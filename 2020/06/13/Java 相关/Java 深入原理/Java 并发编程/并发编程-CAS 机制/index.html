@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="从是什么、有什么、为什么、如何用、底层原理等几个维度分析 CAS 机制。 CAS 简介CAS 的全称是 Compare And Swap（比较与交换），是基于硬件原语实现的，能够在不使用锁（没有线程被阻塞）的情况下实现多线程之间的变量同步。 CAS 拥有功能CAS 使用了 3 个基本操作数：内存地址 V，旧的预期值 A，要修改的新值 B。更新一个变量的时候，只有当变量的预期值 A 和内存地址 V">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并发编程-CAS 机制">
+<meta property="og:url" content="http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="从是什么、有什么、为什么、如何用、底层原理等几个维度分析 CAS 机制。 CAS 简介CAS 的全称是 Compare And Swap（比较与交换），是基于硬件原语实现的，能够在不使用锁（没有线程被阻塞）的情况下实现多线程之间的变量同步。 CAS 拥有功能CAS 使用了 3 个基本操作数：内存地址 V，旧的预期值 A，要修改的新值 B。更新一个变量的时候，只有当变量的预期值 A 和内存地址 V">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://img2018.cnblogs.com/blog/1775037/202001/1775037-20200106164315461-658325570.jpg">
+<meta property="og:updated_time" content="2021-01-22T01:31:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="并发编程-CAS 机制">
+<meta name="twitter:description" content="从是什么、有什么、为什么、如何用、底层原理等几个维度分析 CAS 机制。 CAS 简介CAS 的全称是 Compare And Swap（比较与交换），是基于硬件原语实现的，能够在不使用锁（没有线程被阻塞）的情况下实现多线程之间的变量同步。 CAS 拥有功能CAS 使用了 3 个基本操作数：内存地址 V，旧的预期值 A，要修改的新值 B。更新一个变量的时候，只有当变量的预期值 A 和内存地址 V">
+<meta name="twitter:image" content="https://img2018.cnblogs.com/blog/1775037/202001/1775037-20200106164315461-658325570.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>并发编程-CAS 机制</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-AQS 机制/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/线程/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&text=并发编程-CAS 机制"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&is_video=false&description=并发编程-CAS 机制"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=并发编程-CAS 机制&body=Check out this article: http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&name=并发编程-CAS 机制&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-简介"><span class="toc-number">1.</span> <span class="toc-text">CAS 简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-拥有功能"><span class="toc-number">2.</span> <span class="toc-text">CAS 拥有功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-出现背景"><span class="toc-number">3.</span> <span class="toc-text">CAS 出现背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-基本使用"><span class="toc-number">4.</span> <span class="toc-text">CAS 基本使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-优点缺点"><span class="toc-number">5.</span> <span class="toc-text">CAS 优点缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-底层原理"><span class="toc-number">6.</span> <span class="toc-text">CAS 底层原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#concurrent-包"><span class="toc-number">7.</span> <span class="toc-text">concurrent 包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#附：AtomicInteger"><span class="toc-number">8.</span> <span class="toc-text">附：AtomicInteger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#附：Unsafe-类"><span class="toc-number">9.</span> <span class="toc-text">附：Unsafe 类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分配和释放内存"><span class="toc-number">10.</span> <span class="toc-text">分配和释放内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#定位对象某字段的内存位置、修改对象的字段值"><span class="toc-number">11.</span> <span class="toc-text">定位对象某字段的内存位置、修改对象的字段值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#挂起与恢复"><span class="toc-number">12.</span> <span class="toc-text">挂起与恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-操作"><span class="toc-number">13.</span> <span class="toc-text">CAS 操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#附：我们知道-ArrayList-是线程不安全的，请编码写一个不安全的案例并给出解决方案。"><span class="toc-number">14.</span> <span class="toc-text">附：我们知道 ArrayList 是线程不安全的，请编码写一个不安全的案例并给出解决方案。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU-并发原语"><span class="toc-number">15.</span> <span class="toc-text">CPU 并发原语</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AtomicInteger"><span class="toc-number">16.</span> <span class="toc-text">AtomicInteger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AtomicReference"><span class="toc-number">17.</span> <span class="toc-text">AtomicReference</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AtomicStampedReference"><span class="toc-number">18.</span> <span class="toc-text">AtomicStampedReference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        并发编程-CAS 机制
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-06-12T16:00:00.000Z" itemprop="datePublished">2020-06-13</time>
+        
+        (Updated: <time datetime="2021-01-22T01:31:44.000Z" itemprop="dateModified">2021-01-22</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Java-并发编程/">Java 并发编程</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>从是什么、有什么、为什么、如何用、底层原理等几个维度分析 CAS 机制。</p>
+<h4 id="CAS-简介"><a href="#CAS-简介" class="headerlink" title="CAS 简介"></a>CAS 简介</h4><p>CAS 的全称是 Compare And Swap（比较与交换），是基于硬件原语实现的，能够在不使用锁（没有线程被阻塞）的情况下实现多线程之间的变量同步。</p>
+<h4 id="CAS-拥有功能"><a href="#CAS-拥有功能" class="headerlink" title="CAS 拥有功能"></a>CAS 拥有功能</h4><p>CAS 使用了 3 个基本操作数：内存地址 V，旧的预期值 A，要修改的新值 B。更新一个变量的时候，只有当变量的预期值 A 和内存地址 V 当中的实际值相同时，才会将内存地址 V 对应的值修改为 B。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1775037/202001/1775037-20200106164315461-658325570.jpg" alt=""></p>
+<h4 id="CAS-出现背景"><a href="#CAS-出现背景" class="headerlink" title="CAS 出现背景"></a>CAS 出现背景</h4><p>从 Java5 开始引入了对 CAS 机制的底层的支持，在这之前需要开发人员编写相关的代码才可以实现 CAS。</p>
+<h4 id="CAS-基本使用"><a href="#CAS-基本使用" class="headerlink" title="CAS 基本使用"></a>CAS 基本使用</h4><p>JDK1.5 之后的 <code>java.util.concurrent.atomic</code> 包里，多了一批原子处理类。<code>AtomicBoolean</code>、<code>AtomicInteger</code>、<code>AtomicLong</code>、<code>AtomicReference</code>。主要用于在高并发环境下的高效程序处理，来帮助我们简化同步处理。</p>
+<h4 id="CAS-优点缺点"><a href="#CAS-优点缺点" class="headerlink" title="CAS 优点缺点"></a>CAS 优点缺点</h4><p>CAS 的优点：</p>
+<ol>
+<li>可以保证变量操作的原子性；</li>
+<li>并发量不是很高的情况下，使用 CAS 机制比使用锁机制效率更高；</li>
+<li>在线程对共享资源占用时间较短的情况下，使用 CAS 效率也会较高。</li>
+</ol>
+<p>CAS 虽然很高效的解决原子操作，但是 CAS 仍然存在三大问题：</p>
+<ol>
+<li><p>ABA 问题<br>因为 CAS 需要在操作值的时候检查下值有没有发生变化，如果没有发生变化则更新。但是如果一个值原来是 A，变成了 B，又变成了 A，那么使用 CAS 进行检查时会发现它的值没有发生变化，但是实际上却变化了。</p>
+<p>ABA 问题的一个解决思路就是使用版本号。在变量前面追加上版本号，每次变量更新的时候把版本号加 1，那么 A-&gt;B-&gt;A 就会变成 1A-&gt;2B-&gt;3A。</p>
+<p>另外从 Java1.5 开始 JDK 提供了 <code>AtomicStampedReference</code> 来解决 ABA 问题。这个类的 <code>compareAndSet</code> 方法作用是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式将该引用和该标志的值设置为给定的更新值。</p>
+</li>
+<li><p>循环时间长开销大<br>在并发量比较高的情况下，如果许多线程反复尝试更新某一个变量，却又一直更新不成功，循环往复，会给 CPU 带来很大的压力。</p>
+</li>
+<li><p>只能保证一个共享变量的原子操作<br>CAS 机制所保证的只是一个变量的原子性操作，而不能保证整个代码块的原子性。比如需要保证 3 个变量共同进行原子性的更新时，就不得不使用 <code>synchronized</code> 了。</p>
+<p>另外从 Java1.5 开始 JDK 提供了 <code>AtomicReference</code> 类来保证引用对象之间的原子性，你可以把多个变量放在一个对象里来进行 CAS 操作。</p>
+</li>
+</ol>
+<h4 id="CAS-底层原理"><a href="#CAS-底层原理" class="headerlink" title="CAS 底层原理"></a>CAS 底层原理</h4><p>CAS 并发原语体现在 Java 语言中就是 <code>sun.misc.Unsafe</code> 类中的各个方法。调用 <code>Unsafe</code> 类中的 CAS 方法，JVM 会帮我们实现出 CAS 汇编指令。这是一种完全依赖于硬件的功能，通过它实现了原子操作。</p>
+<p>再次强调，由于 CAS 是一种系统原语，属于操作系统用语范凑，是由若干条指令组成的，用于完成某个功能的一个过程。并且原语的执行必须是连续的，在执行过程中不允许被中断，也就是说 CAS 是一条 CPU 的原子指令，不会造成所谓的数据不一致问题。</p>
+<p><code>AtomicInteger</code> 的自增方法就使用到了 <code>Unsafe</code> CAS 操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. AtomicInteger 自增操作</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 2. Unsafe 原子新增，循环比较交换。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> atomicInteger AtomicInteger 对象本身</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> valueoffset   内存地址偏移量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> incr          需要新增的数量</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object atomicInteger, <span class="keyword">long</span> valueoffset, <span class="keyword">int</span> incr)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">int</span> var5;                                                                         <span class="comment">// 期望值</span></span><br><span class="line">   <span class="keyword">do</span> &#123;</span><br><span class="line">      var5 = <span class="keyword">this</span>.getIntVolatile(atomicInteger, valueoffset);                        <span class="comment">// 通过主内存找出真实的值</span></span><br><span class="line">   &#125; <span class="keyword">while</span> (!<span class="keyword">this</span>.compareAndSwapInt(atomicInteger, valueoffset, var5, var5 + incr)); <span class="comment">// 期望值一致的，则交换。否则循环刷新</span></span><br><span class="line">   <span class="keyword">return</span> var5;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用到了C++实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4, <span class="keyword">int</span> var5)</span></span>;</span><br></pre></td></tr></table></figure>
+<h4 id="concurrent-包"><a href="#concurrent-包" class="headerlink" title="concurrent 包"></a>concurrent 包</h4><h4 id="附：AtomicInteger"><a href="#附：AtomicInteger" class="headerlink" title="附：AtomicInteger"></a>附：AtomicInteger</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">AtomicInteger i = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line"><span class="comment">// 获取并自增（i = 0, 结果 i = 1, 返回 0），类似于 i++</span></span><br><span class="line">System.out.println(i.getAndIncrement());</span><br><span class="line"><span class="comment">// 自增并获取（i = 1, 结果 i = 2, 返回 2），类似于 ++i</span></span><br><span class="line">System.out.println(i.incrementAndGet());</span><br><span class="line"><span class="comment">// 自减并获取（i = 2, 结果 i = 1, 返回 1），类似于 --i</span></span><br><span class="line">System.out.println(i.decrementAndGet());</span><br><span class="line"><span class="comment">// 获取并自减（i = 1, 结果 i = 0, 返回 1），类似于 i--</span></span><br><span class="line">System.out.println(i.getAndDecrement());</span><br><span class="line"><span class="comment">// 获取并加值（i = 0, 结果 i = 5, 返回 0）</span></span><br><span class="line">System.out.println(i.getAndAdd(<span class="number">5</span>));</span><br><span class="line"><span class="comment">// 加值并获取（i = 5, 结果 i = 0, 返回 0）</span></span><br><span class="line">System.out.println(i.addAndGet(-<span class="number">5</span>));</span><br><span class="line"><span class="comment">// 获取并更新（i = 0, p 为 i 的当前值, 结果 i = -2, 返回 0）</span></span><br><span class="line"><span class="comment">// 其中函数中的操作能保证原子，但函数需要无副作用</span></span><br><span class="line">System.out.println(i.getAndUpdate(p -&gt; p - <span class="number">2</span>));</span><br><span class="line"><span class="comment">// 更新并获取（i = -2, p 为 i 的当前值, 结果 i = 0, 返回 0）</span></span><br><span class="line"><span class="comment">// 其中函数中的操作能保证原子，但函数需要无副作用</span></span><br><span class="line">System.out.println(i.updateAndGet(p -&gt; p + <span class="number">2</span>));</span><br><span class="line"><span class="comment">// 获取并计算（i = 0, p 为 i 的当前值, x 为参数1, 结果 i = 10, 返回 0）</span></span><br><span class="line"><span class="comment">// 其中函数中的操作能保证原子，但函数需要无副作用</span></span><br><span class="line"><span class="comment">// getAndUpdate 如果在 lambda 中引用了外部的局部变量，要保证该局部变量是 final 的</span></span><br><span class="line"><span class="comment">// getAndAccumulate 可以通过 参数1 来引用外部的局部变量，但因为其不在 lambda 中因此不必是 final</span></span><br><span class="line">System.out.println(i.getAndAccumulate(<span class="number">10</span>, (p, x) -&gt; p + x));</span><br><span class="line"><span class="comment">// 计算并获取（i = 10, p 为 i 的当前值, x 为参数1, 结果 i = 0, 返回 0）</span></span><br><span class="line"><span class="comment">// 其中函数中的操作能保证原子，但函数需要无副作用</span></span><br><span class="line">System.out.println(i.accumulateAndGet(-<span class="number">10</span>, (p, x) -&gt; p + x));</span><br></pre></td></tr></table></figure>
+<h4 id="附：Unsafe-类"><a href="#附：Unsafe-类" class="headerlink" title="附：Unsafe 类"></a>附：Unsafe 类</h4><p><code>Unsafe</code> 类是 CAS 的核心类，由于 Java 方法无法直接访问底层系统，需要通过本地（<code>native</code>）方法来访问，<code>Unsafe</code> 类相当于一个后门，基于该类可以直接操作特定内存的数据。</p>
+<p><code>Unsafe</code> 类存在于 sum.misc 包中，其内部方法操作可以像 C 的指针一样直接操作内存。Java 中 CAS 操作的执行都依赖于 <code>Unsafe</code> 类方法。</p>
+<blockquote>
+<p>注意 Unsafe 类中的所有方法都是 native 修饰的，也就是说 Unsafe 类中的方法都直接调用操作系统底层资源执行相应任务。</p>
+</blockquote>
+<p><code>Unsafe</code> 类提供了硬件级别的原子操作，主要提供了以下功能：</p>
+<ol>
+<li><p>通过 <code>Unsafe</code> 类可以分配内存，可以释放内存；</p>
+</li>
+<li><p>可以定位对象某字段的内存位置，也可以修改对象的字段值，即使它是私有的；</p>
+</li>
+<li><p>挂起与恢复；</p>
+</li>
+<li><p>CAS 操作；</p>
+</li>
+</ol>
+<h4 id="分配和释放内存"><a href="#分配和释放内存" class="headerlink" title="分配和释放内存"></a>分配和释放内存</h4><p>类中提供的 3 个本地方法 <code>allocateMemory</code>、<code>reallocateMemory</code>、<code>freeMemory</code> 分别用于分配内存，扩充内存和释放内存，与 C 语言中的 3 个方法对应。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">long</span> <span class="title">allocateMemory</span><span class="params">(<span class="keyword">long</span> l)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">long</span> <span class="title">reallocateMemory</span><span class="params">(<span class="keyword">long</span> l, <span class="keyword">long</span> l1)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">freeMemory</span><span class="params">(<span class="keyword">long</span> l)</span></span>;</span><br></pre></td></tr></table></figure>
+<h4 id="定位对象某字段的内存位置、修改对象的字段值"><a href="#定位对象某字段的内存位置、修改对象的字段值" class="headerlink" title="定位对象某字段的内存位置、修改对象的字段值"></a>定位对象某字段的内存位置、修改对象的字段值</h4><ol>
+<li><p>字段的定位<br>Java 中对象的字段的定位可能通过 <code>staticFieldOffset</code> 方法实现，该方法返回给定 field 的内存地址偏移量，这个值对于给定的 filed 是唯一的且是固定不变的。</p>
+<p><code>getLong</code> 方法获取对象中 offset 偏移地址对应的 <code>long</code> 型 field 的值。</p>
+<p><code>getIntVolatile</code> 方法获取对象中 offset 偏移地址对应的整型 field 的值，支持 volatile load 语义。</p>
+</li>
+<li><p>数组元素定位<br><code>Unsafe</code> 类中有很多以 BASE_OFFSET 结尾的常量，比如 ARRAY_INT_BASE_OFFSET，ARRAY_BYTE_BASE_OFFSET 等，这些常量值是通过 <code>arrayBaseOffset</code> 方法得到的。</p>
+<p><code>arrayBaseOffset</code> 方法是一个本地方法，可以获取数组第一个元素的偏移地址。</p>
+<p><code>Unsafe</code> 类中还有很多以 <code>INDEX_SCALE</code> 结尾的常量，比如 ARRAY_INT_INDEX_SCALE ， ARRAY_BYTE_INDEX_SCALE等，这些常量值是通过arrayIndexScale方法得到的。</p>
+<p><code>arrayIndexScale</code> 方法也是一个本地方法，可以获取数组的转换因子，也就是数组中元素的增量地址。</p>
+<p><code>arrayBaseOffset</code> 与 <code>arrayIndexScale</code> 配合使用，可以定位数组中每个元素在内存中的位置。</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Unsafe</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ARRAY_INT_BASE_OFFSET;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ARRAY_INT_INDEX_SCALE;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">long</span> <span class="title">getLong</span><span class="params">(Object obj, <span class="keyword">long</span> l)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">int</span>  <span class="title">getIntVolatile</span><span class="params">(Object obj, <span class="keyword">long</span> l)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">long</span> <span class="title">staticFieldOffset</span><span class="params">(Field field)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">arrayBaseOffset</span><span class="params">(Class class1)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">arrayIndexScale</span><span class="params">(Class class1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> </span><br><span class="line">    &#123;</span><br><span class="line">        ARRAY_INT_BASE_OFFSET = theUnsafe.arrayBaseOffset([I);</span><br><span class="line">        ARRAY_INT_INDEX_SCALE = theUnsafe.arrayIndexScale([I);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="挂起与恢复"><a href="#挂起与恢复" class="headerlink" title="挂起与恢复"></a>挂起与恢复</h4><p>将一个线程进行挂起是通过 <code>park</code> 方法实现的，调用 <code>park</code> 后，线程将一直阻塞直到超时或者中断等条件出现。<code>unpark</code> 可以终止一个挂起的线程，使其恢复正常。整个并发框架中对线程的挂起操作被封装在 <code>LockSupport</code> 类中，<code>LockSupport</code> 类中有各种版本 <code>pack</code> 方法，但最终都调用了 <code>Unsafe.park()</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockSupport</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">unpark</span><span class="params">(Thread thread)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (thread != <span class="keyword">null</span>)</span><br><span class="line">            unsafe.unpark(thread);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">park</span><span class="params">(Object blocker)</span> </span>&#123;</span><br><span class="line">        Thread t = Thread.currentThread();</span><br><span class="line">        setBlocker(t, blocker);</span><br><span class="line">        unsafe.park(<span class="keyword">false</span>, <span class="number">0L</span>);</span><br><span class="line">        setBlocker(t, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parkNanos</span><span class="params">(Object blocker, <span class="keyword">long</span> nanos)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Thread t = Thread.currentThread();</span><br><span class="line">            setBlocker(t, blocker);</span><br><span class="line">            unsafe.park(<span class="keyword">false</span>, nanos);</span><br><span class="line">            setBlocker(t, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parkUntil</span><span class="params">(Object blocker, <span class="keyword">long</span> deadline)</span> </span>&#123;</span><br><span class="line">        Thread t = Thread.currentThread();</span><br><span class="line">        setBlocker(t, blocker);</span><br><span class="line">        unsafe.park(<span class="keyword">true</span>, deadline);</span><br><span class="line">        setBlocker(t, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">park</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        unsafe.park(<span class="keyword">false</span>, <span class="number">0L</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parkNanos</span><span class="params">(<span class="keyword">long</span> nanos)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>)</span><br><span class="line">            unsafe.park(<span class="keyword">false</span>, nanos);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parkUntil</span><span class="params">(<span class="keyword">long</span> deadline)</span> </span>&#123;</span><br><span class="line">        unsafe.park(<span class="keyword">true</span>, deadline);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="CAS-操作"><a href="#CAS-操作" class="headerlink" title="CAS 操作"></a>CAS 操作</h4><p><code>Unsafe</code> 类的 CAS 操作是通过 <code>compareAndSwapXXX</code> 方法实现的。CAS 操作有 3 个操作数，内存值 M，预期值 E，新值 U，如果 M==E，则将内存值修改为 B，否则啥都不做。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 比较obj的offset处内存位置中的值和期望的值，如果相同则更新。此更新是不可中断的。</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>   obj 需要更新的对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>   offset obj中整型field的偏移量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>   expect 希望field中存在的值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>   update 如果期望值expect与field的当前值相同，设置filed的值为这个新值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span>  如果field的值被更改返回true</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapInt</span><span class="params">(Object obj, <span class="keyword">long</span> offset, <span class="keyword">int</span> expect, <span class="keyword">int</span> update)</span></span>;</span><br></pre></td></tr></table></figure>
+<h4 id="附：我们知道-ArrayList-是线程不安全的，请编码写一个不安全的案例并给出解决方案。"><a href="#附：我们知道-ArrayList-是线程不安全的，请编码写一个不安全的案例并给出解决方案。" class="headerlink" title="附：我们知道 ArrayList 是线程不安全的，请编码写一个不安全的案例并给出解决方案。"></a>附：我们知道 ArrayList 是线程不安全的，请编码写一个不安全的案例并给出解决方案。</h4><ol>
+<li>故障现象<br>java.util.ConcurrentModificationException。</li>
+<li>导致原因<br>并发修改导致的，一个线程正在写入，另一个线程过来抢夺，导致数据不一致。</li>
+<li>解决方案<br>new Vector()。<br>Collections.synchronizedList(new ArrayList())。<br>new CopyOnWriteArrayList()。</li>
+<li>优化建议</li>
+<li>衍生：SET、MAP。</li>
+</ol>
+<p>直接使用 ArrayList，会导致异常：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> temp = i;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        list.add(temp);</span><br><span class="line">        System.out.println(list);</span><br><span class="line">    &#125;, i + <span class="string">""</span>).start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">Exception in thread <span class="string">"0"</span> java.util.ConcurrentModificationException</span><br><span class="line">	at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:<span class="number">911</span>)</span><br><span class="line">	at java.util.ArrayList$Itr.next(ArrayList.java:<span class="number">861</span>)</span><br><span class="line">	at java.util.AbstractCollection.toString(AbstractCollection.java:<span class="number">461</span>)</span><br><span class="line">	at java.lang.String.valueOf(String.java:<span class="number">3450</span>)</span><br><span class="line">	at java.io.PrintStream.println(PrintStream.java:<span class="number">821</span>)</span><br><span class="line">	at test4.Demo.lambda$main$<span class="number">0</span>(Demo.java:<span class="number">14</span>)</span><br><span class="line">	at test4.Demo$$Lambda$<span class="number">1</span>/<span class="number">000000000000000000</span>.run(Unknown Source)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:<span class="number">823</span>)</span><br></pre></td></tr></table></figure>
+<p>使用 Collections.synchronizedList：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = Collections.synchronizedList(<span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">   <span class="keyword">final</span> <span class="keyword">int</span> temp = i;</span><br><span class="line">   <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">         list.add(temp);</span><br><span class="line">         System.out.println(list);</span><br><span class="line">   &#125;, i + <span class="string">""</span>).start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<p>使用 Vector，正常，但是效率慢：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> Vector&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">   <span class="keyword">final</span> <span class="keyword">int</span> temp = i;</span><br><span class="line">   <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">         list.add(temp);</span><br><span class="line">         System.out.println(list);</span><br><span class="line">   &#125;, i + <span class="string">""</span>).start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+<p>CopyOnWrite 即写时复制的容器。往一个容器添加元素的时候，不直接往当前容器 ojbect[] 添加，而是先将当前容器 object[] 进行 copy，复制出一个新的容器 object[] newElemenets，然后往新的容器里添加元素。添加完元素之后，再将原容器的引用指向新的容器。</p>
+<p>这样做的好处是可以对容器进行并发的读而不需要加锁，因为当前容器不会添加任何元素。所以 CopyOnWrite 容器也是一种读写分离的思想，读和写不同的容器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> CopyOnWriteArrayList&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">   <span class="keyword">final</span> <span class="keyword">int</span> temp = i;</span><br><span class="line">   <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">         list.add(temp);</span><br><span class="line">         System.out.println(list);</span><br><span class="line">   &#125;, i + <span class="string">""</span>).start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="number">0</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p>CopyOnWriteArraylist 核心源码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">this</span>.lock;</span><br><span class="line">   lock.lock();</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      Object[] elements = getArray();</span><br><span class="line">      <span class="keyword">int</span> len = elements.length;</span><br><span class="line">      Object[] newElements = Arrays.copyOf(elements, len + <span class="number">1</span>);</span><br><span class="line">      newElements[len] = e;</span><br><span class="line">      setArray(newElements);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      lock.unlock();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="CPU-并发原语"><a href="#CPU-并发原语" class="headerlink" title="CPU 并发原语"></a>CPU 并发原语</h4><p>不会。</p>
+<h4 id="AtomicInteger"><a href="#AtomicInteger" class="headerlink" title="AtomicInteger"></a>AtomicInteger</h4><p><code>AtomicInteger</code> 是一个提供原子操作的 <code>Integer</code> 的类。在 Java 语言中，<code>++i</code> 和 <code>i++</code> 操作并不是线程安全的，在使用的时候，不可避免的会用到 <code>synchronized</code> 关键字。而 <code>AtomicInteger</code> 则通过一种线程安全的加减操作接口。</p>
+<p><code>AtomicInteger</code> 提供了下面几个接口:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">()</span></span>;                      <span class="comment">//获取当前的值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndSet</span><span class="params">(<span class="keyword">int</span> newValue)</span></span>;    <span class="comment">//获取当前的值，并设置新的值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAdd</span><span class="params">(<span class="keyword">int</span> delta)</span></span>;       <span class="comment">//获取当前的值，并加上预期的值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span></span>;          <span class="comment">//获取当前的值，并自增</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndDecrement</span><span class="params">()</span></span>;          <span class="comment">//获取当前的值，并自减</span></span><br></pre></td></tr></table></figure>
+<p>下面通过两个简单的例子来看一下 <code>AtomicInteger</code> 的优势在哪。</p>
+<p>普通线程同步：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test2</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 若要线程安全执行执行count++，需要加锁</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">increment</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      count++; </span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> count;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>AtomicInteger</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test2</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> AtomicInteger count = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">increment</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      count.incrementAndGet();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 使用AtomicInteger之后，不需要加锁，也可以实现线程安全。</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> count.get();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>AtomicInteger</code> 是非常的安全的.而且因为 <code>AtomicInteger</code> 由硬件提供原子操作指令实现的。在非激烈竞争的情况下，开销更小，速度更快。</p>
+<h4 id="AtomicReference"><a href="#AtomicReference" class="headerlink" title="AtomicReference"></a>AtomicReference</h4><p>跟 <code>AtomicInteger</code> 类似，里面封装的是一个对象。</p>
+<h4 id="AtomicStampedReference"><a href="#AtomicStampedReference" class="headerlink" title="AtomicStampedReference"></a>AtomicStampedReference</h4><p>由于ABA问题带来的隐患，各种乐观锁的实现中通常都会用版本戳version来对记录或对象标记，避免并发操作带来的问题。在Java中，<code>AtomicStampedReference</code> 也实现了这个作用，它通过包装 <code>[E,Integer]</code> 的元组来对对象标记版本戳 stamp，从而避免 ABA 问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test2</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> AtomicStampedReference&lt;Integer&gt; atomicStampedRef = <span class="keyword">new</span> AtomicStampedReference&lt;Integer&gt;(<span class="number">100</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">increment</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      atomicStampedRef.compareAndSet(<span class="number">100</span>, <span class="number">101</span>, atomicStampedRef.getStamp(), atomicStampedRef.getStamp() + <span class="number">1</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 使用AtomicInteger之后，不需要加锁，也可以实现线程安全。</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> count.get();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-简介"><span class="toc-number">1.</span> <span class="toc-text">CAS 简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-拥有功能"><span class="toc-number">2.</span> <span class="toc-text">CAS 拥有功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-出现背景"><span class="toc-number">3.</span> <span class="toc-text">CAS 出现背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-基本使用"><span class="toc-number">4.</span> <span class="toc-text">CAS 基本使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-优点缺点"><span class="toc-number">5.</span> <span class="toc-text">CAS 优点缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-底层原理"><span class="toc-number">6.</span> <span class="toc-text">CAS 底层原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#concurrent-包"><span class="toc-number">7.</span> <span class="toc-text">concurrent 包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#附：AtomicInteger"><span class="toc-number">8.</span> <span class="toc-text">附：AtomicInteger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#附：Unsafe-类"><span class="toc-number">9.</span> <span class="toc-text">附：Unsafe 类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分配和释放内存"><span class="toc-number">10.</span> <span class="toc-text">分配和释放内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#定位对象某字段的内存位置、修改对象的字段值"><span class="toc-number">11.</span> <span class="toc-text">定位对象某字段的内存位置、修改对象的字段值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#挂起与恢复"><span class="toc-number">12.</span> <span class="toc-text">挂起与恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-操作"><span class="toc-number">13.</span> <span class="toc-text">CAS 操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#附：我们知道-ArrayList-是线程不安全的，请编码写一个不安全的案例并给出解决方案。"><span class="toc-number">14.</span> <span class="toc-text">附：我们知道 ArrayList 是线程不安全的，请编码写一个不安全的案例并给出解决方案。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU-并发原语"><span class="toc-number">15.</span> <span class="toc-text">CPU 并发原语</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AtomicInteger"><span class="toc-number">16.</span> <span class="toc-text">AtomicInteger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AtomicReference"><span class="toc-number">17.</span> <span class="toc-text">AtomicReference</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AtomicStampedReference"><span class="toc-number">18.</span> <span class="toc-text">AtomicStampedReference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&text=并发编程-CAS 机制"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&is_video=false&description=并发编程-CAS 机制"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=并发编程-CAS 机制&body=Check out this article: http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&title=并发编程-CAS 机制"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/06/13/Java 相关/Java 深入原理/Java 并发编程/并发编程-CAS 机制/&name=并发编程-CAS 机制&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

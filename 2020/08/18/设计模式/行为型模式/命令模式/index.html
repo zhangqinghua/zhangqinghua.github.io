@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="在软件开发系统中，常常出现“方法的请求者”与“方法的实现者”之间存在紧密的耦合关系。这不利于软件功能的扩展与维护。例如，想对行为进行“撤销、重做、记录”等处理都很不方便，因此“如何将方法的请求者与方法的实现者解耦？”变得很重要，命令模式能很好地解决这个问题。 在现实生活中，这样的例子也很多，例如，电视机遥控器（命令发送者）通过按钮（具体命令）来遥控电视机（命令接收者），还有计算机键盘上的“功能键”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="命令模式">
+<meta property="og:url" content="http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在软件开发系统中，常常出现“方法的请求者”与“方法的实现者”之间存在紧密的耦合关系。这不利于软件功能的扩展与维护。例如，想对行为进行“撤销、重做、记录”等处理都很不方便，因此“如何将方法的请求者与方法的实现者解耦？”变得很重要，命令模式能很好地解决这个问题。 在现实生活中，这样的例子也很多，例如，电视机遥控器（命令发送者）通过按钮（具体命令）来遥控电视机（命令接收者），还有计算机键盘上的“功能键”">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-01-11T03:13:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="命令模式">
+<meta name="twitter:description" content="在软件开发系统中，常常出现“方法的请求者”与“方法的实现者”之间存在紧密的耦合关系。这不利于软件功能的扩展与维护。例如，想对行为进行“撤销、重做、记录”等处理都很不方便，因此“如何将方法的请求者与方法的实现者解耦？”变得很重要，命令模式能很好地解决这个问题。 在现实生活中，这样的例子也很多，例如，电视机遥控器（命令发送者）通过按钮（具体命令）来遥控电视机（命令接收者），还有计算机键盘上的“功能键”">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>命令模式</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/08/18/设计模式/行为型模式/责任链模式/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/08/18/设计模式/行为型模式/解释器模式/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&text=命令模式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&is_video=false&description=命令模式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=命令模式&body=Check out this article: http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&name=命令模式&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模式介绍"><span class="toc-number">1.</span> <span class="toc-text">模式介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#举例说明"><span class="toc-number">1.0.1.</span> <span class="toc-text">举例说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#主要解决"><span class="toc-number">1.0.2.</span> <span class="toc-text">主要解决</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模式原理"><span class="toc-number">1.0.3.</span> <span class="toc-text">模式原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关键代码"><span class="toc-number">1.0.4.</span> <span class="toc-text">关键代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用场景"><span class="toc-number">1.0.5.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优点缺点"><span class="toc-number">1.0.6.</span> <span class="toc-text">优点缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注意事项"><span class="toc-number">1.0.7.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模式扩展"><span class="toc-number">1.0.8.</span> <span class="toc-text">模式扩展</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#调用者"><span class="toc-number">2.0.1.</span> <span class="toc-text">调用者</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令类"><span class="toc-number">2.0.2.</span> <span class="toc-text">命令类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现类"><span class="toc-number">2.0.3.</span> <span class="toc-text">实现类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK-中的命令模式"><span class="toc-number">3.</span> <span class="toc-text">JDK 中的命令模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-中的命令模式"><span class="toc-number">4.</span> <span class="toc-text">Spring 中的命令模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        命令模式
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-17T16:00:46.000Z" itemprop="datePublished">2020-08-18</time>
+        
+        (Updated: <time datetime="2021-01-11T03:13:36.000Z" itemprop="dateModified">2021-01-11</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/设计模式/">设计模式</a> › <a class="category-link" href="/categories/设计模式/行为型模式/">行为型模式</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>在软件开发系统中，常常出现“方法的请求者”与“方法的实现者”之间存在紧密的耦合关系。这不利于软件功能的扩展与维护。例如，想对行为进行“撤销、重做、记录”等处理都很不方便，因此“如何将方法的请求者与方法的实现者解耦？”变得很重要，命令模式能很好地解决这个问题。</p>
+<p>在现实生活中，这样的例子也很多，例如，电视机遥控器（命令发送者）通过按钮（具体命令）来遥控电视机（命令接收者），还有计算机键盘上的“功能键”等。</p>
+<h2 id="模式介绍"><a href="#模式介绍" class="headerlink" title="模式介绍"></a>模式介绍</h2><p>命令模式是将一个请求封装为一个对象，使发出请求的责任和执行请求的责任分割开。这样两者之间通过命令对象进行沟通，这样方便将命令对象进行储存、传递、调用、增加与管理。</p>
+<h4 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h4><p>客户去餐馆可选择的早餐有肠粉、河粉和馄饨等，客户可向服务员选择以上早餐中的若干种，服务员将客户的请求交给相关的厨师去做。这里的点早餐相当于“命令”，服务员相当于“调用者”，厨师相当于“接收者”，所以用命令模式实现比较合适。</p>
+<h4 id="主要解决"><a href="#主要解决" class="headerlink" title="主要解决"></a>主要解决</h4><h4 id="模式原理"><a href="#模式原理" class="headerlink" title="模式原理"></a>模式原理</h4><p>命令模式包含以下主要角色：</p>
+<ol>
+<li>抽象命令：声明执行命令的接口，拥有执行命令的抽象方法 execute()。</li>
+<li>具体命令：是抽象命令类的具体实现类，它拥有接收者对象，并通过调用接收者的功能来完成命令要执行的操作。</li>
+<li>实现者/接收者：执行命令功能的相关操作，是具体命令对象业务的真正实现者。</li>
+<li>调用者/请求者：是请求的发送者，它通常拥有很多的命令对象，并通过访问命令对象来执行相关请求，它不直接访问接收者。</li>
+</ol>
+<p>在餐馆的例子中，服务区相当于调用者，点早餐相当于“命令”，厨师相当于“接收者”。</p>
+<pre class="mermaid">classDiagram
+
+class 服务员 {
+    <<调用者>>
+}
+class 点云吞 {
+    <<命令>>
+}
+class 点河粉 {
+    <<命令>>
+}
+class 厨师A {
+    <<实现者>>
+}
+class 厨师B {
+    <<实现者>>
+}
+
+服务员 --> 点云吞: 点早餐
+点云吞 --> 厨师A: 通知
+
+服务员 --> 点河粉: 点早餐
+点河粉 --> 厨师B: 通知</pre>
+
+<h4 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Waiter是调用者</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Waiter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Command是抽象命令，Hefen是具体命令</span></span><br><span class="line">        Command hefen = <span class="keyword">new</span> Hefen();</span><br><span class="line">        <span class="comment">// 调用命令类中的命令</span></span><br><span class="line">        hefen.cooking();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hefen</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 命令类里面持有一个实现类。</span></span><br><span class="line">    <span class="keyword">private</span> HefenChelf chelf = <span class="keyword">new</span> HefenChelf();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cooking</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        chelf.cookingHefen();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><p>命令模式通常适用于以下场景：</p>
+<ol>
+<li>当系统需要将请求调用者与请求接收者解耦时，命令模式使得调用者和接收者不直接交互。</li>
+<li>当系统需要随机请求命令或经常增加或删除命令时，命令模式比较方便实现这些功能。</li>
+<li>当系统需要执行一组操作时，命令模式可以定义宏命令来实现该功能。</li>
+<li>当系统需要支持命令的撤销（Undo）操作和恢复（Redo）操作时，可以将命令对象存储起来，采用备忘录模式来实现。</li>
+</ol>
+<h4 id="优点缺点"><a href="#优点缺点" class="headerlink" title="优点缺点"></a>优点缺点</h4><p>命令模式的主要优点如下：</p>
+<ol>
+<li>降低系统的耦合度。命令模式能将调用操作的对象与实现该操作的对象解耦。</li>
+<li>增加或删除命令非常方便。采用命令模式增加与删除命令不会影响其他类，它满足“开闭原则”，对扩展比较灵活。</li>
+<li>可以实现宏命令。命令模式可以与组合模式结合，将多个命令装配成一个组合命令，即宏命令。</li>
+<li>方便实现 Undo 和 Redo 操作。命令模式可以与后面介绍的备忘录模式结合，实现命令的撤销与恢复。</li>
+</ol>
+<p>其缺点是：可能产生大量具体命令类。因为计对每一个具体操作都需要设计一个具体命令类，这将增加系统的复杂性。</p>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><h4 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h4><p>在软件开发中，有时将命令模式与前面学的组合模式联合使用，这就构成了宏命令模式，也叫组合命令模式。宏命令包含了一组命令，它充当了具体命令与调用者的双重角色，执行它时将递归调用它所包含的所有命令。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>用命令模式实现客户去餐馆吃早餐的实例。</p>
+<p>分析：客户去餐馆可选择的早餐有肠粉、河粉和馄饨等，客户可向服务员选择以上早餐中的若干种，服务员将客户的请求交给相关的厨师去做。这里的点早餐相当于“命令”，服务员相当于“调用者”，厨师相当于“接收者”，所以用命令模式实现比较合适。</p>
+<p>首先，定义一个早餐类（Breakfast），它是抽象命令类，有抽象方法 cooking()，说明要做什么；再定义其子类肠粉类（ChangFen）、馄饨类（HunTun）和河粉类（HeFen），它们是具体命令类，实现早餐类的 cooking() 方法，但它们不会具体做，而是交给具体的厨师去做；具体厨师类有肠粉厨师（ChangFenChef）、馄蚀厨师（HunTunChef）和河粉厨师（HeFenChef），他们是命令的接收者。最后，定义服务员类（Waiter），它接收客户的做菜请求，并发出做菜的命令。客户类是通过服务员类来点菜的。</p>
+<h4 id="调用者"><a href="#调用者" class="headerlink" title="调用者"></a>调用者</h4><p>服务员作为调用者角色，接收客户的做菜请求，并发出做菜的命令。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Waiter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 早餐：河粉</span></span><br><span class="line">        Breakfast hefen = <span class="keyword">new</span> Hefen();</span><br><span class="line">        hefen.cooking();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 早餐：肠粉</span></span><br><span class="line">        Breakfast changfen = <span class="keyword">new</span> Changfen();</span><br><span class="line">        changfen.cooking();</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="命令类"><a href="#命令类" class="headerlink" title="命令类"></a>命令类</h4><p>早餐类作为抽象命令类，有个抽象方法 <code>cooking()</code>。具体命令类有肠粉类，馄饨类和河粉类，实现了 <code>cooking()</code> 方法，但它们不会具体做，而是交给厨房（实现类）去做。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Breakfast</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">cooking</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hefen</span> <span class="keyword">implements</span> <span class="title">Breakfast</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> HefenChef = <span class="keyword">new</span> HefenChef();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cooking</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        chef.cookingHefen();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Changfen</span> <span class="keyword">implements</span> <span class="title">Breakfast</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ChangFenChef chef = <span class="keyword">new</span> ChangFenChef();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cooking</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        chef.cookingChangefen();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="实现类"><a href="#实现类" class="headerlink" title="实现类"></a>实现类</h4><p>实现类是负责命令的最终实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HefenChef</span> </span>&#123;</span><br><span class="line">    <span class="function">pbulic <span class="keyword">void</span> <span class="title">cookingHefen</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"厨师正在做河粉。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChangFenChef</span> </span>&#123;</span><br><span class="line">    <span class="function">pbulic <span class="keyword">void</span> <span class="title">cookingChangefen</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"厨师正在做肠粉。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="JDK-中的命令模式"><a href="#JDK-中的命令模式" class="headerlink" title="JDK 中的命令模式"></a>JDK 中的命令模式</h2><h2 id="Spring-中的命令模式"><a href="#Spring-中的命令模式" class="headerlink" title="Spring 中的命令模式"></a>Spring 中的命令模式</h2>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模式介绍"><span class="toc-number">1.</span> <span class="toc-text">模式介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#举例说明"><span class="toc-number">1.0.1.</span> <span class="toc-text">举例说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#主要解决"><span class="toc-number">1.0.2.</span> <span class="toc-text">主要解决</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模式原理"><span class="toc-number">1.0.3.</span> <span class="toc-text">模式原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关键代码"><span class="toc-number">1.0.4.</span> <span class="toc-text">关键代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用场景"><span class="toc-number">1.0.5.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优点缺点"><span class="toc-number">1.0.6.</span> <span class="toc-text">优点缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注意事项"><span class="toc-number">1.0.7.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模式扩展"><span class="toc-number">1.0.8.</span> <span class="toc-text">模式扩展</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#调用者"><span class="toc-number">2.0.1.</span> <span class="toc-text">调用者</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令类"><span class="toc-number">2.0.2.</span> <span class="toc-text">命令类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现类"><span class="toc-number">2.0.3.</span> <span class="toc-text">实现类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK-中的命令模式"><span class="toc-number">3.</span> <span class="toc-text">JDK 中的命令模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-中的命令模式"><span class="toc-number">4.</span> <span class="toc-text">Spring 中的命令模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&text=命令模式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&is_video=false&description=命令模式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=命令模式&body=Check out this article: http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&title=命令模式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/命令模式/&name=命令模式&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+   <script src="/js/search.js"></script>
+   <script src='/js/mermaid.js'></script>
+   <!-- <script src='https://cdn.jsdelivr.net/npm/mermaid@8.6.0/dist/mermaid.js'></script> -->
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({});
+  }
+</script>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

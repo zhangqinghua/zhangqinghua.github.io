@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="访问控制对象存储OSS提供Bucket级别的权限访问控制。 Bucket目前有三种访问权限：public-read-write，public-read和private，它们的含义如下：  public-read-write 公共读写，任何人（包括匿名访问者）都可以对该存储空间内文件进行读写操作。  警告 互联网上任何用户都可以对该 Bucket 内的文件进行访问，并且向该 Bucket 写入数据。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云服务">
+<meta property="og:url" content="http://yoursite.com/2020/09/04/其它/阿里云服务/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="访问控制对象存储OSS提供Bucket级别的权限访问控制。 Bucket目前有三种访问权限：public-read-write，public-read和private，它们的含义如下：  public-read-write 公共读写，任何人（包括匿名访问者）都可以对该存储空间内文件进行读写操作。  警告 互联网上任何用户都可以对该 Bucket 内的文件进行访问，并且向该 Bucket 写入数据。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-11-06T07:26:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="阿里云服务">
+<meta name="twitter:description" content="访问控制对象存储OSS提供Bucket级别的权限访问控制。 Bucket目前有三种访问权限：public-read-write，public-read和private，它们的含义如下：  public-read-write 公共读写，任何人（包括匿名访问者）都可以对该存储空间内文件进行读写操作。  警告 互联网上任何用户都可以对该 Bucket 内的文件进行访问，并且向该 Bucket 写入数据。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>阿里云服务</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/09/04/其它/Vue/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/09/02/运维相关/Nginx 快速上手/Nginx 介绍/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/09/04/其它/阿里云服务/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&text=阿里云服务"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&is_video=false&description=阿里云服务"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=阿里云服务&body=Check out this article: http://yoursite.com/2020/09/04/其它/阿里云服务/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&name=阿里云服务&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#访问控制"><span class="toc-number">1.</span> <span class="toc-text">访问控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象存储-OSS"><span class="toc-number">2.</span> <span class="toc-text">对象存储 OSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#图片上传"><span class="toc-number">2.0.1.</span> <span class="toc-text">图片上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片压缩"><span class="toc-number">2.0.2.</span> <span class="toc-text">图片压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片高级压缩"><span class="toc-number">2.0.3.</span> <span class="toc-text">图片高级压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片加密"><span class="toc-number">2.0.4.</span> <span class="toc-text">图片加密</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片在线预览"><span class="toc-number">2.0.5.</span> <span class="toc-text">图片在线预览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片小程序预览"><span class="toc-number">2.0.6.</span> <span class="toc-text">图片小程序预览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片迁移"><span class="toc-number">2.0.7.</span> <span class="toc-text">图片迁移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片跨域设置"><span class="toc-number">2.0.8.</span> <span class="toc-text">图片跨域设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#访问控制-RAM"><span class="toc-number">2.0.9.</span> <span class="toc-text">访问控制 RAM</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#云效"><span class="toc-number">3.</span> <span class="toc-text">云效</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#机器-Agent-管理"><span class="toc-number">3.0.1.</span> <span class="toc-text">机器 Agent 管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#流水线"><span class="toc-number">3.0.2.</span> <span class="toc-text">流水线</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        阿里云服务
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-09-03T16:00:00.000Z" itemprop="datePublished">2020-09-04</time>
+        
+        (Updated: <time datetime="2020-11-06T07:26:55.000Z" itemprop="dateModified">2020-11-06</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/其它/">其它</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a>访问控制</h2><p>对象存储OSS提供Bucket级别的权限<a href="https://help.aliyun.com/document_detail/31954.html?spm=5176.8466010.acl.1.615e1450N7b9g0">访问控制</a>。</p>
+<p>Bucket目前有三种访问权限：public-read-write，public-read和private，它们的含义如下：</p>
+<ol>
+<li><p>public-read-write<br> 公共读写，任何人（包括匿名访问者）都可以对该存储空间内文件进行读写操作。</p>
+<p> 警告 互联网上任何用户都可以对该 Bucket 内的文件进行访问，并且向该 Bucket 写入数据。这有可能造成您数据的外泄以及费用激增，若被人恶意写入违法信息还可能会侵害您的合法权益。除特殊场景外，不建议您配置公共读写权限。</p>
+</li>
+<li><p>public-read<br> 公共读，私有写，只有该存储空间的拥有者可以对该存储空间内的文件进行写操作，任何人（包括匿名访问者）都可以对该存储空间中的文件进行读操作。</p>
+<p> 警告 互联网上任何用户都可以对该 Bucket 内文件进行访问，这有可能造成您数据的外泄以及费用激增，请谨慎操作。</p>
+</li>
+<li><p>private<br> 私有读写，只有该存储空间的拥有者可以对该存储空间内的文件进行读写操作，其他人无法访问该存储空间内的文件。</p>
+</li>
+</ol>
+<p>以读取图片的例子说来，如果是私有读写，则需要在图片连接后面加上访问密钥，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://huijie-ews-officialwebsite.oss-cn-hangzhou.aliyuncs.com/enweis/200723170935-160.jpg?Expires=1599210628&amp;OSSAccessKeyId=LTAI8BhoSy8azhCF&amp;Signature=pmXlGqxmox%2FwKezSyomDxoOZSMg%3D</span><br></pre></td></tr></table></figure>
+<p>如果不加访问密钥则会有以下提示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;Error&gt;</span><br><span class="line">&lt;Code&gt;AccessDenied&lt;/Code&gt;</span><br><span class="line">&lt;Message&gt;You have no right to access this object because of bucket acl.&lt;/Message&gt;</span><br><span class="line">&lt;RequestId&gt;5F51FD89F56D43303688B470&lt;/RequestId&gt;</span><br><span class="line">&lt;HostId&gt;huijie-ews-officialwebsite.oss-cn-hangzhou.aliyuncs.com&lt;/HostId&gt;</span><br><span class="line">&lt;/Error&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：<br>用户创建一个Bucket时，如果不指定Bucket权限，OSS会自动为该Bucket设置private权限。<br>对于private资源，需要获得授权才能访问。关于授权管理，可参考权限控制。<br>对于一个已经存在的Bucket，在对象存储 -&gt; 指定的bucket -&gt; 权限管理 里面设置读写权限。</p>
+</blockquote>
+<h2 id="对象存储-OSS"><a href="#对象存储-OSS" class="headerlink" title="对象存储 OSS"></a>对象存储 OSS</h2><h4 id="图片上传"><a href="#图片上传" class="headerlink" title="图片上传"></a>图片上传</h4><h4 id="图片压缩"><a href="#图片压缩" class="headerlink" title="图片压缩"></a>图片压缩</h4><p>目前阿里云有两种方式实现图片压缩功能：质量变换和图片高级压缩。</p>
+<p><a href="https://help.aliyun.com/document_detail/44705.html?spm=a2c4g.11186623.4.3.64e41729322Z12">质量变换</a>操作是使用原图本身的格式对图片进行压缩，因此仅支持有损压缩的图片格式：JPG和WebP。对于无损压缩的图片格式（如PNG），由于其压缩前后图片质量没有变化，所以无法进行质量变换。即使为PNG格式的图片添加了质量变换的参数，也没有实际效果。</p>
+<p>如果在质量变换时不指定Q或者q参数，可能会导致图片占用空间变大。如需获得特定质量的图片，请指定Q参数。</p>
+<ol>
+<li><p>将原图缩略为宽度和高度均为100，且相对质量为原图80%的JPG图。<br> <a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/2171539851/p2629.jpg?x-oss-process=image/resize,w_100,h_100/quality,q_80">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/2171539851/p2629.jpg?x-oss-process=image/resize,w_100,h_100/quality,q_80</a></p>
+<p> <code>q</code>决定图片的相对质量，对原图按照q%进行质量压缩。例如，如果原图质量为100%，添加<code>quality,q_90</code>参数会得到质量为90％的图片。如果原图质量为80%，添加<code>quality,q_90</code>参数会得到质量72%的图片。</p>
+</li>
+<li><p>将原图缩略成宽度和高度均为100，且绝对质量为80%的JPG图。<br> <a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/2171539851/p2629.jpg?x-oss-process=image/resize,w_100,h_100/quality,Q_80">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/zh-CN/2171539851/p2629.jpg?x-oss-process=image/resize,w_100,h_100/quality,Q_80</a></p>
+<p> <code>Q</code>决定图片的绝对质量，将原图质量压缩至Q%，如果原图质量小于指定参数值，则按照原图质量重新进行压缩。</p>
+<p> 例如，如果原图质量是95%，添加<code>quality,Q_90</code>参数会得到质量90％的图片。如果原图质量是80%，添加<code>quality,Q_90</code>只能得到质量80%的图片。</p>
+</li>
+</ol>
+<blockquote>
+<p>说明 该参数只能对保存格式为JPG、WebP的图片使用，对其他格式的图片无效果。如果同时指定了<code>q</code>和<code>Q</code>，会按照<code>Q</code>的值进行处理。</p>
+</blockquote>
+<h4 id="图片高级压缩"><a href="#图片高级压缩" class="headerlink" title="图片高级压缩"></a>图片高级压缩</h4><h4 id="图片加密"><a href="#图片加密" class="headerlink" title="图片加密"></a>图片加密</h4><h4 id="图片在线预览"><a href="#图片在线预览" class="headerlink" title="图片在线预览"></a>图片在线预览</h4><p>使用 OSS 默认域名访问 html、图片资源，会有以附件形式下载的情况。若需要浏览器直接访问，需使用自定义域名进行访问。</p>
+<ol>
+<li><p>域名绑定<br> 对象存储 -&gt; bucketname -&gt; 域名管理。</p>
+</li>
+<li><p>证书托管<br> 申请证书后，下载 Nginx 证书配置上去。</p>
+</li>
+<li><p>公钥：pem，密钥：key。</p>
+</li>
+</ol>
+<h4 id="图片小程序预览"><a href="#图片小程序预览" class="headerlink" title="图片小程序预览"></a>图片小程序预览</h4><p>微信小程序配置安全域名</p>
+<h4 id="图片迁移"><a href="#图片迁移" class="headerlink" title="图片迁移"></a>图片迁移</h4><p>参考<a href="https://help.aliyun.com/document_detail/95074.html?spm=a2c4g.11186623.6.550.79154accS5qoSS">文档</a></p>
+<ol>
+<li>申请迁移资格<a href="https://page.aliyun.com/form/act998591440/index.htm?spm=5176.a2c3g.0.0.228c3d89NRZqzm">在线迁移公测申请</a></li>
+<li>给待迁移数据的OSS用户分配迁移权限：AliyunOSSFullAccess、AliyunMGWFullAccess。</li>
+<li>在<a href="https://mgw.console.aliyun.com/?spm=a2c4g.11186623.2.12.70f7614ccmJkHM#/job?_k=6w2hbo">迁移控制台</a>分别创建源地址和目的地址。<br> 如果只希望迁移某个文件夹，则 OSS Prefix 加上此文件夹名称。</li>
+<li>迁移控制台创建迁移任务。</li>
+</ol>
+<p><a href="https://help.aliyun.com/document_detail/90090.html?spm=a2c4g.11186623.4.2.69157f85oBY3jH">存储类型转换</a></p>
+<blockquote>
+<p>图片存储类型为归档存储的无法迁移，我是手工去解冻的。</p>
+</blockquote>
+<h4 id="图片跨域设置"><a href="#图片跨域设置" class="headerlink" title="图片跨域设置"></a>图片跨域设置</h4><p>问题：图片没法上传，提示跨域。</p>
+<p>oss -&gt; bucket -&gt; 权限管理 -&gt; 跨域设置</p>
+<p>参考<a href="https://help.aliyun.com/document_detail/31870.html?spm=5176.8466060.cors.1.6d6e1450ab9CBj">设置跨域资源共享</a></p>
+<p>来源：<em><br>允许的Methods：钩上全部<br>允许Headers：</em><br>暴露 Headers：ETag 和 x-oss-request-id<br>缓存时间（秒）：1<br>返回 Vary: Origin：不选</p>
+<h4 id="访问控制-RAM"><a href="#访问控制-RAM" class="headerlink" title="访问控制 RAM"></a>访问控制 RAM</h4><ol>
+<li>创建OSS用户，选择编程访问。</li>
+<li>创建 AccessKey ID 和 AccessKey Secret。</li>
+<li>添加权限：AliyunOSSFullAccess、AliyunOSSReadOnlyAccess、AliyunYundunNewBGPAntiDDoS、AliyunYundunNewBGPAntiDDoS。</li>
+</ol>
+<h2 id="云效"><a href="#云效" class="headerlink" title="云效"></a>云效</h2><h4 id="机器-Agent-管理"><a href="#机器-Agent-管理" class="headerlink" title="机器 Agent 管理"></a>机器 Agent 管理</h4><p>1、添加 Agent。</p>
+<p>企业设置 -&gt; 机器管理 -&gt; 添加主机。</p>
+<p>2、重启 Agent。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/staragent/bin/staragentctl restart;</span><br></pre></td></tr></table></figure>
+<p>3、Agent 状态。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/staragent/bin/staragentctl status;</span><br></pre></td></tr></table></figure>
+<p>4、卸载 Agent。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/home/staragent/bin/staragentctl stop;</span><br><span class="line">rm -rf /usr/sbin/staragent_sn;</span><br><span class="line">rm -rf /home/aol2</span><br><span class="line">rm -rf /home/staragent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">/home/staragent/bin/staragentctl stop &amp;&amp; rm -rf /usr/sbin/staragent_sn &amp;&amp; rm -rf /home/aol2 &amp;&amp; rm -rf /home/staragent</span><br></pre></td></tr></table></figure>
+<p><a href="https://help.aliyun.com/document_detail/62360.html?spm=a2c40.rdc_buyecspage.resource.1.18e78477pl96zp">参考</a></p>
+<p>5、安装 Python2。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 Python2.7</span></span><br><span class="line">yum install -y python2;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建软连接</span></span><br><span class="line">ln -s /usr/bin/python2 /usr/bin/python</span><br></pre></td></tr></table></figure>
+<h4 id="流水线"><a href="#流水线" class="headerlink" title="流水线"></a>流水线</h4><p>1、Java RDC 脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/data/deploy/Java/icebartech-cloudnote/package.tgz</span><br><span class="line"></span><br><span class="line">set -e;</span><br><span class="line">if [ -f &quot;/data/deploy/Java/icebartech-cloudnote/deploy.sh&quot; ]; </span><br><span class="line">    then /data/deploy/Java/icebartech-cloudnote/deploy.sh stop; </span><br><span class="line">fi;</span><br><span class="line">mkdir -p /data/deploy/Java/icebartech-cloudnote;</span><br><span class="line">tar xf /data/deploy/Java/icebartech-cloudnote/package.tgz -o -C /data/deploy/Java/icebartech-cloudnote;</span><br><span class="line">chmod -R 777 /data/deploy/Java/icebartech-cloudnote/deploy.sh;</span><br><span class="line">/data/deploy/Java/icebartech-cloudnote/deploy.sh start</span><br></pre></td></tr></table></figure></p>
+<p>2、Web 打包 RDC 脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/data/deploy/Web/icebartech-bookstore/icebartech-bookstore-sys/package.tgz</span><br><span class="line"></span><br><span class="line">set -e;</span><br><span class="line">mkdir -p /data/deploy/Web/icebartech-bookstore/icebartech-bookstore-sys/dist;</span><br><span class="line">tar xf /data/deploy/Web/icebartech-bookstore/icebartech-bookstore-sys/package.tgz -o -C /data/deploy/Web/icebartech-bookstore/icebartech-bookstore-sys/dist;</span><br></pre></td></tr></table></figure>
+<p>3、Web 源码 RDC 脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/data/deploy/Web/icebartech-home/icebartech-home-sys/package.tgz</span><br><span class="line"></span><br><span class="line">set -e;</span><br><span class="line">mkdir -p /data/deploy/Web/icebartech-home/icebartech-home-sys;</span><br><span class="line">tar xf /data/deploy/Web/home/home-sys/package.tgz -o -C /data/deploy/Web/home/home-sys;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#访问控制"><span class="toc-number">1.</span> <span class="toc-text">访问控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象存储-OSS"><span class="toc-number">2.</span> <span class="toc-text">对象存储 OSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#图片上传"><span class="toc-number">2.0.1.</span> <span class="toc-text">图片上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片压缩"><span class="toc-number">2.0.2.</span> <span class="toc-text">图片压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片高级压缩"><span class="toc-number">2.0.3.</span> <span class="toc-text">图片高级压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片加密"><span class="toc-number">2.0.4.</span> <span class="toc-text">图片加密</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片在线预览"><span class="toc-number">2.0.5.</span> <span class="toc-text">图片在线预览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片小程序预览"><span class="toc-number">2.0.6.</span> <span class="toc-text">图片小程序预览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片迁移"><span class="toc-number">2.0.7.</span> <span class="toc-text">图片迁移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片跨域设置"><span class="toc-number">2.0.8.</span> <span class="toc-text">图片跨域设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#访问控制-RAM"><span class="toc-number">2.0.9.</span> <span class="toc-text">访问控制 RAM</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#云效"><span class="toc-number">3.</span> <span class="toc-text">云效</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#机器-Agent-管理"><span class="toc-number">3.0.1.</span> <span class="toc-text">机器 Agent 管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#流水线"><span class="toc-number">3.0.2.</span> <span class="toc-text">流水线</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/09/04/其它/阿里云服务/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&text=阿里云服务"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&is_video=false&description=阿里云服务"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=阿里云服务&body=Check out this article: http://yoursite.com/2020/09/04/其它/阿里云服务/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&title=阿里云服务"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/09/04/其它/阿里云服务/&name=阿里云服务&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

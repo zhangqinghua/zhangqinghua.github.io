@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="线程池如何使用？单个线程，主要特点如下：  创建一个单线程化的线程池，它只会用一唯一的工作线程来执行任务，保证所有任务按照指定顺序执行。 newSingleThreadExecutor 将 corePollSize 和 maximumPollSize 都设置为 1，它使用的是 LinkedBlockQueue。 适用一个任务一个任务执行的场景。  123456789101112131415publ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="尚硅谷Java大厂面试题全集">
+<meta property="og:url" content="http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="线程池如何使用？单个线程，主要特点如下：  创建一个单线程化的线程池，它只会用一唯一的工作线程来执行任务，保证所有任务按照指定顺序执行。 newSingleThreadExecutor 将 corePollSize 和 maximumPollSize 都设置为 1，它使用的是 LinkedBlockQueue。 适用一个任务一个任务执行的场景。  123456789101112131415publ">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-01-18T09:35:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="尚硅谷Java大厂面试题全集">
+<meta name="twitter:description" content="线程池如何使用？单个线程，主要特点如下：  创建一个单线程化的线程池，它只会用一唯一的工作线程来执行任务，保证所有任务按照指定顺序执行。 newSingleThreadExecutor 将 corePollSize 和 maximumPollSize 都设置为 1，它使用的是 LinkedBlockQueue。 适用一个任务一个任务执行的场景。  123456789101112131415publ">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>尚硅谷Java大厂面试题全集</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/01/11/Java 相关/Java 开发手册/Java 基础/Java 集合/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/01/10/开发工具/HEXO 使用指南/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&text=尚硅谷Java大厂面试题全集"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&is_video=false&description=尚硅谷Java大厂面试题全集"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=尚硅谷Java大厂面试题全集&body=Check out this article: http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&name=尚硅谷Java大厂面试题全集&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池如何使用？"><span class="toc-number">1.</span> <span class="toc-text">线程池如何使用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#为什么用线程池，优势？"><span class="toc-number">2.</span> <span class="toc-text">为什么用线程池，优势？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池有几个重要的参数？"><span class="toc-number">3.</span> <span class="toc-text">线程池有几个重要的参数？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#蚂蚁花呗一面（一个小时）"><span class="toc-number"></span> <span class="toc-text">蚂蚁花呗一面（一个小时）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Java-容器有哪些？哪些是同步容器？哪些是并发容器？"><span class="toc-number">1.</span> <span class="toc-text">Java 容器有哪些？哪些是同步容器？哪些是并发容器？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ArrayList-和-LinkedList-的插入和访问的时间复杂度？"><span class="toc-number">2.</span> <span class="toc-text">ArrayList 和 LinkedList 的插入和访问的时间复杂度？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Java-反射原理，注解原理？"><span class="toc-number">3.</span> <span class="toc-text">Java 反射原理，注解原理？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#新生代分为几个区？使用什么算法进行垃圾回收？为什么使用这个算法？"><span class="toc-number">4.</span> <span class="toc-text">新生代分为几个区？使用什么算法进行垃圾回收？为什么使用这个算法？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMap-在什么情况下会扩容，或者有哪些操作会导致扩容？"><span class="toc-number">5.</span> <span class="toc-text">HashMap 在什么情况下会扩容，或者有哪些操作会导致扩容？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMap-push-方法的执行过程？"><span class="toc-number">6.</span> <span class="toc-text">HashMap push 方法的执行过程？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMap-检测到-hash-冲突后，将元素插入在链表的末尾还是开头？"><span class="toc-number">7.</span> <span class="toc-text">HashMap 检测到 hash 冲突后，将元素插入在链表的末尾还是开头？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-8-还采用了红黑树，讲讲红黑树的特性，为什么人家一定要用红黑树而不是-AV了，B-树之类的？"><span class="toc-number">8.</span> <span class="toc-text">1.8 还采用了红黑树，讲讲红黑树的特性，为什么人家一定要用红黑树而不是 AV了，B 树之类的？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#https-和-http-的区别，也没有用过其它安全传输手段？"><span class="toc-number">9.</span> <span class="toc-text">https 和 http 的区别，也没有用过其它安全传输手段？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池的工作原理，几个重要的参数，然后给了具体几个参数分析线程池会怎么做，最后问阻塞队列的作用是什么？"><span class="toc-number">10.</span> <span class="toc-text">线程池的工作原理，几个重要的参数，然后给了具体几个参数分析线程池会怎么做，最后问阻塞队列的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux-怎么查看系统负载情况？"><span class="toc-number">11.</span> <span class="toc-text">Linux 怎么查看系统负载情况？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#请详细描述-Spring-MVC-处理请求全流程？"><span class="toc-number">12.</span> <span class="toc-text">请详细描述 Spring MVC 处理请求全流程？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Spring-一个-bean-装配的过程？"><span class="toc-number">13.</span> <span class="toc-text">Spring 一个 bean 装配的过程？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#讲一讲-AtomicInteger、为什么要用-CAS-而不是-synchronized？"><span class="toc-number">14.</span> <span class="toc-text">讲一讲 AtomicInteger、为什么要用 CAS 而不是 synchronized？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#美团一面经验"><span class="toc-number"></span> <span class="toc-text">美团一面经验</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#最近做的比较熟悉的项目是哪个，画一下项目技术架构图"><span class="toc-number">1.</span> <span class="toc-text">最近做的比较熟悉的项目是哪个，画一下项目技术架构图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JVM-老年代和新生代的比例？"><span class="toc-number">2.</span> <span class="toc-text">JVM 老年代和新生代的比例？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#YGC-和-FGC-发生的具体场景"><span class="toc-number">3.</span> <span class="toc-text">YGC 和 FGC 发生的具体场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jstack、jmap、jutil-分别的意义？如何线上排查-JVM-的相关问题？"><span class="toc-number">4.</span> <span class="toc-text">jstack、jmap、jutil 分别的意义？如何线上排查 JVM 的相关问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池的构造类的方法的-5-个参数的具体意义？"><span class="toc-number">5.</span> <span class="toc-text">线程池的构造类的方法的 5 个参数的具体意义？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#单机上一个线程池正在处理服务，如果忽然断电怎么办（正在处理的和阻塞队列里面的请求怎么处理）"><span class="toc-number">6.</span> <span class="toc-text">单机上一个线程池正在处理服务，如果忽然断电怎么办（正在处理的和阻塞队列里面的请求怎么处理）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用无界阻塞队列会出现什么问题？"><span class="toc-number">7.</span> <span class="toc-text">使用无界阻塞队列会出现什么问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接口如何处理重复请求？"><span class="toc-number">8.</span> <span class="toc-text">接口如何处理重复请求？</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        尚硅谷Java大厂面试题全集
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-01-10T16:00:00.000Z" itemprop="datePublished">2021-01-11</time>
+        
+        (Updated: <time datetime="2021-01-18T09:35:00.000Z" itemprop="dateModified">2021-01-18</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/面试题/">面试题</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h4 id="线程池如何使用？"><a href="#线程池如何使用？" class="headerlink" title="线程池如何使用？"></a>线程池如何使用？</h4><p>单个线程，主要特点如下：</p>
+<ol>
+<li>创建一个单线程化的线程池，它只会用一唯一的工作线程来执行任务，保证所有任务按照指定顺序执行。</li>
+<li>newSingleThreadExecutor 将 corePollSize 和 maximumPollSize 都设置为 1，它使用的是 LinkedBlockQueue。</li>
+<li>适用一个任务一个任务执行的场景。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService(<span class="keyword">new</span> ThreadPoolExecutor(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0L</span>, </span><br><span class="line">                                                                         TimeUnit.MILLISECONDS, </span><br><span class="line">                                                                         <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ExecutorService executor = Executors.newSingleThreadExecutor();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">    executor.execute(() -&gt; System.out.println(Thread.currentThread().getName() + <span class="string">"\t 办理业务"</span>));</span><br><span class="line">&#125;</span><br><span class="line">executor.shutdown();</span><br><span class="line"></span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>	 办理业务</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>	 办理业务</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>	 办理业务</span><br></pre></td></tr></table></figure>
+<p>固定线程数</p>
+<ol>
+<li>执行长期任务，性能好很多。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(nThreads, nThreads, <span class="number">0L</span>, TimeUnit.MILLISECONDS, <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ExecutorService executor = Executors.newFixedThreadPool(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">    executor.execute(() -&gt; System.out.println(Thread.currentThread().getName() + <span class="string">"\t 办理业务"</span>));</span><br><span class="line">&#125;</span><br><span class="line">executor.shutdown();</span><br><span class="line"></span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">2</span>	 办理业务</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>	 办理业务</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">2</span>	 办理业务</span><br></pre></td></tr></table></figure>
+<p>无限制线程数，主要特点如下：</p>
+<ol>
+<li>创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。</li>
+<li>任务来了就创建线程，当线程空闲超过 60 秒，就销毁线程。</li>
+<li>适用执行很多短期异步的小程序或者负载较轻的服务。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">0</span>, Integer.MAX_VALUE, <span class="number">60L</span>, TimeUnit.SECONDS, <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ExecutorService executor = Executors.newCachedThreadPool();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">    executor.execute(() -&gt; System.out.println(Thread.currentThread().getName() + <span class="string">"\t 办理业务"</span>));</span><br><span class="line">&#125;</span><br><span class="line">executor.shutdown();</span><br><span class="line"></span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">2</span>	 办理业务</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">3</span>	 办理业务</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>	 办理业务</span><br></pre></td></tr></table></figure>
+<h4 id="为什么用线程池，优势？"><a href="#为什么用线程池，优势？" class="headerlink" title="为什么用线程池，优势？"></a>为什么用线程池，优势？</h4><p>线程池做的工作主要是控制运行的线程的数量，处理过程中将任务放进队列，然后在线程创建后启动这些任务。如果线程数量超过了最大数量，则在队列中排队等候。等其它线程执行完毕，再从队列中取出任务来执行。</p>
+<p>线程池的主要特点为：线程复用、控制最大并发数、管理线程。</p>
+<p>线程池的好处有：</p>
+<ol>
+<li>降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的销毁。</li>
+<li>提高响应速度。当任务到达时，任务可以不需要等待线程创建就能立即执行。</li>
+<li>提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性。使用线程池可以进行统一的分配，调优和监控。</li>
+</ol>
+<h4 id="线程池有几个重要的参数？"><a href="#线程池有几个重要的参数？" class="headerlink" title="线程池有几个重要的参数？"></a>线程池有几个重要的参数？</h4><ol>
+<li>corePoolSize 线程池中的常驻核心线程数；</li>
+<li>maximumPollSize 线程池能够容纳同时执行的最大线程数，此值必须大于等于1；</li>
+<li>keepAliveTime 多余的空闲线程的存活时间。当前线程池数量超过 corePoolSize 时，当空闲时间达到 keepAliveTime 值时，多余空闲线程会被销毁只剩下 corePoolSize 个线程为止；</li>
+<li>unit keepAliveTime 的单位；</li>
+<li>workQueue 任务队列，被提交但尚未被执行的任务；</li>
+<li>threadFactory 表示生成线程池中工作线程的线程工厂，用于创建线程，一般默认即可；</li>
+<li>handler 拒绝策略，表示当队列满了并且工作线程大于等于线程池的最大线程数时如何拒绝新的任务；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="蚂蚁花呗一面（一个小时）"><a href="#蚂蚁花呗一面（一个小时）" class="headerlink" title="蚂蚁花呗一面（一个小时）"></a>蚂蚁花呗一面（一个小时）</h2><h4 id="Java-容器有哪些？哪些是同步容器？哪些是并发容器？"><a href="#Java-容器有哪些？哪些是同步容器？哪些是并发容器？" class="headerlink" title="Java 容器有哪些？哪些是同步容器？哪些是并发容器？"></a>Java 容器有哪些？哪些是同步容器？哪些是并发容器？</h4><h4 id="ArrayList-和-LinkedList-的插入和访问的时间复杂度？"><a href="#ArrayList-和-LinkedList-的插入和访问的时间复杂度？" class="headerlink" title="ArrayList 和 LinkedList 的插入和访问的时间复杂度？"></a>ArrayList 和 LinkedList 的插入和访问的时间复杂度？</h4><h4 id="Java-反射原理，注解原理？"><a href="#Java-反射原理，注解原理？" class="headerlink" title="Java 反射原理，注解原理？"></a>Java 反射原理，注解原理？</h4><h4 id="新生代分为几个区？使用什么算法进行垃圾回收？为什么使用这个算法？"><a href="#新生代分为几个区？使用什么算法进行垃圾回收？为什么使用这个算法？" class="headerlink" title="新生代分为几个区？使用什么算法进行垃圾回收？为什么使用这个算法？"></a>新生代分为几个区？使用什么算法进行垃圾回收？为什么使用这个算法？</h4><h4 id="HashMap-在什么情况下会扩容，或者有哪些操作会导致扩容？"><a href="#HashMap-在什么情况下会扩容，或者有哪些操作会导致扩容？" class="headerlink" title="HashMap 在什么情况下会扩容，或者有哪些操作会导致扩容？"></a>HashMap 在什么情况下会扩容，或者有哪些操作会导致扩容？</h4><h4 id="HashMap-push-方法的执行过程？"><a href="#HashMap-push-方法的执行过程？" class="headerlink" title="HashMap push 方法的执行过程？"></a>HashMap push 方法的执行过程？</h4><h4 id="HashMap-检测到-hash-冲突后，将元素插入在链表的末尾还是开头？"><a href="#HashMap-检测到-hash-冲突后，将元素插入在链表的末尾还是开头？" class="headerlink" title="HashMap 检测到 hash 冲突后，将元素插入在链表的末尾还是开头？"></a>HashMap 检测到 hash 冲突后，将元素插入在链表的末尾还是开头？</h4><h4 id="1-8-还采用了红黑树，讲讲红黑树的特性，为什么人家一定要用红黑树而不是-AV了，B-树之类的？"><a href="#1-8-还采用了红黑树，讲讲红黑树的特性，为什么人家一定要用红黑树而不是-AV了，B-树之类的？" class="headerlink" title="1.8 还采用了红黑树，讲讲红黑树的特性，为什么人家一定要用红黑树而不是 AV了，B 树之类的？"></a>1.8 还采用了红黑树，讲讲红黑树的特性，为什么人家一定要用红黑树而不是 AV了，B 树之类的？</h4><h4 id="https-和-http-的区别，也没有用过其它安全传输手段？"><a href="#https-和-http-的区别，也没有用过其它安全传输手段？" class="headerlink" title="https 和 http 的区别，也没有用过其它安全传输手段？"></a>https 和 http 的区别，也没有用过其它安全传输手段？</h4><h4 id="线程池的工作原理，几个重要的参数，然后给了具体几个参数分析线程池会怎么做，最后问阻塞队列的作用是什么？"><a href="#线程池的工作原理，几个重要的参数，然后给了具体几个参数分析线程池会怎么做，最后问阻塞队列的作用是什么？" class="headerlink" title="线程池的工作原理，几个重要的参数，然后给了具体几个参数分析线程池会怎么做，最后问阻塞队列的作用是什么？"></a>线程池的工作原理，几个重要的参数，然后给了具体几个参数分析线程池会怎么做，最后问阻塞队列的作用是什么？</h4><h4 id="Linux-怎么查看系统负载情况？"><a href="#Linux-怎么查看系统负载情况？" class="headerlink" title="Linux 怎么查看系统负载情况？"></a>Linux 怎么查看系统负载情况？</h4><h4 id="请详细描述-Spring-MVC-处理请求全流程？"><a href="#请详细描述-Spring-MVC-处理请求全流程？" class="headerlink" title="请详细描述 Spring MVC 处理请求全流程？"></a>请详细描述 Spring MVC 处理请求全流程？</h4><h4 id="Spring-一个-bean-装配的过程？"><a href="#Spring-一个-bean-装配的过程？" class="headerlink" title="Spring 一个 bean 装配的过程？"></a>Spring 一个 bean 装配的过程？</h4><h4 id="讲一讲-AtomicInteger、为什么要用-CAS-而不是-synchronized？"><a href="#讲一讲-AtomicInteger、为什么要用-CAS-而不是-synchronized？" class="headerlink" title="讲一讲 AtomicInteger、为什么要用 CAS 而不是 synchronized？"></a>讲一讲 AtomicInteger、为什么要用 CAS 而不是 synchronized？</h4><h2 id="美团一面经验"><a href="#美团一面经验" class="headerlink" title="美团一面经验"></a>美团一面经验</h2><h4 id="最近做的比较熟悉的项目是哪个，画一下项目技术架构图"><a href="#最近做的比较熟悉的项目是哪个，画一下项目技术架构图" class="headerlink" title="最近做的比较熟悉的项目是哪个，画一下项目技术架构图"></a>最近做的比较熟悉的项目是哪个，画一下项目技术架构图</h4><h4 id="JVM-老年代和新生代的比例？"><a href="#JVM-老年代和新生代的比例？" class="headerlink" title="JVM 老年代和新生代的比例？"></a>JVM 老年代和新生代的比例？</h4><h4 id="YGC-和-FGC-发生的具体场景"><a href="#YGC-和-FGC-发生的具体场景" class="headerlink" title="YGC 和 FGC 发生的具体场景"></a>YGC 和 FGC 发生的具体场景</h4><h4 id="jstack、jmap、jutil-分别的意义？如何线上排查-JVM-的相关问题？"><a href="#jstack、jmap、jutil-分别的意义？如何线上排查-JVM-的相关问题？" class="headerlink" title="jstack、jmap、jutil 分别的意义？如何线上排查 JVM 的相关问题？"></a>jstack、jmap、jutil 分别的意义？如何线上排查 JVM 的相关问题？</h4><h4 id="线程池的构造类的方法的-5-个参数的具体意义？"><a href="#线程池的构造类的方法的-5-个参数的具体意义？" class="headerlink" title="线程池的构造类的方法的 5 个参数的具体意义？"></a>线程池的构造类的方法的 5 个参数的具体意义？</h4><h4 id="单机上一个线程池正在处理服务，如果忽然断电怎么办（正在处理的和阻塞队列里面的请求怎么处理）"><a href="#单机上一个线程池正在处理服务，如果忽然断电怎么办（正在处理的和阻塞队列里面的请求怎么处理）" class="headerlink" title="单机上一个线程池正在处理服务，如果忽然断电怎么办（正在处理的和阻塞队列里面的请求怎么处理）"></a>单机上一个线程池正在处理服务，如果忽然断电怎么办（正在处理的和阻塞队列里面的请求怎么处理）</h4><h4 id="使用无界阻塞队列会出现什么问题？"><a href="#使用无界阻塞队列会出现什么问题？" class="headerlink" title="使用无界阻塞队列会出现什么问题？"></a>使用无界阻塞队列会出现什么问题？</h4><h4 id="接口如何处理重复请求？"><a href="#接口如何处理重复请求？" class="headerlink" title="接口如何处理重复请求？"></a>接口如何处理重复请求？</h4>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池如何使用？"><span class="toc-number">1.</span> <span class="toc-text">线程池如何使用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#为什么用线程池，优势？"><span class="toc-number">2.</span> <span class="toc-text">为什么用线程池，优势？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池有几个重要的参数？"><span class="toc-number">3.</span> <span class="toc-text">线程池有几个重要的参数？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#蚂蚁花呗一面（一个小时）"><span class="toc-number"></span> <span class="toc-text">蚂蚁花呗一面（一个小时）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Java-容器有哪些？哪些是同步容器？哪些是并发容器？"><span class="toc-number">1.</span> <span class="toc-text">Java 容器有哪些？哪些是同步容器？哪些是并发容器？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ArrayList-和-LinkedList-的插入和访问的时间复杂度？"><span class="toc-number">2.</span> <span class="toc-text">ArrayList 和 LinkedList 的插入和访问的时间复杂度？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Java-反射原理，注解原理？"><span class="toc-number">3.</span> <span class="toc-text">Java 反射原理，注解原理？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#新生代分为几个区？使用什么算法进行垃圾回收？为什么使用这个算法？"><span class="toc-number">4.</span> <span class="toc-text">新生代分为几个区？使用什么算法进行垃圾回收？为什么使用这个算法？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMap-在什么情况下会扩容，或者有哪些操作会导致扩容？"><span class="toc-number">5.</span> <span class="toc-text">HashMap 在什么情况下会扩容，或者有哪些操作会导致扩容？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMap-push-方法的执行过程？"><span class="toc-number">6.</span> <span class="toc-text">HashMap push 方法的执行过程？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMap-检测到-hash-冲突后，将元素插入在链表的末尾还是开头？"><span class="toc-number">7.</span> <span class="toc-text">HashMap 检测到 hash 冲突后，将元素插入在链表的末尾还是开头？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-8-还采用了红黑树，讲讲红黑树的特性，为什么人家一定要用红黑树而不是-AV了，B-树之类的？"><span class="toc-number">8.</span> <span class="toc-text">1.8 还采用了红黑树，讲讲红黑树的特性，为什么人家一定要用红黑树而不是 AV了，B 树之类的？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#https-和-http-的区别，也没有用过其它安全传输手段？"><span class="toc-number">9.</span> <span class="toc-text">https 和 http 的区别，也没有用过其它安全传输手段？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池的工作原理，几个重要的参数，然后给了具体几个参数分析线程池会怎么做，最后问阻塞队列的作用是什么？"><span class="toc-number">10.</span> <span class="toc-text">线程池的工作原理，几个重要的参数，然后给了具体几个参数分析线程池会怎么做，最后问阻塞队列的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux-怎么查看系统负载情况？"><span class="toc-number">11.</span> <span class="toc-text">Linux 怎么查看系统负载情况？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#请详细描述-Spring-MVC-处理请求全流程？"><span class="toc-number">12.</span> <span class="toc-text">请详细描述 Spring MVC 处理请求全流程？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Spring-一个-bean-装配的过程？"><span class="toc-number">13.</span> <span class="toc-text">Spring 一个 bean 装配的过程？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#讲一讲-AtomicInteger、为什么要用-CAS-而不是-synchronized？"><span class="toc-number">14.</span> <span class="toc-text">讲一讲 AtomicInteger、为什么要用 CAS 而不是 synchronized？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#美团一面经验"><span class="toc-number"></span> <span class="toc-text">美团一面经验</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#最近做的比较熟悉的项目是哪个，画一下项目技术架构图"><span class="toc-number">1.</span> <span class="toc-text">最近做的比较熟悉的项目是哪个，画一下项目技术架构图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JVM-老年代和新生代的比例？"><span class="toc-number">2.</span> <span class="toc-text">JVM 老年代和新生代的比例？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#YGC-和-FGC-发生的具体场景"><span class="toc-number">3.</span> <span class="toc-text">YGC 和 FGC 发生的具体场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jstack、jmap、jutil-分别的意义？如何线上排查-JVM-的相关问题？"><span class="toc-number">4.</span> <span class="toc-text">jstack、jmap、jutil 分别的意义？如何线上排查 JVM 的相关问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池的构造类的方法的-5-个参数的具体意义？"><span class="toc-number">5.</span> <span class="toc-text">线程池的构造类的方法的 5 个参数的具体意义？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#单机上一个线程池正在处理服务，如果忽然断电怎么办（正在处理的和阻塞队列里面的请求怎么处理）"><span class="toc-number">6.</span> <span class="toc-text">单机上一个线程池正在处理服务，如果忽然断电怎么办（正在处理的和阻塞队列里面的请求怎么处理）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用无界阻塞队列会出现什么问题？"><span class="toc-number">7.</span> <span class="toc-text">使用无界阻塞队列会出现什么问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接口如何处理重复请求？"><span class="toc-number">8.</span> <span class="toc-text">接口如何处理重复请求？</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&text=尚硅谷Java大厂面试题全集"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&is_video=false&description=尚硅谷Java大厂面试题全集"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=尚硅谷Java大厂面试题全集&body=Check out this article: http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&title=尚硅谷Java大厂面试题全集"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/01/11/面试题/尚硅谷Java大厂面试题全集/&name=尚硅谷Java大厂面试题全集&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

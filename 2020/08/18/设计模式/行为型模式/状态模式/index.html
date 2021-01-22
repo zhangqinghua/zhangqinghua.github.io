@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="模式介绍 举例说明 抽奖活动，多种状态。  意图目的 主要用来解决对象在多种状态转换时，需要对外输出不同的行为和问题。状态和行为一一对应，状态之间可以相互转换。  当一个对象的内在状态改变时，允许改变其行为，这个对象看起来像是改变了其类。  主要解决    如何解决 环境类：用于维护状态实例，这个实例定义了当前状态。 抽象状态：抽象的状态角色，定义了一个接口封装与环境类的一个特定接口相关行为。 具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="状态模式">
+<meta property="og:url" content="http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="模式介绍 举例说明 抽奖活动，多种状态。  意图目的 主要用来解决对象在多种状态转换时，需要对外输出不同的行为和问题。状态和行为一一对应，状态之间可以相互转换。  当一个对象的内在状态改变时，允许改变其行为，这个对象看起来像是改变了其类。  主要解决    如何解决 环境类：用于维护状态实例，这个实例定义了当前状态。 抽象状态：抽象的状态角色，定义了一个接口封装与环境类的一个特定接口相关行为。 具">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-01-11T03:13:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="状态模式">
+<meta name="twitter:description" content="模式介绍 举例说明 抽奖活动，多种状态。  意图目的 主要用来解决对象在多种状态转换时，需要对外输出不同的行为和问题。状态和行为一一对应，状态之间可以相互转换。  当一个对象的内在状态改变时，允许改变其行为，这个对象看起来像是改变了其类。  主要解决    如何解决 环境类：用于维护状态实例，这个实例定义了当前状态。 抽象状态：抽象的状态角色，定义了一个接口封装与环境类的一个特定接口相关行为。 具">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>状态模式</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/08/18/设计模式/行为型模式/观察者模式/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/08/18/设计模式/J2EE 模式/空对象模式/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&text=状态模式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&is_video=false&description=状态模式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=状态模式&body=Check out this article: http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&name=状态模式&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模式介绍"><span class="toc-number">1.</span> <span class="toc-text">模式介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#借贷平台源码解析"><span class="toc-number">3.</span> <span class="toc-text">借贷平台源码解析</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        状态模式
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-17T16:00:40.000Z" itemprop="datePublished">2020-08-18</time>
+        
+        (Updated: <time datetime="2021-01-11T03:13:36.000Z" itemprop="dateModified">2021-01-11</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/设计模式/">设计模式</a> › <a class="category-link" href="/categories/设计模式/行为型模式/">行为型模式</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="模式介绍"><a href="#模式介绍" class="headerlink" title="模式介绍"></a>模式介绍</h2><ol>
+<li><p>举例说明<br> 抽奖活动，多种状态。</p>
+</li>
+<li><p>意图目的<br> 主要用来解决对象在多种状态转换时，需要对外输出不同的行为和问题。状态和行为一一对应，状态之间可以相互转换。</p>
+<p> 当一个对象的内在状态改变时，允许改变其行为，这个对象看起来像是改变了其类。</p>
+</li>
+<li><p>主要解决</p>
+</li>
+</ol>
+<ol>
+<li><p>如何解决<br> 环境类：用于维护状态实例，这个实例定义了当前状态。<br> 抽象状态：抽象的状态角色，定义了一个接口封装与环境类的一个特定接口相关行为。<br> 具体状态：每个状态子类试了一个与环境类的一个状态相关行为。<br> 客户类：使用环境类的。</p>
+</li>
+<li><p>何时使用<br> 当一个事件或者对象有很多状态，状态之间相互转换，对不同的状态要求不同的行为的时候，可以考虑使用状态模式。</p>
+</li>
+<li><p>优点缺点</p>
+<p> 代码具有很强的可读性。状态模式将每个状态的行为封装到对应的一个类中。</p>
+<p> 方便维护，将容易产生问题的 if/else 语句删除了。如果把每个状态的行为都放到一个类中，每次调用方法时都要判断当前是什么状态，不但会产生很多 if/else 语句，而且容易出错。</p>
+<p> 符合“开闭原则”，容易增删状态。</p>
+<p> 会产生很多类，每个状态都要对应一个类，加大维护难度。</p>
+</li>
+<li><p>注意事项</p>
+</li>
+<li><p>应用场景<br> 订单状态。</p>
+</li>
+<li><p>模式扩展</p>
+</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>请编写程序完成 APP 抽奖活动，具体要求如下：</p>
+<ol>
+<li>假如没参加一次这个活动要扣除用户 50 积分，中奖概率为 10%。</li>
+<li>奖品数量固定，抽完就不能抽奖。</li>
+<li>活动有四个状态：可以抽奖、不能抽奖、发放奖品和奖品领完。</li>
+<li>活动的四个状态转换关系如下图。</li>
+</ol>
+<pre class="mermaid">graph LR
+
+可以抽奖 -->|抽奖-90%没中 | 不能抽奖
+不能抽奖 -->|重玩-扣除50积分| 可以抽奖
+
+可以抽奖 -->|抽奖-10%中奖| 发放奖品
+
+发放奖品 -->|领奖-还有奖品| 不能抽奖
+
+发放奖品 -->|领奖-没有奖品| 奖品领完</pre>
+
+<p>1、客户类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 创建一个活动，投放2个奖品</span></span><br><span class="line">        Activity activity = <span class="keyword">new</span> Activity(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">"第 "</span> + i + <span class="string">" 次玩。。。"</span>);</span><br><span class="line">            activity.deduce();</span><br><span class="line">            Boolean flag = activity.raffle();</span><br><span class="line">            <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">                activity.dispense();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">第 <span class="number">1</span> 次玩。。。</span><br><span class="line">扣除积分成功，您可以抽奖了！</span><br><span class="line">正在抽奖，请稍等！</span><br><span class="line">很遗憾您没有中奖！</span><br><span class="line">第 <span class="number">2</span> 次玩。。。</span><br><span class="line">扣除积分成功，您可以抽奖了！</span><br><span class="line">正在抽奖，请稍等！</span><br><span class="line">很遗憾您没有中奖！</span><br><span class="line">第 <span class="number">3</span> 次玩。。。</span><br><span class="line">扣除积分成功，您可以抽奖了！</span><br><span class="line">正在抽奖，请稍等！</span><br><span class="line">恭喜您中奖了，请领取奖品！</span><br><span class="line">领取奖品成功，剩余奖品数为：<span class="number">1</span></span><br><span class="line">第 <span class="number">4</span> 次玩。。。</span><br><span class="line">扣除积分成功，您可以抽奖了！</span><br><span class="line">正在抽奖，请稍等！</span><br><span class="line">恭喜您中奖了，请领取奖品！</span><br><span class="line">领取奖品成功，剩余奖品数为：<span class="number">0</span></span><br><span class="line">第 <span class="number">5</span> 次玩。。。</span><br><span class="line">奖品已经发完，游戏结束。</span><br><span class="line">奖品已经发完，游戏结束。</span><br></pre></td></tr></table></figure></p>
+<p>2、环境类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 环境类，含有所有的状态类。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 各个状态子类也含有环境类。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 奖品数量</span></span><br><span class="line">    <span class="keyword">private</span> Integer prizes;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> State currentState;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> OverState overState;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> NoRaffleState noRaffleState;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> CanRaffleState canRaffleState;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> DispenseState dispenseState;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Activity</span><span class="params">(Integer prizes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.prizes = prizes;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.overState = <span class="keyword">new</span> OverState(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">this</span>.dispenseState = <span class="keyword">new</span> DispenseState(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">this</span>.noRaffleState = <span class="keyword">new</span> NoRaffleState(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">this</span>.canRaffleState = <span class="keyword">new</span> CanRaffleState(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.currentState = <span class="keyword">this</span>.noRaffleState;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 抽奖-10%概率中奖，90%概率没中奖</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">raffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> currentState.raffle();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重玩-扣除积分</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deduce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        currentState.deduce();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 领奖-奖品数量减少</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispense</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        currentState.dispense();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3、抽象状态和具体状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 抽象状态-定义所有行为</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 抽奖-10%概率中奖，90%概率没中奖</span></span><br><span class="line">    <span class="function">Boolean <span class="title">raffle</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重玩-扣除积分</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">deduce</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 领奖-奖品数量减少</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dispense</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体状态-不能抽奖</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoRaffleState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Activity activity;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NoRaffleState</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.activity = activity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前状态不能抽奖</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">raffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"扣了积分才能抽奖哦！"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前状态可以扣积分，扣除后，将状态设置为可以抽奖状态。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deduce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"扣除积分成功，您可以抽奖了！"</span>);</span><br><span class="line">        activity.setCurrentState(activity.getCanRaffleState());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前状态不能发奖品</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispense</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"不能发放奖品！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体状态-可以抽奖</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CanRaffleState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Activity activity;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CanRaffleState</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.activity = activity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以抽奖状态，用户可以进行抽奖行为。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">raffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"正在抽奖，请稍等！"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 抽奖结果</span></span><br><span class="line">        Boolean flag = <span class="keyword">new</span> Random().nextBoolean();</span><br><span class="line">        System.out.println(flag ? <span class="string">"恭喜您中奖了，请领取奖品！"</span> : <span class="string">"很遗憾您没有中奖！"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 状态转移，如果已经中奖了则转为领取奖品状态，没中奖则为不能抽奖状态。</span></span><br><span class="line">        activity.setCurrentState(flag ? activity.getDispenseState() : activity.getNoRaffleState());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> flag;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以抽奖状态，用户不能进行扣除积分行为。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deduce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"已经扣取过积分了！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以抽奖状态，用户不能进行领奖行为。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispense</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"没有中奖，不能发放奖品！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体状态-发放奖品</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DispenseState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Activity activity;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DispenseState</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.activity = activity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发放奖品状态，不能进行抽奖行为</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">raffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"请先领取奖品！"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发放奖品状态，不能进行扣除积分行为</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deduce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"请先领取奖品！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发放奖品状态，可以领取奖品，并进入下一状态。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispense</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        activity.setPrizes(activity.getPrizes() - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"领取奖品成功，剩余奖品数为："</span> + activity.getPrizes());</span><br><span class="line"></span><br><span class="line">        activity.setCurrentState(activity.getPrizes() &gt; <span class="number">0</span> ? activity.getNoRaffleState() : activity.getOverState());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体状态-奖品领完</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OverState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Activity activity;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OverState</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.activity = activity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">raffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"奖品已经发完，游戏结束。"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deduce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"奖品已经发完，游戏结束。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispense</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"奖品已经发完，游戏结束。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="借贷平台源码解析"><a href="#借贷平台源码解析" class="headerlink" title="借贷平台源码解析"></a>借贷平台源码解析</h2><p>某贷平台的订单，有审核-发布-抢单等步骤，随着操作的不同，会改变订单的状态。项目中的这个模块实现使用到了状态模式。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">状态/事件</th>
+<th>电审审核</th>
+<th>电审失败</th>
+<th>定价发布</th>
+<th>接单</th>
+<th>接单失效</th>
+<th>付款</th>
+<th>支付失败</th>
+<th>反馈</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">订单生成</td>
+<td>已审核</td>
+<td>已完结</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">已审核</td>
+<td></td>
+<td></td>
+<td>已发布</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">已发布</td>
+<td></td>
+<td></td>
+<td></td>
+<td>待付款</td>
+<td>已完结</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">待付款</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>已付款</td>
+<td>已完结</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">已完结</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>已完结</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>1、通过 if/else 判断订单状态，从而实现不同的逻辑，伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if (审核) &#123;</span><br><span class="line">    // 审核逻辑</span><br><span class="line">&#125; else if (发布) &#123;</span><br><span class="line">    // 发布逻辑</span><br><span class="line">&#125; else if (接单) &#123;</span><br><span class="line">    // 接单逻辑</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问题分析：这类代码难以应对变化，在添加一种状态时，我们需要手动添加 if/else，在添加一种功能时，要对所有的状态进行判断。因此代码会变得越来越臃肿，并且一旦没有处理某个状态，便会发生极其严重的 Bug，难以维护。</p>
+<p>2、使用状态模式完成借贷平台项目的审核模块。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 客户类，使用过程。</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.1 创建上下文对象，该对象会记录当前处于什么状态。</span></span><br><span class="line">        Context context = <span class="keyword">new</span> Context();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.1 将当前状态设置为发布状态</span></span><br><span class="line">        context.setState(<span class="keyword">new</span> PublishState());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.1 审核通过</span></span><br><span class="line">        context.acceptOrderEvent(context);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.1 用客户愿意支付订单</span></span><br><span class="line">        context.payOrderEvent(context);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4.1 检测到失败时，抛出异常。</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            context.checkFailEvent(context);</span><br><span class="line">            System.out.println(<span class="string">"流程正常。。。"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 环境类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 当前状态</span></span><br><span class="line">    <span class="keyword">private</span> State state;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">checkEvent</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        state.checkEvent(<span class="keyword">this</span>);</span><br><span class="line">        getCurrentState();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 抽象状态-定义所有行为</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">checkEvent</span><span class="params">(Context context)</span> </span>&#123;<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"流程不允许"</span>);&#125;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">checkFailEvent</span><span class="params">(Context context)</span> </span>&#123;<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"流程不允许"</span>);&#125;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">MakePriceEvent</span><span class="params">(Context context)</span> </span>&#123;<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"流程不允许"</span>);&#125;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">acceptOrderEvent</span><span class="params">(Context context)</span> </span>&#123;<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"流程不允许"</span>);&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 具体状态-发布状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PulishState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 具体状态-未支付状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NotPayState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 具体状态-反馈状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FeedBack</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模式介绍"><span class="toc-number">1.</span> <span class="toc-text">模式介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#借贷平台源码解析"><span class="toc-number">3.</span> <span class="toc-text">借贷平台源码解析</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&text=状态模式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&is_video=false&description=状态模式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=状态模式&body=Check out this article: http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&title=状态模式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/18/设计模式/行为型模式/状态模式/&name=状态模式&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+   <script src="/js/search.js"></script>
+   <script src='/js/mermaid.js'></script>
+   <!-- <script src='https://cdn.jsdelivr.net/npm/mermaid@8.6.0/dist/mermaid.js'></script> -->
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({});
+  }
+</script>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

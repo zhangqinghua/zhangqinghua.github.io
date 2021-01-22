@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="单例模式是指一个类只有一个实例，且该类能自行创建这个实例。它属于创建型模式，提供了一种创建对象的最佳方式。 单例模式有以下特点：  单例类只有一个实例。 单例类自己创建实例。 单例类对外提供一个访问该实例的全局访问点。  模式介绍 举例说明 一个班级只有一个班主任。  Window 系统只能打开一个任务管理器。  意图目的 确保一个类只有一个实例，并提供一个访问该实例的全局访问点。  主要解决 一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单例模式">
+<meta property="og:url" content="http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="单例模式是指一个类只有一个实例，且该类能自行创建这个实例。它属于创建型模式，提供了一种创建对象的最佳方式。 单例模式有以下特点：  单例类只有一个实例。 单例类自己创建实例。 单例类对外提供一个访问该实例的全局访问点。  模式介绍 举例说明 一个班级只有一个班主任。  Window 系统只能打开一个任务管理器。  意图目的 确保一个类只有一个实例，并提供一个访问该实例的全局访问点。  主要解决 一">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-01-11T03:13:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单例模式">
+<meta name="twitter:description" content="单例模式是指一个类只有一个实例，且该类能自行创建这个实例。它属于创建型模式，提供了一种创建对象的最佳方式。 单例模式有以下特点：  单例类只有一个实例。 单例类自己创建实例。 单例类对外提供一个访问该实例的全局访问点。  模式介绍 举例说明 一个班级只有一个班主任。  Window 系统只能打开一个任务管理器。  意图目的 确保一个类只有一个实例，并提供一个访问该实例的全局访问点。  主要解决 一">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>单例模式</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/08/18/设计模式/创建型模式/抽象工厂模式/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/08/18/设计模式/创建型模式/原型模式/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&text=单例模式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&is_video=false&description=单例模式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=单例模式&body=Check out this article: http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&name=单例模式&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模式介绍"><span class="toc-number">1.</span> <span class="toc-text">模式介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK-中的单例模式"><span class="toc-number">3.</span> <span class="toc-text">JDK 中的单例模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-中的单例模式"><span class="toc-number">4.</span> <span class="toc-text">Spring 中的单例模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        单例模式
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-17T16:00:57.000Z" itemprop="datePublished">2020-08-18</time>
+        
+        (Updated: <time datetime="2021-01-11T03:13:36.000Z" itemprop="dateModified">2021-01-11</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/设计模式/">设计模式</a> › <a class="category-link" href="/categories/设计模式/创建型模式/">创建型模式</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>单例模式是指一个类只有一个实例，且该类能自行创建这个实例。它属于创建型模式，提供了一种创建对象的最佳方式。</p>
+<p>单例模式有以下特点：</p>
+<ol>
+<li>单例类只有一个实例。</li>
+<li>单例类自己创建实例。</li>
+<li>单例类对外提供一个访问该实例的全局访问点。</li>
+</ol>
+<h2 id="模式介绍"><a href="#模式介绍" class="headerlink" title="模式介绍"></a>模式介绍</h2><ol>
+<li><p>举例说明<br> 一个班级只有一个班主任。</p>
+<p> Window 系统只能打开一个任务管理器。</p>
+</li>
+<li><p>意图目的<br> 确保一个类只有一个实例，并提供一个访问该实例的全局访问点。</p>
+</li>
+<li><p>主要解决<br> 一个全局使用的类的频繁创建与销毁。</p>
+</li>
+<li><p>如何解决<br> 单例模式主要角色有：单例类、访问类。</p>
+<p> 单例类包含一个实例且能自行创建这个实例的类。比如上面的班级。</p>
+<p> 访问类是使用单例类的类。比如上面的学生。</p>
+</li>
+<li><p>关键代码<br> 私有的构造函数。    </p>
+<p> 判断实例是否已经存在，如果已经存在则返回，不存在则创建。</p>
+</li>
+<li><p>何时使用<br> 当你想控制实例的数量时。</p>
+<p> 某类需要被频繁的创建和销毁。</p>
+</li>
+<li><p>优点缺点<br> 实例只创建一次，避免频繁的创建销毁。</p>
+<p> 在内存中只有一个实例，减少内存开销。</p>
+<p> 单例模式无法被继承。</p>
+<p> 单例模式与单一职责原则冲突，即一个类只关心内部逻辑，而不关心外面是如何实例化的。</p>
+</li>
+<li><p>注意事项<br> 获取实例的方法需要加上同步锁。</p>
+<p> 避免在方法外使用同步锁 <code>sychronized</code>。</p>
+</li>
+<li><p>应用场景<br> JDK Runtime。</p>
+<p> Spring Bean。</p>
+</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>我们将创建一个SingleObject类。SingleObject类有它的私有构造函数和本身的一个静态实例。</p>
+<p>SingleObject类提供了一个静态方法，供外界获取它的静态实例。</p>
+<pre class="mermaid">classDiagram
+
+Demo --> SingleObject : 获取唯一实例
+
+class Demo{
+    +main() void
+}
+
+class SingleObject {
+    -SingleObject instance
+
+    -SingleObject()
+
+    +getInstance() SingleObject
+
+    +show() void
+}</pre>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建 SingleObject 的一个对象</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 让构造函数为 private，这样该类就不会被实例化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Hello World!!!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//不合法的构造函数</span></span><br><span class="line">        <span class="comment">//编译时错误：构造函数 SingleObject() 是不可见的</span></span><br><span class="line">        <span class="comment">//SingleObject object = new SingleObject();</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取唯一可用的对象</span></span><br><span class="line">        Singleton object = Singleton.getInstance();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//显示消息</span></span><br><span class="line">        object.showMessage();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单例模式的实现有多种方式，下面我们分别来讲一下。</p>
+<p>1、懒汉式，线程不安全。</p>
+<p>是否Lazy初始化：是。</p>
+<p>是否多线程安全：否</p>
+<p>实现难度：易</p>
+<p>描述：这种方式是最基本的实现方式，这种实现最大的问题就是不支持多线程。因为没有加锁 <code>synchronized</code>，所以严格意义上它不算单例模式。这种方式 lazy loading 很明显，不要求现在安全，在多线程不能正常工作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singletion <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、懒汉式，线程安全</p>
+<p>Lazy 初始化：是</p>
+<p>多线程安全：是</p>
+<p>实现难度：易</p>
+<p>描述：这种方式具备很好的 lazy loading，能够在多线程中很好的工作，但是效率很低，99%的情况下不需要同步。</p>
+<p>优点：第一次调试才初始化，避免内存浪费。</p>
+<p>缺点：必须加锁 <code>synchronized</code> 才能保证单例，但加锁会 影响效率。<code>getInstance()</code> 的性能对应用程序不是很关键（该方法使用不频繁）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> sychronized Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singletion();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3、饿汉式</p>
+<p>Lazy 初始化：否</p>
+<p>多线程安全：是</p>
+<p>实现难度：易</p>
+<p>描述：这种方式比较常用，但容易生产垃圾对象。</p>
+<p>优点：没有加锁，执行效率会提高。</p>
+<p>缺点：类加载时就初始化，浪费内存。</p>
+<p>它基于 classloader 机制避免了多线程的同步问题。不过，instance 在类加载时就实例化（虽然导致类装载的原因有很多种，例如被静态方法调用），显然没有达到 lazy loading 的效果。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> instance;  </span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4、双检锁</p>
+<p>JDK 版本：1.5 起。</p>
+<p>Lazy 初始化：是</p>
+<p>多线程安全：是</p>
+<p>实现难度：较复杂</p>
+<p>描述：这种方式才用双锁机制，安全且在多线程情况下能保持高性能。<code>getInstance()</code> 的性能对应用程序很关键。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>5、静态内部类</p>
+<p>Lazy 初始化：是</p>
+<p>多线程安全：是</p>
+<p>实现难度：一般</p>
+<p>描述：这种方式能达到双检锁方式一样的功效，但实现更简单，对静态域实现延迟初始化，应使用这种方式而不是双检锁方式。这种方式只适用于静态域的情况，双检锁可在实例域需要延迟初始化时使用。</p>
+<p>这种方式同样利用了 classloader 机制来保证初始化 instance 时只有一个线程，它跟第 3 种方式不同的是：第 3 种方式只要 Singleton 类被装载了，那么 instance 就会被实例化（没有达到 lazy laoding 的效果），而这种方式是 Singleton 类被装载了，类不一样初始化。因为 SingletonHolder 类没有被主动使用。只有通过显式调用 getInstance 方法时，才会显式装载 SinletonHolder 类，从而实例化 instance。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>6、枚举</p>
+<p>JDK 版本：1.5 起。</p>
+<p>Lazy 初始化：否</p>
+<p>多线程安全：是</p>
+<p>实现难度：易</p>
+<p>描述：这种实现方式还没有被广泛采用，但这是实现单例模式的最佳方法。它更简洁，自动支持序列化机制，绝对防止多次实例化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Singleton &#123;</span><br><span class="line">    INSTANCE;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">whateverMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>一般情况下，不建议使用第 1、2 种懒汉方式。建议使用第 3 种饿汉方式。只有在明确要求实现 lazy loading 效果时，才使用第 5 种静态内部类方式。如果涉及到反序列化创建对象时，可以尝试第 6 种枚举方式。如果有其它特殊需求，可以考虑使用第 4 种 双检锁方式。</p>
+</blockquote>
+<h2 id="JDK-中的单例模式"><a href="#JDK-中的单例模式" class="headerlink" title="JDK 中的单例模式"></a>JDK 中的单例模式</h2><p>JDK 中主要是 <code>Runtime</code> 使用了单例模式。</p>
+<p>每个 Java 应用程序都有一个 <code>Runtime</code> 类实例，它允许应用程序与运行应用程序的环境进行交互。可以从 <code>getRuntime</code> 方法获取当前运行时。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 访问类</span></span><br><span class="line">Runtime runtime = Runtime.getRuntime();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 单例类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runtime</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Runtime currentRuntime = <span class="keyword">new</span> Runtime();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Runtime <span class="title">getRuntime</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> currentRuntime;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Runtime</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Spring-中的单例模式"><a href="#Spring-中的单例模式" class="headerlink" title="Spring 中的单例模式"></a>Spring 中的单例模式</h2><p>Spring 框架中的 Bean，或者说组件，获取实例的时候都是默认单例模式，这是在多线程开发的时候需要尤其注意的地方。</p>
+<p>Spring官方文档中给出的bean的scope有五种：</p>
+<ol>
+<li><code>singleton</code></li>
+<li><code>prototype</code></li>
+<li><code>request</code></li>
+<li><code>session</code></li>
+<li><code>global session</code></li>
+</ol>
+<p>实际上，Spring 最基本的 scope 只有两种，即 <code>singleton</code> 和 <code>prototype</code>。</p>
+<p>可以参看 Spring 源码中的 BeanDefinition.java 的定义，只有这两种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;</span><br><span class="line">String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;</span><br></pre></td></tr></table></figure>
+<p>其他的各种 scope 都是自行扩展出来的。包括官网文档中没有列出来的 <code>servletContenxt</code> 、<code>thread</code>；SpringCloud提供的 <code>refresh</code> 等。</p>
+<p>其继承关系大致如下：</p>
+<pre class="mermaid">classDiagram
+    class Scope
+    <<interface>> Scope
+
+    Scope <|.. AbstractRequestAttributesScope
+    Scope <|.. RefreshScope
+    Scope <|.. ServletContextScope
+    Scope <|.. ThreadScope
+
+    AbstractRequestAttributesScope <|-- SessionScope
+    AbstractRequestAttributesScope <|-- RequestScope</pre>
+
+<p>可以参看spring的 AbstractBeanFactory.java 中的 doGetBean 方法，理解两种bean的使用过程。</p>
+<p>单例 Bean：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/** Cache of singleton objects: bean name --&gt; bean instance */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; singletonObjects = <span class="keyword">new</span> ConcurrentHashMap&lt;String, Object&gt;(<span class="number">256</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create bean instance.</span></span><br><span class="line"><span class="keyword">if</span> (mbd.isSingleton()) &#123;</span><br><span class="line">    sharedInstance = getSingleton(beanName, <span class="keyword">new</span> ObjectFactory&lt;Object&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> createBean(beanName, mbd, args);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (BeansException ex) &#123;</span><br><span class="line">                <span class="comment">// Explicitly remove instance from singleton cache: It might have been put there</span></span><br><span class="line">                <span class="comment">// eagerly by the creation process, to allow for circular reference resolution.</span></span><br><span class="line">                <span class="comment">// Also remove any beans that received a temporary reference to the bean.</span></span><br><span class="line">                destroySingleton(beanName);</span><br><span class="line">                <span class="keyword">throw</span> ex;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>原型 Bean：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (mbd.isPrototype()) &#123;</span><br><span class="line">    <span class="comment">// It's a prototype -&gt; create a new instance.</span></span><br><span class="line">    Object prototypeInstance = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        beforePrototypeCreation(beanName);</span><br><span class="line">        prototypeInstance = createBean(beanName, mbd, args);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">        afterPrototypeCreation(beanName);</span><br><span class="line">    &#125;</span><br><span class="line">    bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模式介绍"><span class="toc-number">1.</span> <span class="toc-text">模式介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK-中的单例模式"><span class="toc-number">3.</span> <span class="toc-text">JDK 中的单例模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-中的单例模式"><span class="toc-number">4.</span> <span class="toc-text">Spring 中的单例模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&text=单例模式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&is_video=false&description=单例模式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=单例模式&body=Check out this article: http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&title=单例模式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/18/设计模式/创建型模式/单例模式/&name=单例模式&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+   <script src="/js/search.js"></script>
+   <script src='/js/mermaid.js'></script>
+   <!-- <script src='https://cdn.jsdelivr.net/npm/mermaid@8.6.0/dist/mermaid.js'></script> -->
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({});
+  }
+</script>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

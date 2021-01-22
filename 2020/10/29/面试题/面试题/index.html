@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Java 基础Java 进阶Map HashMap中的get()方法是如何实现的？ HashMap及线程安全的ConcurrentHashMap，以及各自优劣势 HashMap和HashTable以及CocurrentHashMap详细说明 HashMap实现原理，如何保证HashMap的线程安全 HashMap可以用在哪些场景？ ConcurrentHashMap是怎么解决并发问题的？ Hash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题">
+<meta property="og:url" content="http://yoursite.com/2020/10/29/面试题/面试题/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java 基础Java 进阶Map HashMap中的get()方法是如何实现的？ HashMap及线程安全的ConcurrentHashMap，以及各自优劣势 HashMap和HashTable以及CocurrentHashMap详细说明 HashMap实现原理，如何保证HashMap的线程安全 HashMap可以用在哪些场景？ ConcurrentHashMap是怎么解决并发问题的？ Hash">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-01-22T06:43:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面试题">
+<meta name="twitter:description" content="Java 基础Java 进阶Map HashMap中的get()方法是如何实现的？ HashMap及线程安全的ConcurrentHashMap，以及各自优劣势 HashMap和HashTable以及CocurrentHashMap详细说明 HashMap实现原理，如何保证HashMap的线程安全 HashMap可以用在哪些场景？ ConcurrentHashMap是怎么解决并发问题的？ Hash">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>面试题</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/11/09/LeetCode/栈/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/09/04/其它/Vue/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/10/29/面试题/面试题/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/10/29/面试题/面试题/&text=面试题"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/10/29/面试题/面试题/&is_video=false&description=面试题"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=面试题&body=Check out this article: http://yoursite.com/2020/10/29/面试题/面试题/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/10/29/面试题/面试题/&name=面试题&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-基础"><span class="toc-number">1.</span> <span class="toc-text">Java 基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-进阶"><span class="toc-number">2.</span> <span class="toc-text">Java 进阶</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Map"><span class="toc-number">2.0.1.</span> <span class="toc-text">Map</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#List"><span class="toc-number">2.0.2.</span> <span class="toc-text">List</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-网络"><span class="toc-number">3.</span> <span class="toc-text">Java 网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-虚拟机"><span class="toc-number">4.</span> <span class="toc-text">Java 虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-多线程"><span class="toc-number">5.</span> <span class="toc-text">Java 多线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Java-内存模型"><span class="toc-number">5.0.1.</span> <span class="toc-text">Java 内存模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#volatile-相关"><span class="toc-number">5.0.2.</span> <span class="toc-text">volatile 相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-机制"><span class="toc-number">5.0.3.</span> <span class="toc-text">CAS 机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#各种锁机制"><span class="toc-number">5.0.4.</span> <span class="toc-text">各种锁机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#synchronized相关"><span class="toc-number">5.0.5.</span> <span class="toc-text">synchronized相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ReentrantLock-相关"><span class="toc-number">5.0.6.</span> <span class="toc-text">ReentrantLock 相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#阻塞队列"><span class="toc-number">5.0.7.</span> <span class="toc-text">阻塞队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池"><span class="toc-number">5.0.8.</span> <span class="toc-text">线程池</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL"><span class="toc-number">6.</span> <span class="toc-text">MySQL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL"><span class="toc-number">6.0.1.</span> <span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存储引擎"><span class="toc-number">6.0.2.</span> <span class="toc-text">存储引擎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引"><span class="toc-number">6.0.3.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#锁"><span class="toc-number">6.0.4.</span> <span class="toc-text">锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#事务"><span class="toc-number">6.0.5.</span> <span class="toc-text">事务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#备份恢复"><span class="toc-number">6.0.6.</span> <span class="toc-text">备份恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#读写分离"><span class="toc-number">6.0.7.</span> <span class="toc-text">读写分离</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性能分析"><span class="toc-number">6.0.8.</span> <span class="toc-text">性能分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性能优化"><span class="toc-number">6.0.9.</span> <span class="toc-text">性能优化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis"><span class="toc-number">7.</span> <span class="toc-text">Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx"><span class="toc-number">8.</span> <span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot"><span class="toc-number">9.</span> <span class="toc-text">SpringBoot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringCloud"><span class="toc-number">10.</span> <span class="toc-text">SpringCloud</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据结构和算法"><span class="toc-number">11.</span> <span class="toc-text">数据结构和算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-number">12.</span> <span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作系统"><span class="toc-number">13.</span> <span class="toc-text">操作系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算机网络"><span class="toc-number">14.</span> <span class="toc-text">计算机网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式"><span class="toc-number">15.</span> <span class="toc-text">设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#架构设计"><span class="toc-number">16.</span> <span class="toc-text">架构设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工作经验"><span class="toc-number">17.</span> <span class="toc-text">工作经验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#个人发展"><span class="toc-number">18.</span> <span class="toc-text">个人发展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-number">19.</span> <span class="toc-text">其它</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        面试题
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-10-28T16:00:00.000Z" itemprop="datePublished">2020-10-29</time>
+        
+        (Updated: <time datetime="2021-01-22T06:43:39.000Z" itemprop="dateModified">2021-01-22</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/面试题/">面试题</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Java-基础"><a href="#Java-基础" class="headerlink" title="Java 基础"></a>Java 基础</h2><h2 id="Java-进阶"><a href="#Java-进阶" class="headerlink" title="Java 进阶"></a>Java 进阶</h2><h4 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h4><ol>
+<li>HashMap中的get()方法是如何实现的？</li>
+<li>HashMap及线程安全的ConcurrentHashMap，以及各自优劣势</li>
+<li>HashMap和HashTable以及CocurrentHashMap详细说明</li>
+<li>HashMap实现原理，如何保证HashMap的线程安全</li>
+<li>HashMap可以用在哪些场景？</li>
+<li>ConcurrentHashMap是怎么解决并发问题的？</li>
+<li>HashMap怎么从链表转换为红黑树？如果存入的是null键，放在桶的哪个位置？</li>
+<li>HashMap如何解决Hash冲突</li>
+<li>ConcurrentHashMap如何保证线程安全，并发度大小，jdk1.8有什么变化</li>
+<li>为什么concurrenthashmap底层为什么要红黑树</li>
+</ol>
+<h4 id="List"><a href="#List" class="headerlink" title="List"></a>List</h4><ol>
+<li>ArrayList和LinkedList底层</li>
+<li>ArrayList和LinkedList内部的实现大致是怎样的？他们之间的区别和优缺点</li>
+<li>Collections.sort底层排序方式</li>
+</ol>
+<h2 id="Java-网络"><a href="#Java-网络" class="headerlink" title="Java 网络"></a>Java 网络</h2><ol>
+<li>输入 ping IP 后敲回车，发包前会发生什么</li>
+<li>网络IO模型？什么是多路复用IO？select和epoll的差别？</li>
+<li>TCP三次握手的过程，如果没有第三次握手有什么问题？</li>
+<li>网络编程nio和netty相关，netty的线程模型，零拷贝实现?</li>
+<li>epoll和poll的区别，及其应用场景</li>
+</ol>
+<h2 id="Java-虚拟机"><a href="#Java-虚拟机" class="headerlink" title="Java 虚拟机"></a>Java 虚拟机</h2><ol>
+<li>Java类加载机制？双亲委派模型的好处？</li>
+<li>JVM的垃圾回收机制，以及回收算法有哪些</li>
+<li>JVM什么时候会触发YGC，什么时候触发FGC？</li>
+<li>JVM如何内存调优、内存泄漏如何排查</li>
+<li>JVM，垃圾回收机制，内存划分等</li>
+<li>jvm性能调优都做了什么</li>
+<li>jvm GC原理，JVM怎么回收内存</li>
+<li>Java的内存模型，Java8做了什么修改</li>
+<li>如何进行JVM调优？有哪些方法？</li>
+<li>Java内存模型：常问的JVM分代模型，以及JDK1.8后的区别，最后还问了JVM相关的调优参数</li>
+<li>Java有哪些锁种类（乐观锁、悲观锁、可重入锁和synchroned）</li>
+<li>Java内存分代模型，GC算法，JVM常见的启动参数，CMS算法的过程。</li>
+<li>Java的内存结构，堆分为哪几部分，默认年龄多大进入老年代</li>
+<li>讲一下oom以及遇到这种情况怎么处理的，是否使用过日志分析工具</li>
+<li>CountDownLoatch、CyclicBarrier、Semapphore 使用过吗？</li>
+</ol>
+<h2 id="Java-多线程"><a href="#Java-多线程" class="headerlink" title="Java 多线程"></a>Java 多线程</h2><ol>
+<li>多线程与高并发的关系和区别</li>
+<li>Java 线程的状态及相互转换</li>
+<li>JAVA并发包组件了解多少?</li>
+<li>什么时候多线程会发生死锁?怎么来预防</li>
+<li>多线程状态图，状态如何流转？</li>
+<li>再谈谈 threadLocal的实际应用</li>
+<li>讲讲多线程和并发工具的使用</li>
+<li>Java如何实现线程安全</li>
+</ol>
+<h4 id="Java-内存模型"><a href="#Java-内存模型" class="headerlink" title="Java 内存模型"></a>Java 内存模型</h4><p>回答套路：</p>
+<ol>
+<li>JMM 简述</li>
+<li>JMM 规范</li>
+<li>JVM 实现</li>
+<li>并发问题</li>
+<li>原子操作</li>
+</ol>
+<p>涉及面试题：</p>
+<ol>
+<li>线程同步的几种方式和线程间通信</li>
+<li>JMM 你谈谈！</li>
+</ol>
+<h4 id="volatile-相关"><a href="#volatile-相关" class="headerlink" title="volatile 相关"></a>volatile 相关</h4><ol>
+<li><code>volatile</code> 是什么？</li>
+<li><code>volatile</code> 的原理</li>
+<li><code>volatile</code> 的工作原理</li>
+<li><code>volatile</code> 关键字有什么用（包括底层原理）</li>
+<li><code>volatile</code> 关键字，他是如何保证可见性，有序性</li>
+<li>你在哪些地方用到过 <code>volatile</code>？</li>
+<li><code>volatile</code> 如何解决原子性？</li>
+</ol>
+<h4 id="CAS-机制"><a href="#CAS-机制" class="headerlink" title="CAS 机制"></a>CAS 机制</h4><ol>
+<li>CAS 你知道吗？</li>
+<li>CAS 知道吗？如何实现？</li>
+<li>CAS？CAS本质是什么？什么是原子性？Compare and Swap两步<em>*</em>作，为什么能保证原子性（涉及到CPU指令）？</li>
+<li>讲一讲 AtomicInteger，为什么要用 CAS 而不是 synchronized？</li>
+</ol>
+<h4 id="各种锁机制"><a href="#各种锁机制" class="headerlink" title="各种锁机制"></a>各种锁机制</h4><ol>
+<li>死锁的四个必要条件</li>
+<li>死锁，死锁原因</li>
+<li>页锁、乐观锁、悲观锁？</li>
+<li>乐观锁如何保证线程安全？</li>
+<li>重点问了Java线程锁：synchronized 和ReentrantLock相关的底层实现</li>
+<li>sychronized的自旋锁、偏向锁、轻量级锁、重量级锁，分别介绍和联系</li>
+<li>公平锁、非公平锁、可重入锁、递归锁、自旋转锁谈谈你的理解？请手写一个自旋锁。</li>
+<li>synchronized 和 lock 的区别？synchronized 什么情况下是对象锁？什么情况下是全局锁？为什么？</li>
+<li></li>
+</ol>
+<h4 id="synchronized相关"><a href="#synchronized相关" class="headerlink" title="synchronized相关"></a>synchronized相关</h4><ol>
+<li>谈谈对 <code>synchronized</code> 关键字，类锁，方法锁，重入锁的理解</li>
+<li>sychronized和ReentrantLock的区别</li>
+<li>sychronized的自旋锁、偏向锁、轻量级锁、重量级锁，分别介绍和联系</li>
+<li>synchronized 和 lock 有什么区别？用新的 Lock 有什么好处？你举例说说。</li>
+</ol>
+<h4 id="ReentrantLock-相关"><a href="#ReentrantLock-相关" class="headerlink" title="ReentrantLock 相关"></a>ReentrantLock 相关</h4><ol>
+<li>ReentrantLock的内部实现</li>
+<li>Synchronized和Lock哪个更好？</li>
+<li>谈谈Synchronized与ReentrantLock的区别</li>
+<li>重点问了Java线程锁：synchronized 和ReentrantLock相关的底层实现</li>
+<li>synchronized 和 lock 有什么区别？用新的 Lock 有什么好处？你举例说说。</li>
+</ol>
+<h4 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h4><p>知识点：</p>
+<ol>
+<li>队列 + 阻塞队列</li>
+<li>为什么？有什么用？</li>
+<li>BlockingQueue 的核心方法？</li>
+<li>架构梳理 + 种类分析</li>
+<li>用在哪里？</li>
+</ol>
+<p>相关面试题：</p>
+<ol>
+<li>J.U.C下的常见类的使用，ThreadPool的深入考察，BlockingQueue的使用</li>
+<li>简述线程池原理，FixedThreadPool用的阻塞队列是什么</li>
+<li>阻塞队列知道吗？</li>
+</ol>
+<h4 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h4><ol>
+<li>常用的线程池有哪些?各自的应用场景?</li>
+<li>用过线程池吗，对应的好处，如何用？</li>
+<li>1000个多并发线程，10台机器，每台机器4核的，设计线程池大小。</li>
+<li>线程池中的几种重要的参数及流程说明</li>
+<li>线程池的底层实现以及常见的参数</li>
+<li>简述线程池原理，FixedThreadPool用的阻塞队列是什么</li>
+<li>线程池用过吗？ThreadPollExecutor 谈谈你的理解？ </li>
+<li>线程池如何使用？</li>
+<li>说说线程池的底层工作原理。</li>
+<li>线程池的拒绝策略你谈谈</li>
+<li>你在工作中单一的/固定的/可变的三种创建线程池的方法，你用哪个多？超级大坑。<br>一个都不用<br>阿里开发者手册</li>
+<li>你在工作做是如何使用线程池的，是否自定义过线程池使用？<br>阿里开发者手册<br>case</li>
+<li>合理配置线程池你是如何考虑的？</li>
+<li>CPU 密集型<br>CPU 密集型的意思是该任务需要大量的运算，而没有阻塞，CPU 一直全速运行。<br>CPU 密集任务只有在真正的多核 CPU 上才可能得到加速（通过多线程）。<br>而在单核 CPU 上，无论你开几个模拟的多线程该任务都不可能得到加速，因为 CPU 总的运算能力就那些。<br>CPU 密集型任务配置尽可能少的线程数量：CPU 核数 + 1 个线程的线程池。</li>
+<li>IO  密集型<br>IO 密集型，即该任务需要大量的IO，即大量的阻塞。<br>在单线程上运行 IO 密集型的任务会导致浪费大量的 CPU 运算能力浪费在等待。<br>所以在 IO 密集型任务中使用多线程可以大大的加速程序运行，即使在单核 CPU 上，这种加速主要是利用了被浪费掉的阻塞时间。<br>IO 密集型时，大部分线程都阻塞，故需要多配置线程数。<br>参考公式：CPU 核数 / （1 - 阻塞系统）（0.8 - 0.9）<br>比如 8 核 CPU：8 / (1 - 0.9) = 80.<br>或者：CPU 核数 * 2。</li>
+<li>死锁编码以及定位分析<br>死锁是什么<br>代码举例<br>解决过程</li>
+</ol>
+<h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><ol>
+<li>数据库三范式及判断、E-R图</li>
+</ol>
+<h4 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h4><ol>
+<li>drop、truncate、delete区别</li>
+<li>查询语句不同元素（where、jion、limit、group by、having等等）执行先后顺序</li>
+</ol>
+<h4 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h4><ol>
+<li>innodb和myisam存储引擎的区别</li>
+</ol>
+<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h4><ol>
+<li>索引分类（主键、唯一索引、全文索引、覆盖索引等等），最左前缀原则，哪些条件无法使用索引</li>
+<li>聚集索引与非聚集索引（使用非聚集索引的查询过程）</li>
+<li>索引会不会使插入、删除作效率变低，怎么解决（分表<em>*</em>作）？</li>
+<li><p>建索引的时候一般考虑什么？</p>
+</li>
+<li><p>B树和B+树的区别，为什么MySQL要使用B+树</p>
+</li>
+<li>数据库索引，B+树的特性和建树过程</li>
+<li>数据库索引？B+树？为什么要建索引？什么样的字段需要建索引，</li>
+<li>B树、B+树区别，索引为何使用B+树</li>
+</ol>
+<h4 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h4><ol>
+<li>MySQL相关的行锁，表锁，乐观锁，悲观锁。</li>
+<li>死锁判定原理和具体场景</li>
+<li>乐观锁和悲观锁、行锁与表锁、共享锁与排他锁（inndob如何手动加共享锁与排他锁）</li>
+</ol>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><ol>
+<li>数据库事务属性</li>
+<li>数据库事务特点？事务隔离级别？项目中的事务实现？脏读、不可重复读、幻读各举个例子？</li>
+<li>事务隔离级别和各自存在的问题（脏读、不可重复读、幻读）和解决方式（间隙锁及MVCC）</li>
+<li>事务的ACID（原子性、一致性、隔离性、持久性）</li>
+<li>MVCC（增加两个版本号）及delete、update、select时的具体控制</li>
+</ol>
+<h4 id="备份恢复"><a href="#备份恢复" class="headerlink" title="备份恢复"></a>备份恢复</h4><ol>
+<li>数据库崩溃时事务的恢复机制（REDO日志和UNDO日志）</li>
+</ol>
+<h4 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h4><ol>
+<li>mysql优化，读写分离、主从复制</li>
+</ol>
+<h4 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h4><ol>
+<li>查询缓慢和解决方式（explain、慢查询日志、show profile等）</li>
+</ol>
+<h4 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h4><ol>
+<li>如何做的MySQL优化</li>
+<li>数据库性能调优如何做</li>
+<li>SQL优化，常用的索引？</li>
+</ol>
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><ol>
+<li>Redis如何做高可用、集群</li>
+<li>Redis和Memcached的优劣势比较</li>
+<li>Redis的数据存储类型有哪些?</li>
+<li>Redis的应用场景有哪些?</li>
+<li>Redis的持久化方式，以及项目中用的哪种</li>
+<li>Redis的缓存雪崩怎么解决？</li>
+<li>Redis与数据库MySQL的双写一致如何解决？</li>
+<li>Redis的缓存穿透怎么解决？</li>
+<li>Redis的持久化操作有哪些？</li>
+<li>如何利用redis处理热点数据</li>
+<li>Redis是单线程还是多线程？Redis的分布式集群怎么做?</li>
+<li>谈谈Redis相关的集群有哪些成熟方案</li>
+<li>谈谈一致hash算法（redis）</li>
+<li>讲讲Redis的架构和组件</li>
+<li>Redis数据一致性问题（分布式多节点和单机环境）</li>
+<li>你们怎么保证Redis缓存和数据库的数据一致性？</li>
+<li>Redis缓存雪崩？击穿？穿透？</li>
+</ol>
+<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><h2 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h2><ol>
+<li>Spring框架中IOC的原理是什么</li>
+<li>用Spring如何实现一个切面</li>
+</ol>
+<h2 id="SpringCloud"><a href="#SpringCloud" class="headerlink" title="SpringCloud"></a>SpringCloud</h2><ol>
+<li>谈谈你的SOA以及微服务的理解？</li>
+<li>具体谈谈Spring Cloud服务和注册?</li>
+<li>SpringCloud的服务注册与发现是怎么设计的</li>
+</ol>
+<h2 id="数据结构和算法"><a href="#数据结构和算法" class="headerlink" title="数据结构和算法"></a>数据结构和算法</h2><ol>
+<li>数组、链表（单向、双向、双端）、栈和队列、二叉树、红黑树、哈希表、堆（最大和最小）</li>
+<li>个人经验：栈和队列、哈希表、链表、二叉树的题较多，图的较少</li>
+<li>查找：二分查找及其变形</li>
+<li>二叉树：前序、中序、后序遍历，按规定方式打印，两个节点之间操作（最近公共祖先、距离）等问题。</li>
+<li>最大堆和最小堆：大数量级数据找最大几个等问题、堆如何调整等问题。</li>
+<li>栈和队列：经常作为算法题要用到的数据结构</li>
+<li>八大排序：3个简单的：冒泡、选择、插入及其优化，5个高级的：快速排序、归并排序、堆排序、希尔排序、桶排序（快排、归并、堆很重要）</li>
+<li>手写堆排序</li>
+<li>给阿里2万多名员工按年龄排序应该选择哪个算法？</li>
+<li>数据结构基本都问了一遍：链表、队列等</li>
+<li>比较重要的数据结构，如链表、队列、栈的基本理解以及大致实现</li>
+<li>二叉搜索树和平衡二叉树有什么关系，强平衡二叉树（AVL树）和弱平衡二叉树（红黑树）有什么区别</li>
+</ol>
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><ol>
+<li>常用命令：用户控制、权限控制、进程控制、系统状态查询之类的</li>
+<li>/etc/hosts文件什么做用？</li>
+<li>Linux目录结构（尤其是/proc非常重要）</li>
+<li>linux文件系统结构和启动流程）</li>
+<li>Java服务端问题排查（OOM，CPU高，Load高，类冲突）</li>
+<li>如何查看Java应用的线程信息</li>
+<li>Thread dump文件如何分析（Runnable，锁，代码栈，操作系统线程ID关联）</li>
+<li>生产服务器变慢，诊断思路和性能评估谈谈？<br>整机状态、CPU 状态、内存状态、磁盘状态、网络状态等等排查，相关命令。</li>
+<li>假如生产环境出现CPU占用过高，请谈谈你的分析思路和定位</li>
+</ol>
+<h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><ol>
+<li>一个二进制文件运行出结果，操作系统做了什么（这是一个很全面的题）</li>
+<li>死锁的条件及银行家算法、资源分配图之类的</li>
+<li>进程间通信方式</li>
+<li>linux的五种IO方式（阻塞与非阻塞、同步与异步的理解）</li>
+<li>linux的select、poll、epoll的区别</li>
+<li>进程与线程区别、内核级线程与用户级线程</li>
+<li>页面置换算法，尤其是lru</li>
+<li>进程调度算法</li>
+<li>linux中断响应机制</li>
+<li>虚拟内存机制</li>
+<li>操作系统的用户态和核心态切换条件以及为什么要切换</li>
+</ol>
+<h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><ol>
+<li>OSI七层协议、TCP/IP四层协议</li>
+<li>各层对应的网络设备（路由器、交换机、网关、网桥、集线器等等），各层对应的协议</li>
+<li>数据链路层的CSMA/CD协议，笔试可能会用到</li>
+<li>IP地址分类，子网划分（笔试常用）</li>
+<li>TCP和UDP的区别</li>
+<li>TCP三次握手和四次挥手，为什么三次握手，为什么四次挥手</li>
+<li>TCP精髓问题：停止等待协议、连续ARQ协议、滑动窗口、流量控制、拥塞控制（慢开始、拥塞避免、快重传、快恢复）</li>
+<li>HTTP状态码</li>
+<li>HTTP缓存机制（cache-control、Expires之类的一系列请求与相应报头字段</li>
+<li>session和cookie的区别，禁用cookie后怎么办</li>
+<li>DNS解析的过程</li>
+<li>常用协议的端口</li>
+<li>一次web请求响应中，那个部分最耗时，tcp握手？业务逻辑处理？网络延迟？数据库查询？浏览器解析？</li>
+<li>HTTP有哪些问题，加密算法有哪些，针对不同加密方式可能产生的问题，及其HTTPS是如何保证安全传输的</li>
+</ol>
+<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><ol>
+<li>常见的设计模式、手写一个单例、JDK、Spring原理里有哪些采用了设计模式。</li>
+<li>设计模式，单例模式，怎么保证线程安全？锁效率太低，怎么提高效率？</li>
+<li>设计模式与重构，谈谈你对重构的理解。</li>
+<li>设计模式有哪些大类，及熟悉其中哪些设计模式</li>
+</ol>
+<h2 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h2><ol>
+<li>常见的高并发场景有哪些，对应的架构设计方案是什么</li>
+<li>介绍完整的分布式中间件有哪些，各自的应用场景和作用</li>
+<li>双11秒杀活动，你的技术架构设计思路</li>
+<li>分布式锁的实现知道到哪些？你更推荐哪一种锁?</li>
+<li>有接触过哪些消息队列中间件？如何来选型？</li>
+<li>分布式的cap了解么，分别指什么?</li>
+<li>了解过集群雪崩么？</li>
+<li>谈谈高并发场景下削峰，限流的实现？</li>
+</ol>
+<h2 id="工作经验"><a href="#工作经验" class="headerlink" title="工作经验"></a>工作经验</h2><ol>
+<li>你之前工作的项目里个人最满意的，谈谈你的架构设计思路？</li>
+<li>为什么要从上一家公司离职?</li>
+<li>项目参与的核心设计有哪些</li>
+<li>还有什么问题需要问的。</li>
+<li>工作中觉得哪方面欠缺？</li>
+<li>有问题要问么？</li>
+<li>参与的项目，选一个，技术难点在哪？</li>
+<li>项目介绍</li>
+</ol>
+<h2 id="个人发展"><a href="#个人发展" class="headerlink" title="个人发展"></a>个人发展</h2><ol>
+<li>自我介绍</li>
+<li>介绍一下自己。</li>
+<li>如何看待加班问题？</li>
+<li>为什么要选择这里？</li>
+<li>未来2年是怎样打算的？</li>
+<li>平时自己是怎么学习技术的，除了Java相关，还会去了解其他什么技术？</li>
+<li>期待的薪资是多少？</li>
+<li>对哪些技术比较熟悉？</li>
+<li>说一下自己的优点。</li>
+<li>与同事沟通的时候，如果遇到冲突了如何解决？</li>
+<li>期望薪水？</li>
+<li>为什么要离开现在的公司？</li>
+<li>擅长哪些方面的技术</li>
+<li>最近上过哪些技术站点，最近在看哪些书？</li>
+<li>工作和生活中遇见最大挑战，怎么去克服</li>
+<li>未来有什么打算</li>
+</ol>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ol>
+<li>两个10G的文件，里面是一些url，内存只有1G，如何将这两个文件合并，找到相同的url？</li>
+<li>代码题：两个有序数组，数组中存在重复数字，合并成一个有序数组，去除重复数字。</li>
+<li>分布式系统原理：CAP，最终一致性，幂等操作等</li>
+<li>高并发情况下，我们系统是如何支撑大量的请求的</li>
+<li>集群如何同步会话状态</li>
+<li>常用NOSQL，有做过比较?</li>
+<li>什么情况会出现雪崩，以及如何应对？</li>
+<li>负载均衡的原理</li>
+<li>分布式锁的实现比较</li>
+<li>分布式系统的全局Id如何实现</li>
+<li>分布式锁的方案，redis和zookeeper哪个好，如果是集群部署，高并发情况下哪个性能更好。</li>
+<li>负载均衡的原理</li>
+<li>Docker容器</li>
+<li>高并发情况下，系统是如何支持大量的请求的？</li>
+<li>kafka、redis、rocketMQ、mycat等设计思路和适用场景</li>
+<li>你熟悉哪些消息中间件,有做过性能比较?</li>
+<li>谈谈分布式架构设计</li>
+</ol>
+<p><a href="https://youzhixueyuan.com/java-interview-questions">https://youzhixueyuan.com/java-interview-questions</a><br>done    2019蚂蚁金服 Java面试题目！涵盖现场3面真题<br>undone: 2019头条抖音Java 3面真题，含面试题答案！</p>
+<p>1234567890a<br>我们是谁呢a<br>。。。。。a<br>我们是谁呢a<br>1234567890a</p>
+<p>1234567890a<br>我们是谁呢a<br>。。。。。a<br>我们是谁呢a<br>1234567890a</p>
+<p>aaaaaaaaaa<br>我们aaaaaJ<br>aaaaaaaaaa<br>aaaaaaaaaa<br>llllllllll<br>Input Mono Compressed</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-基础"><span class="toc-number">1.</span> <span class="toc-text">Java 基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-进阶"><span class="toc-number">2.</span> <span class="toc-text">Java 进阶</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Map"><span class="toc-number">2.0.1.</span> <span class="toc-text">Map</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#List"><span class="toc-number">2.0.2.</span> <span class="toc-text">List</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-网络"><span class="toc-number">3.</span> <span class="toc-text">Java 网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-虚拟机"><span class="toc-number">4.</span> <span class="toc-text">Java 虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-多线程"><span class="toc-number">5.</span> <span class="toc-text">Java 多线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Java-内存模型"><span class="toc-number">5.0.1.</span> <span class="toc-text">Java 内存模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#volatile-相关"><span class="toc-number">5.0.2.</span> <span class="toc-text">volatile 相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-机制"><span class="toc-number">5.0.3.</span> <span class="toc-text">CAS 机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#各种锁机制"><span class="toc-number">5.0.4.</span> <span class="toc-text">各种锁机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#synchronized相关"><span class="toc-number">5.0.5.</span> <span class="toc-text">synchronized相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ReentrantLock-相关"><span class="toc-number">5.0.6.</span> <span class="toc-text">ReentrantLock 相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#阻塞队列"><span class="toc-number">5.0.7.</span> <span class="toc-text">阻塞队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池"><span class="toc-number">5.0.8.</span> <span class="toc-text">线程池</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL"><span class="toc-number">6.</span> <span class="toc-text">MySQL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL"><span class="toc-number">6.0.1.</span> <span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存储引擎"><span class="toc-number">6.0.2.</span> <span class="toc-text">存储引擎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引"><span class="toc-number">6.0.3.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#锁"><span class="toc-number">6.0.4.</span> <span class="toc-text">锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#事务"><span class="toc-number">6.0.5.</span> <span class="toc-text">事务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#备份恢复"><span class="toc-number">6.0.6.</span> <span class="toc-text">备份恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#读写分离"><span class="toc-number">6.0.7.</span> <span class="toc-text">读写分离</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性能分析"><span class="toc-number">6.0.8.</span> <span class="toc-text">性能分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性能优化"><span class="toc-number">6.0.9.</span> <span class="toc-text">性能优化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis"><span class="toc-number">7.</span> <span class="toc-text">Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx"><span class="toc-number">8.</span> <span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot"><span class="toc-number">9.</span> <span class="toc-text">SpringBoot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringCloud"><span class="toc-number">10.</span> <span class="toc-text">SpringCloud</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据结构和算法"><span class="toc-number">11.</span> <span class="toc-text">数据结构和算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-number">12.</span> <span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作系统"><span class="toc-number">13.</span> <span class="toc-text">操作系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算机网络"><span class="toc-number">14.</span> <span class="toc-text">计算机网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式"><span class="toc-number">15.</span> <span class="toc-text">设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#架构设计"><span class="toc-number">16.</span> <span class="toc-text">架构设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工作经验"><span class="toc-number">17.</span> <span class="toc-text">工作经验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#个人发展"><span class="toc-number">18.</span> <span class="toc-text">个人发展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-number">19.</span> <span class="toc-text">其它</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/10/29/面试题/面试题/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/10/29/面试题/面试题/&text=面试题"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/10/29/面试题/面试题/&is_video=false&description=面试题"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=面试题&body=Check out this article: http://yoursite.com/2020/10/29/面试题/面试题/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/10/29/面试题/面试题/&title=面试题"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/10/29/面试题/面试题/&name=面试题&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
