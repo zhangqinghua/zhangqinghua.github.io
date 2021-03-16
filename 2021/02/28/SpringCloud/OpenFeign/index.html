@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Feign 是一个声明式 WebService 客户端。使用 Feign 能让便携 WebService 客户端更加简单。 它的使用方法是定一个一个服务接口然后在上面添加注解。Feign 也支持可拔插式的编码器和解码器。SpringCloud 对 Feign 进行了封装，使其支持了 Spring MVC 标准注解和 HttpMessageConverters。Feign 可以与 Eureke 和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenFeign">
+<meta property="og:url" content="http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Feign 是一个声明式 WebService 客户端。使用 Feign 能让便携 WebService 客户端更加简单。 它的使用方法是定一个一个服务接口然后在上面添加注解。Feign 也支持可拔插式的编码器和解码器。SpringCloud 对 Feign 进行了封装，使其支持了 Spring MVC 标准注解和 HttpMessageConverters。Feign 可以与 Eureke 和">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-03-16T09:41:46.899Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenFeign">
+<meta name="twitter:description" content="Feign 是一个声明式 WebService 客户端。使用 Feign 能让便携 WebService 客户端更加简单。 它的使用方法是定一个一个服务接口然后在上面添加注解。Feign 也支持可拔插式的编码器和解码器。SpringCloud 对 Feign 进行了封装，使其支持了 Spring MVC 标准注解和 HttpMessageConverters。Feign 可以与 Eureke 和">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>OpenFeign</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/03/16/Swagger/Swagger 教程/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/02/21/SpringBoot/Spring Security/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&text=OpenFeign"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&is_video=false&description=OpenFeign"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=OpenFeign&body=Check out this article: http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&name=OpenFeign&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-能干什么"><span class="toc-number">1.</span> <span class="toc-text">Feign 能干什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-集成了-Ribbon"><span class="toc-number">2.</span> <span class="toc-text">Feign 集成了 Ribbon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-和-OpenFeign-的区别"><span class="toc-number">3.</span> <span class="toc-text">Feign 和 OpenFeign 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenFeign-使用步骤"><span class="toc-number">4.</span> <span class="toc-text">OpenFeign 使用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本环境"><span class="toc-number">4.0.1.</span> <span class="toc-text">基本环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#添加依赖"><span class="toc-number">4.0.2.</span> <span class="toc-text">添加依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置-YML"><span class="toc-number">4.0.3.</span> <span class="toc-text">配置 YML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建生产者和消费者服务，将其注册到注册中心"><span class="toc-number">4.0.4.</span> <span class="toc-text">创建生产者和消费者服务，将其注册到注册中心</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenFeign-超时控制"><span class="toc-number">5.</span> <span class="toc-text">OpenFeign 超时控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenFeign-日志打印"><span class="toc-number">6.</span> <span class="toc-text">OpenFeign 日志打印</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        OpenFeign
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-02-28T00:00:01.000Z" itemprop="datePublished">2021-02-28</time>
+        
+        (Updated: <time datetime="2021-03-16T09:41:46.899Z" itemprop="dateModified">2021-03-16</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/SpringCloud-教程/">SpringCloud 教程</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Feign 是一个声明式 WebService 客户端。使用 Feign 能让便携 WebService 客户端更加简单。</p>
+<p>它的使用方法是定一个一个服务接口然后在上面添加注解。Feign 也支持可拔插式的编码器和解码器。SpringCloud 对 Feign 进行了封装，使其支持了 Spring MVC 标准注解和 <code>HttpMessageConverters</code>。Feign 可以与 Eureke 和 Ribbon 组合使用以支持负载均衡。</p>
+<h2 id="Feign-能干什么"><a href="#Feign-能干什么" class="headerlink" title="Feign 能干什么"></a>Feign 能干什么</h2><p>Feign 旨在使编写 Java Http 客户端变得更加容易。</p>
+<p>前面在使用 Ribbon + RestTemplate 时，利用 RestTemplate 对 Http 请求的封装处理，形成了一套模版化的调用方法。但是在实际开发中，由于对服务依赖的调用可能不止一处，往往一个接口会被多处调用，所以通常都会针对每个微服务自行封装一些客户端类来包装这些依赖服务的调用。</p>
+<p>所以，Feign 在此基础上做了进一步封装，由它来帮助我们定义和实现依赖服务接口的定义。在 Feign 的实现下，我们只需创建一个接口并使用注解的方式来配置它（以前是 Dao 接口上面标注 Mapper 注解，现在是一个微服务接口上标注一个 Feign 注解），即可完成对服务提供方的接口绑定，简化了使用 Spring Cloud Ribbon 时，自动封装服务调用客户端的开发量。</p>
+<h2 id="Feign-集成了-Ribbon"><a href="#Feign-集成了-Ribbon" class="headerlink" title="Feign 集成了 Ribbon"></a>Feign 集成了 Ribbon</h2><p>利用 Ribbon 维护了 Payment 的服务列表信息，并且通过轮询实现了客户端和负载均衡。而与 Ribbon 不同的是，通过 Feign 只需要定义服务绑定接口且以声明式的方法，优雅而简单的实现了服务调用。</p>
+<h2 id="Feign-和-OpenFeign-的区别"><a href="#Feign-和-OpenFeign-的区别" class="headerlink" title="Feign 和 OpenFeign 的区别"></a>Feign 和 OpenFeign 的区别</h2><p>Feign 是 SpringCloud 组件中的一个轻量级 RESTful 的 HTTP 服务客户端。Feign 内置了 Ribbon，用来做客户端负载均衡，去调用服务注册中心的服务。Feign 的使用方法是：使用 Feign 的注解定义接口，调用这个接口，就可以调用服务注册中心的服务。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-feign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>OpenFeign 是 Spring Cloud 在 Feign 的基础上支持了 SpringMVC 的注解，如 @RequestMapping 等等。OpenFeign 的 @FeignClient 可以解析 SpringMVC 的@RequestMapping 注解下的接口，并通过动态代理的方式产生实现类，实现类中做负载均衡并调用其它服务。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="OpenFeign-使用步骤"><a href="#OpenFeign-使用步骤" class="headerlink" title="OpenFeign 使用步骤"></a>OpenFeign 使用步骤</h2><h4 id="基本环境"><a href="#基本环境" class="headerlink" title="基本环境"></a>基本环境</h4><ol>
+<li>注册中心<br>已启动了一个 Eureka 注册中心，地址为本机 8080 端口。当然，如果是其他注册中心也可以。</li>
+<li>服务注册<br>已经注册了两个服务名为 ORDER_PROVIDE 和 ORDER_COMSUMER 的服务，地址分别为本机 8081 和 8082 端口。</li>
+<li>提供服务<br> 服务提供者 ORDER_PROVIDE 提供 <code>getUserById</code> 和 <code>sayHi</code> 的接口。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserAdminController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Autowired</span></span><br><span class="line">   IUserAdminService userAdminService;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Value</span>(<span class="string">"$&#123;server.port&#125;"</span>)</span><br><span class="line">   <span class="keyword">private</span> String serverPort;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@GetMapping</span>(<span class="string">"/getUserById/&#123;userId&#125;"</span>)</span><br><span class="line">   <span class="function"><span class="keyword">public</span> BaseResponse&lt;UserVO&gt; <span class="title">getUserById</span><span class="params">(@PathVariable Integer userId)</span></span>&#123; </span><br><span class="line">      <span class="keyword">return</span> BaseResponse.success(userVO);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@GetMapping</span>(<span class="string">"/sayHi"</span>)</span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">sayHi</span><span class="params">()</span></span>&#123;</span><br><span class="line">   String number= UUID.randomUUID().toString();</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"service,port:"</span>+serverPort+<span class="string">",number:"</span>+ number;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h4><p>给消费者服务 ORDER_COMSUMER 添加 OpenFeign 的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="配置-YML"><a href="#配置-YML" class="headerlink" title="配置 YML"></a>配置 YML</h4><h4 id="创建生产者和消费者服务，将其注册到注册中心"><a href="#创建生产者和消费者服务，将其注册到注册中心" class="headerlink" title="创建生产者和消费者服务，将其注册到注册中心"></a>创建生产者和消费者服务，将其注册到注册中心</h4><h2 id="OpenFeign-超时控制"><a href="#OpenFeign-超时控制" class="headerlink" title="OpenFeign 超时控制"></a>OpenFeign 超时控制</h2><h2 id="OpenFeign-日志打印"><a href="#OpenFeign-日志打印" class="headerlink" title="OpenFeign 日志打印"></a>OpenFeign 日志打印</h2>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-能干什么"><span class="toc-number">1.</span> <span class="toc-text">Feign 能干什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-集成了-Ribbon"><span class="toc-number">2.</span> <span class="toc-text">Feign 集成了 Ribbon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-和-OpenFeign-的区别"><span class="toc-number">3.</span> <span class="toc-text">Feign 和 OpenFeign 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenFeign-使用步骤"><span class="toc-number">4.</span> <span class="toc-text">OpenFeign 使用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本环境"><span class="toc-number">4.0.1.</span> <span class="toc-text">基本环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#添加依赖"><span class="toc-number">4.0.2.</span> <span class="toc-text">添加依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置-YML"><span class="toc-number">4.0.3.</span> <span class="toc-text">配置 YML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建生产者和消费者服务，将其注册到注册中心"><span class="toc-number">4.0.4.</span> <span class="toc-text">创建生产者和消费者服务，将其注册到注册中心</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenFeign-超时控制"><span class="toc-number">5.</span> <span class="toc-text">OpenFeign 超时控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenFeign-日志打印"><span class="toc-number">6.</span> <span class="toc-text">OpenFeign 日志打印</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&text=OpenFeign"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&is_video=false&description=OpenFeign"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=OpenFeign&body=Check out this article: http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&title=OpenFeign"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/02/28/SpringCloud/OpenFeign/&name=OpenFeign&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

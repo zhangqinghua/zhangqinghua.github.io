@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Docker 运行需要占据 50MB 的内存。 Centos 人工安装卸载旧版本（如果安装过旧版本的话）12345678910[root@vultr ~]# sudo yum remove docker  docker-common docker-selinux docker-engineFailed to set locale, defaulting to CNo match for argum">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-01-11T03:13:36.000Z">
+<meta property="og:updated_time" content="2021-03-16T09:41:46.907Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 安装">
 <meta name="twitter:description" content="Docker 运行需要占据 50MB 的内存。 Centos 人工安装卸载旧版本（如果安装过旧版本的话）12345678910[root@vultr ~]# sudo yum remove docker  docker-common docker-selinux docker-engineFailed to set locale, defaulting to CNo match for argum">
@@ -77,7 +77,7 @@
         <li><a class="icon" href="/2020/07/09/运维相关/Linux 教程/Centos 软件安装/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2020/07/08/运维相关/Docker 笔记/安装 MySQL/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2020/07/08/运维相关/Docker 笔记/Docker 镜像/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -128,9 +128,9 @@
       
     <div class="postdate">
       
-        <time datetime="2020-07-07T16:00:00.000Z" itemprop="datePublished">2020-07-08</time>
+        <time datetime="2020-07-08T00:00:00.000Z" itemprop="datePublished">2020-07-08</time>
         
-        (Updated: <time datetime="2021-01-11T03:13:36.000Z" itemprop="dateModified">2021-01-11</time>)
+        (Updated: <time datetime="2021-03-16T09:41:46.907Z" itemprop="dateModified">2021-03-16</time>)
         
       
     </div>
@@ -165,10 +165,16 @@
 <p>国内用户还可以使用阿里云或 daocloud 提供的脚本安装：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@vultrguest ~]<span class="comment"># sudo curl -sSL https://get.daocloud.io/docker | sh</span></span><br><span class="line"></span><br><span class="line">[root@vultrguest ~]<span class="comment"># sudo curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="MacOS-安装"><a href="#MacOS-安装" class="headerlink" title="MacOS 安装"></a>MacOS 安装</h2><p>Mac 用户可以使用 brew cask 安装。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew cask install docker</span><br></pre></td></tr></table></figure></p>
 <h2 id="国内镜像加速器"><a href="#国内镜像加速器" class="headerlink" title="国内镜像加速器"></a>国内镜像加速器</h2><p>国内访问 Docker Hub 有时会遇到困难，此时可以配置镜像加速器。国内很多云服务商都提供了加速器服务。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"registry-mirrors"</span>: [</span><br><span class="line">        <span class="string">"https://mirror.ccs.tencentyun.com"</span>, </span><br><span class="line">        <span class="string">"http://registry.docker-cn.com"</span>, </span><br><span class="line">        <span class="string">"http://docker.mirrors.ustc.edu.cn"</span>, </span><br><span class="line">        <span class="string">"http://hub-mirror.c.163.com"</span></span><br><span class="line">    ], </span><br><span class="line">    <span class="attr">"insecure-registries"</span>: [</span><br><span class="line">        <span class="string">"registry.docker-cn.com"</span>, </span><br><span class="line">        <span class="string">"docker.mirrors.ustc.edu.cn"</span></span><br><span class="line">    ], </span><br><span class="line">    <span class="attr">"debug"</span>: <span class="literal">true</span>, </span><br><span class="line">    <span class="attr">"experimental"</span>: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 <p>针对 Docker 客户端版本大于 1.10.0 的用户 您可以通过修改 daemon 配置文件 /etc/docker/daemon.json（没有时新建该文件）来使用加速器：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://xxx.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://y0qd3iq.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
 <p>修改后：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"registry-mirrors"</span>: [<span class="string">"&lt;your accelerate address&gt;"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;                      </span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://registry.docker-cn.com"</span>, <span class="string">"https://y0qd3iq.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是 Deocker Desktop 版本，则需要如此配置：</p>
+<ol>
+<li>任务栏 Docker 图标上右键 –&gt; Setting -&gt; Docker Engine；</li>
+<li>修改配置文件 “registry-mirrors” 的值，然后应用重启就好了；</li>
+</ol>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><ol>
 <li>requires containerd.io &gt;= 1.2.2-3<br>CentOS 8.0 安装 docker 报错：Problem: package docker-ce-3:19.03.8-3.el7.x86_64 requires containerd.io &gt;= 1.2.2-3。</li>
 </ol>
@@ -177,6 +183,8 @@
 <ol>
 <li>ERROR: Unsupported distribution ‘amzn’<br>问题：亚马逊云安装Docker提示这个异常。。。<br>原因：软件库太老。<br>解决：<code>sudo yum update -y &amp;&amp; sudo yum install docker -y</code></li>
 </ol>
+<p><strong>one of the sub-processes failed: com.docker.driver.amd64-linux -addr fd:3 -debug (pid: 3464)</strong><br>场景：黑苹果 MacOS 15.7 启动 Docker 失败。<br>原因：版本太新？<br>解决：直接从官网下载 2.3.0.3 版本即可。</p>
+<p><strong>The data couldn’t be read because it is missing.</strong><br>场景：黑苹果 MacOS 15.7 启动 Docker 失败。<br>原因：没有开启因特尔虚拟技术。<br>解决：开启主板的英特尔虚拟化技术。<br>参考：<a href="https://blog.csdn.net/qq1784855023/article/details/106911545">https://blog.csdn.net/qq1784855023/article/details/106911545</a></p>
 
   </div>
 </article>

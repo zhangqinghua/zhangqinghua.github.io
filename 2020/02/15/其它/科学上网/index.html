@@ -6,18 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="Github修改hosts：  打开Dns检测|Dns查询 - 站长工具 在检测输入栏中输入http://wwww.github.com官网 把检测列表里的TTL值最小的IP输入到 hosts 里，并对应写上 github 官网域名  123456789101112131415140.82.113.3 github.com# 219.76.4.4 github-cloud.s3.amazonaws">
+    <meta name="description" content="Github修改hosts：  打开Dns检测|Dns查询 - 站长工具 在检测输入栏中输入需要解析的域名； 把检测列表里的TTL值最小的IP输入到 /etc/hosts 里，并对应写上域名；  123456789101112131415140.82.113.3 github.com# 219.76.4.4 github-cloud.s3.amazonaws.com151.101.184.133">
 <meta name="keywords" content="科学上网">
 <meta property="og:type" content="article">
 <meta property="og:title" content="科学上网">
 <meta property="og:url" content="http://yoursite.com/2020/02/15/其它/科学上网/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Github修改hosts：  打开Dns检测|Dns查询 - 站长工具 在检测输入栏中输入http://wwww.github.com官网 把检测列表里的TTL值最小的IP输入到 hosts 里，并对应写上 github 官网域名  123456789101112131415140.82.113.3 github.com# 219.76.4.4 github-cloud.s3.amazonaws">
+<meta property="og:description" content="Github修改hosts：  打开Dns检测|Dns查询 - 站长工具 在检测输入栏中输入需要解析的域名； 把检测列表里的TTL值最小的IP输入到 /etc/hosts 里，并对应写上域名；  123456789101112131415140.82.113.3 github.com# 219.76.4.4 github-cloud.s3.amazonaws.com151.101.184.133">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-06-04T08:26:30.000Z">
+<meta property="og:updated_time" content="2021-03-16T09:41:46.899Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="科学上网">
-<meta name="twitter:description" content="Github修改hosts：  打开Dns检测|Dns查询 - 站长工具 在检测输入栏中输入http://wwww.github.com官网 把检测列表里的TTL值最小的IP输入到 hosts 里，并对应写上 github 官网域名  123456789101112131415140.82.113.3 github.com# 219.76.4.4 github-cloud.s3.amazonaws">
+<meta name="twitter:description" content="Github修改hosts：  打开Dns检测|Dns查询 - 站长工具 在检测输入栏中输入需要解析的域名； 把检测列表里的TTL值最小的IP输入到 /etc/hosts 里，并对应写上域名；  123456789101112131415140.82.113.3 github.com# 219.76.4.4 github-cloud.s3.amazonaws.com151.101.184.133">
     
     
         
@@ -129,9 +129,9 @@
       
     <div class="postdate">
       
-        <time datetime="2020-02-14T16:00:00.000Z" itemprop="datePublished">2020-02-15</time>
+        <time datetime="2020-02-15T00:00:00.000Z" itemprop="datePublished">2020-02-15</time>
         
-        (Updated: <time datetime="2020-06-04T08:26:30.000Z" itemprop="dateModified">2020-06-04</time>)
+        (Updated: <time datetime="2021-03-16T09:41:46.899Z" itemprop="dateModified">2021-03-16</time>)
         
       
     </div>
@@ -159,10 +159,12 @@
     <h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><p>修改hosts：</p>
 <ol>
 <li>打开<a href="https://link.zhihu.com/?target=http%3A//tool.chinaz.com/dns">Dns检测|Dns查询 - 站长工具</a></li>
-<li>在检测输入栏中输入<a href="http://wwww.github.com官网">http://wwww.github.com官网</a></li>
-<li>把检测列表里的TTL值最小的IP输入到 hosts 里，并对应写上 github 官网域名</li>
+<li>在检测输入栏中输入需要解析的域名；</li>
+<li>把检测列表里的TTL值最小的IP输入到 /etc/hosts 里，并对应写上域名；</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">140.82.113.3 github.com</span><br><span class="line"></span><br><span class="line"># 219.76.4.4 github-cloud.s3.amazonaws.com</span><br><span class="line">151.101.184.133 assets-cdn.github.com</span><br><span class="line">185.199.108.153 documentcloud.github.com</span><br><span class="line">192.30.253.118 gist.github.com</span><br><span class="line">185.199.108.153 help.github.com</span><br><span class="line">192.30.253.120 nodeload.github.com</span><br><span class="line">151.101.184.133 raw.github.com</span><br><span class="line">18.204.240.114 status.github.com</span><br><span class="line">192.30.253.166 training.github.com</span><br><span class="line">192.30.253.112 www.github.com</span><br><span class="line">151.101.185.194 github.global.ssl.fastly.net</span><br><span class="line">151.101.184.133 avatars0.githubusercontent.com</span><br><span class="line">151.101.184.133 avatars1.githubusercontent.com</span><br></pre></td></tr></table></figure>
+<p>在未修改之前，速度在 10kb/s 或者连不上，修改之后，速度可以达到 80kb/s。</p>
+
   </div>
 </article>
 
