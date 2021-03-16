@@ -262,25 +262,6 @@
     
     
     <entry>
-      <title>SpringCloud Gateway</title>
-      <link href="/2021/02/17/SpringCloud/SpringCloud%20Gateway/"/>
-      <url>/2021/02/17/SpringCloud/SpringCloud%20Gateway/</url>
-      
-        <content type="html"><![CDATA[<h2 id="附：常见问题"><a href="#附：常见问题" class="headerlink" title="附：常见问题"></a>附：常见问题</h2><p><strong>The following method did not exist: org/springframework/web/reactive/socket/client/ReactorNettyWebSocketClient.setHandlePing(Z)V</strong><br>场景：SpringBoot 2.2.3 SpringCloud Hoxton.SR3 启动 gateway 服务报错。<br>原因：版本不兼容？官网上写了是 SR5以下对应 SpringBoot 2.2.X。<br>解决：使用最新版 2.2.13 和 SR10。</p><p><strong>predicates 修改了，不生效，总是跳转到 阿里云首页</strong><br>场景：predicates -Path修改不生效。<br>场景：切换不同浏览器能生效。<br>场景：www.baidu.com 不成功。CDNS、阿里云成功。<br>原因：未知。<br>解决：未知。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> SpringCloud </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>SpringCloud Nacos</title>
       <link href="/2021/02/17/SpringCloud/SpringCloud%20Nocas/"/>
       <url>/2021/02/17/SpringCloud/SpringCloud%20Nocas/</url>
@@ -324,6 +305,25 @@
       <url>/2021/02/17/SpringCloud/SpringCloud%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%9F%BA%E7%A1%80/</url>
       
         <content type="html"><![CDATA[<h2 id="事务基础"><a href="#事务基础" class="headerlink" title="事务基础"></a>事务基础</h2><p>事务是指在一个操作单元中的所有操作最终要保持一致的行为，要么所有操作都成功，要么所有的操作都被撤销。</p><p>举个例子：你去小卖铺买东西，“一手交钱、一手交货”就是一个事务的例子，交钱和交货必须全部成功，事务才算成功，任一个操作失败，事务都将撤销所有已成功的活动。</p><p>事务可以看作是一次大的操作，它是由不同的小操作组成，这么操作要么全部成功，要么全部失败。</p><p>例如：</p><ol><li>转账：包含转出和转入操作；</li><li>网购：包含下单、扣减库存、支付等操作；</li></ol><h2 id="事务的四个特性"><a href="#事务的四个特性" class="headerlink" title="事务的四个特性"></a>事务的四个特性</h2><ol><li>原子性（要么全部执行、要么全部不执行）<br>操作这些指令时，要么全部执行成功，要么全部不执行。只要其中一个指令执行失败，所有的指令都执行失败，数据进行回滚，回到执行前的数据状态；</li><li><p>一致性（能量守恒、总量不变）<br>食物的执行使数据从一个状态转换成为另一个状态，数据库的完整性没有被破坏；</p><p>eg：拿转装来说，假设用户 A 和 B 两者的钱加起来一共是 2000，那么不管 A 和 B 之间如何转账，转几次帐，事务结束后两个用户的钱相加起来应该还是 2000，这就是事务一致性。</p></li><li><p>隔离性（信息彼此独立，互不干扰）<br>隔离性是当多个用户并发访问数据库时，比如操作同一张表，数据库为每一个用户开启的食物，不能被其它事务的操作所干扰，多个并发事务之间要相互隔离。</p></li><li><p>持久性（不会轻易改变）<br>当事务正确完成后，它对于数据的改变是永久性的。</p></li></ol><h2 id="本地实现事务"><a href="#本地实现事务" class="headerlink" title="本地实现事务"></a>本地实现事务</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="comment">-- 1. 本地数据库操作：张三减少金额</span></span><br><span class="line"><span class="comment">-- 2. 本地数据库操作：李四增加金额</span></span><br><span class="line"><span class="keyword">commit</span> <span class="keyword">transaction</span>;</span><br></pre></td></tr></table></figure><h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><p>随着互联网的快速发展，软件系统由原来的单体应用转变为分布式应用。分布式应用会把一个应用系统拆分成可独立部署的多个服务，因此需要服务与服务之间远程协作才能完成事务操作。这种分布式系统环境下由不同的服务之间通过网络远程协作完成的事务称之为分布式事务，例如用户注册送积分事务、创建订单减库存事务，银行转账事务等都是分布式事务。</p><h2 id="CAP-原则"><a href="#CAP-原则" class="headerlink" title="CAP 原则"></a>CAP 原则</h2><p>CAP 原则又叫 CAP 定理，同时又被称作布鲁尔定理（Brewer’s theorem），指的是在一个分布式系统中，不可能同时满足以下三点：</p><ol><li><p>一致性 Consistency （副本最新）<br>指在写操作完成后开始的任何读操作都必须返回该值，或者后续写操作的结果。</p><p>也就是说，在一致性系统中，一旦客户端将值写入任何一台服务器并获取响应，那么之后客户端从其他任何服务器读取的都是刚写入的数据。</p><p>一致性保证了不管向哪台服务器写入数据，其他的服务器能实时同步数据。</p></li><li><p>可用性 Availability （高可用）<br>可用性是指，每次向未崩溃的节点发送请求，总能保证收到响应数据（允许不是最新数据）。</p></li><li><p>分区容忍性 Partition tolerance （能容忍网络分区）<br>分布式系统在遇到任何网络分区故障的时候，仍然能够对外提供满意一致性的可用性的服务。也就是说，服务器 A 和 B 发送给对方的任何消息都是可以放弃的，也就是说 A 和 B 可能因为各种意外情况，导致无法成功进行同步。分布式系统要能容忍这种情况。除非整个网络环境都发生了故障。</p></li></ol><blockquote><p>什么是分区：在分布式系统中，不同的节点分布在不同的子网络下，由于一些特殊的原因，这些子节点之间出现了网络不通的状态，但它们的内部子网络是正常的。从而导致了整个系统的环境被切分成了若干个孤立的区域。这就是分区。</p></blockquote><h2 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h2><p>一致性可以分为强一致性和弱一致性。所谓强一致性，即复制是同步的，若一致性，复制是异步的。</p><h2 id="CAP-回顾"><a href="#CAP-回顾" class="headerlink" title="CAP 回顾"></a>CAP 回顾</h2><p>CAP 理论中，我们只能在 C、A、P 中选择两个条件。而对于业务系统而言，我们往往选择牺牲一致性来换取系统的可用性和分区容错性。不过这里要指出的是，所谓的“牺牲一致性”不是完全放弃数据一致性，而是牺牲强一致性换取弱一致性。</p><h2 id="强一致性"><a href="#强一致性" class="headerlink" title="强一致性"></a>强一致性</h2><p>系统中的某个数据被成功更新后，后续任何对该数据的读取操作都将得到更新后的值。也称为：原子一致性（Atomic Consistency）、线性一致性（Linearizable Consistency）。</p><p>两个要求：</p><ol><li>任何一次读都能读到某个数据的最近一次写的数据；</li><li>系统中的所有进程，看到的操作顺序，都和全局时钟下的顺序一致。</li></ol><p>简而言之，在任意时刻，所有节点中的数据是一样的。例如，对于关系型数据库，要求更新过的数据能被后续的访问都能看到。</p><p>总结：</p><ol><li>一个集群需要对外部提供强一致性，所以只要集群内部某一台服务器的数据发生了变化，那么就需要等待集群内其他服务器的数据同步完成之后，才能保证对外提供服务；</li><li>保证了强一致性，务必会造成损耗可用性；</li></ol><h2 id="弱一致性"><a href="#弱一致性" class="headerlink" title="弱一致性"></a>弱一致性</h2><p>系统中的某个数据被更新后，后续对该数据的读取操作可能得到更改后的值，也可能是更改前的值。</p><p>但即使过了“不一致时间窗口”这段时间后，后续对该数据的读取也不一定是最新的。</p><p>所以说，可以理解为数据更新后，如果能容忍后续的访问只能访问到部分或者全部访问不到，则是若一致性。</p><h2 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h2><p>是若一致性的特殊形式，存储系统保证在没有新的更新的条件下，最终所有的访问都是最新更新的值。</p><p>不能保证任意时刻任意节点上的同一份数据都是相同的，但是随着时间的迁移，不同节点上的同一份数据总是向着趋同的方向变化。</p><h2 id="BASE-理论"><a href="#BASE-理论" class="headerlink" title="BASE 理论"></a>BASE 理论</h2><p>BASE 理论即 Basic Available（基本可用）、Soft State（柔性状态）、Eventual Consisstency（最终一致性）：</p><ol><li><p>基本可用<br>整个系统在某些不可抗力的情况下，仍然能够保证“可用性”，即一定时间内仍然能够返回一个明确的结果。</p><p>例如：当举行大促时，响应时间可以适当延长，或者给部分用户返回一个降级页面，从而缓解服务器压力。</p></li><li><p>柔性状态<br>即允许系统中的数据存在中间状态，并认为该状态的存在不会影响系统的整体可用性，允许系统不同节点的数据副本之间进行数据同步的过程存在延迟。</p><p>例如：微信支付，等待回调，中间有几秒延迟，使用“支付中”状态表示。</p></li><li><p>最终一致性<br>同一数据的不同副本的状态，可以不需要实时一致，但一定要保证经过一定时间后仍然是一致的。</p></li></ol><p>BASE 理论是对 CAP 中的一致性和可用性进行一个权衡的结果，理论的核心思想是：我们无法做到强一致性，但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> SpringCloud </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SpringCloud Gateway</title>
+      <link href="/2021/02/17/SpringCloud/SpringCloud%20Gateway/"/>
+      <url>/2021/02/17/SpringCloud/SpringCloud%20Gateway/</url>
+      
+        <content type="html"><![CDATA[<h2 id="附：常见问题"><a href="#附：常见问题" class="headerlink" title="附：常见问题"></a>附：常见问题</h2><p><strong>The following method did not exist: org/springframework/web/reactive/socket/client/ReactorNettyWebSocketClient.setHandlePing(Z)V</strong><br>场景：SpringBoot 2.2.3 SpringCloud Hoxton.SR3 启动 gateway 服务报错。<br>原因：版本不兼容？官网上写了是 SR5以下对应 SpringBoot 2.2.X。<br>解决：使用最新版 2.2.13 和 SR10。</p><p><strong>predicates 修改了，不生效，总是跳转到 阿里云首页</strong><br>场景：predicates -Path修改不生效。<br>场景：切换不同浏览器能生效。<br>场景：www.baidu.com 不成功。CDNS、阿里云成功。<br>原因：未知。<br>解决：未知。</p>]]></content>
       
       
       <categories>
