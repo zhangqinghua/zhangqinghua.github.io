@@ -473,7 +473,7 @@ body table {
 }
 article .content img,
 article .content video {
-  width: 70% !important;
+  width: 80% !important;
 }
 figure::-webkit-scrollbar {
   background-color: rgba(100,1,1,0);

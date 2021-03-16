@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="本文主要介绍 TCC 的原理，以及从代码的角度上分析如何实现的；不涉及具体使用示例。本文分析的是 Github 中开源项目 tcc-transaction 的代码。当然 Github 上有多个 TCC 项目，但是他们原理相近，所以不过多介绍，有兴趣的小伙伴自行阅读源码。 项目架构tcc-transaction 的架构由以下部分组成：  一个完整的业务活动由一个主业务服务与若干从业务服务组成； 主业">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式事务 TCC 原理">
+<meta property="og:url" content="http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文主要介绍 TCC 的原理，以及从代码的角度上分析如何实现的；不涉及具体使用示例。本文分析的是 Github 中开源项目 tcc-transaction 的代码。当然 Github 上有多个 TCC 项目，但是他们原理相近，所以不过多介绍，有兴趣的小伙伴自行阅读源码。 项目架构tcc-transaction 的架构由以下部分组成：  一个完整的业务活动由一个主业务服务与若干从业务服务组成； 主业">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210317003130.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/002.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/006.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/007.png">
+<meta property="og:updated_time" content="2021-03-16T16:33:45.794Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式事务 TCC 原理">
+<meta name="twitter:description" content="本文主要介绍 TCC 的原理，以及从代码的角度上分析如何实现的；不涉及具体使用示例。本文分析的是 Github 中开源项目 tcc-transaction 的代码。当然 Github 上有多个 TCC 项目，但是他们原理相近，所以不过多介绍，有兴趣的小伙伴自行阅读源码。 项目架构tcc-transaction 的架构由以下部分组成：  一个完整的业务活动由一个主业务服务与若干从业务服务组成； 主业">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210317003130.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>分布式事务 TCC 原理</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/03/16/Java 相关/Java 开发手册/Java 基础/Java 集合/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/03/16/分布式事务/分布式事务 理论基础/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&text=分布式事务 TCC 原理"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&is_video=false&description=分布式事务 TCC 原理"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=分布式事务 TCC 原理&body=Check out this article: http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&name=分布式事务 TCC 原理&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目架构"><span class="toc-number">1.</span> <span class="toc-text">项目架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例分析"><span class="toc-number">2.</span> <span class="toc-text">示例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#转账面临的主要问题"><span class="toc-number">2.0.1.</span> <span class="toc-text">转账面临的主要问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCC-解决问题的思路"><span class="toc-number">2.0.2.</span> <span class="toc-text">TCC 解决问题的思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCC-处理逻辑"><span class="toc-number">2.0.3.</span> <span class="toc-text">TCC 处理逻辑</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理分析"><span class="toc-number">3.</span> <span class="toc-text">原理分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#整体流程图"><span class="toc-number">3.0.1.</span> <span class="toc-text">整体流程图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCC-核心处理逻辑"><span class="toc-number">3.0.2.</span> <span class="toc-text">TCC 核心处理逻辑</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#异常处理流程"><span class="toc-number">3.0.3.</span> <span class="toc-text">异常处理流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优点缺点"><span class="toc-number">4.</span> <span class="toc-text">优点缺点</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        分布式事务 TCC 原理
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-03-16T00:00:02.000Z" itemprop="datePublished">2021-03-16</time>
+        
+        (Updated: <time datetime="2021-03-16T16:33:45.794Z" itemprop="dateModified">2021-03-16</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/分布式事务/">分布式事务</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>本文主要介绍 TCC 的原理，以及从代码的角度上分析如何实现的；不涉及具体使用示例。本文分析的是 Github 中开源项目 <a href="https://github.com/changmingxie/tcc-transaction">tcc-transaction</a> 的代码。当然 Github 上有多个 TCC 项目，但是他们原理相近，所以不过多介绍，有兴趣的小伙伴自行阅读源码。</p>
+<h2 id="项目架构"><a href="#项目架构" class="headerlink" title="项目架构"></a>项目架构</h2><p>tcc-transaction 的架构由以下部分组成：</p>
+<ol>
+<li>一个完整的业务活动由一个主业务服务与若干从业务服务组成；</li>
+<li>主业务服务负责发起并完成整个业务活动。</li>
+<li>从业务服务提供TCC型业务操作。</li>
+<li>业务活动管理器控制业务活动的一致性，它登记业务活动中的操作，并在业务活动提交时进行 confirm 操作，在业务活动取消时进行 cancel 操作；</li>
+</ol>
+<p>TCC 和 2PC/3PC 很像，不过 TCC 的事务控制都是业务代码层面的，而 2PC/3PC 则是资源层面的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210317003130.png" alt=""></p>
+<p>TCC 事务其实主要包含两个阶段：Try 阶段、Confirm/Cancel 阶段。</p>
+<p>从 TCC 的逻辑模型上我们可以看到，TCC 的核心思想是，Try 阶段检查并预留资源，确保在 Confirm 阶段有资源可用，这样可以最大程度的确保 Confirm 阶段能够执行成功。</p>
+<ol>
+<li><p>Try-尝试执行业务<br>完成所有业务检查(一致性)</p>
+<p>预留必须业务资源(准隔离性)</p>
+</li>
+<li><p>Confirm-确认执行业务<br>真正执行业务。</p>
+<p>不作任何业务检查。</p>
+<p>只使用 Try 阶段预留的业务资源。</p>
+<p>Confirm 操作必须保证幂等性。</p>
+</li>
+<li><p>Cancel-取消执行业务<br>释放Try阶段预留的业务资源。</p>
+<p>Cancel操作必须保证幂等性。</p>
+</li>
+</ol>
+<h2 id="示例分析"><a href="#示例分析" class="headerlink" title="示例分析"></a>示例分析</h2><p>下面通过一个示例来讨论 TCC 事务：Tom 需要给 Tracy 转 10 元，当使用 TCC 解决这种事务时，应该如何去做呢？</p>
+<h4 id="转账面临的主要问题"><a href="#转账面临的主要问题" class="headerlink" title="转账面临的主要问题"></a>转账面临的主要问题</h4><p>我们考虑一下这个转账过程面临的问题：</p>
+<ol>
+<li>需要确保 Tom 账户余额不少于10元；</li>
+<li>需要确保账户余额的正确性，例如：假设 Tom 只有 10 元钱，但是 Tom 同时给 Tracy、Angle 转账 10 元；Tom 给其他人转账时，也可能收到其他人转过来的钱，此时账户的余额不能出现错乱（Tracy 账户也面临过类似的问题）；</li>
+<li>当并发量比较大时，要能够确保性能；</li>
+</ol>
+<h4 id="TCC-解决问题的思路"><a href="#TCC-解决问题的思路" class="headerlink" title="TCC 解决问题的思路"></a>TCC 解决问题的思路</h4><p>TCC 解决分布式事物的思路是，一个大事务拆解成多个小事务。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/002.png" alt=""></p>
+<h4 id="TCC-处理逻辑"><a href="#TCC-处理逻辑" class="headerlink" title="TCC 处理逻辑"></a>TCC 处理逻辑</h4><p>使用 TCC 事务时，伪代码如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Compensable</span>(confirmMethod = <span class="string">"transferConfirm"</span>, cancelMethod = <span class="string">"transferCancel"</span>)</span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transferTry</span><span class="params">(<span class="keyword">long</span> fromAccountId, <span class="keyword">long</span> toAccountId, <span class="keyword">int</span> amount)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//检查Tom账户</span></span><br><span class="line">    <span class="comment">//锁定Tom账户</span></span><br><span class="line">    <span class="comment">//锁定Tracy账户</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transferConfirm</span><span class="params">(<span class="keyword">long</span> fromAccountId, <span class="keyword">long</span> toAccountId, <span class="keyword">int</span> amount)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//tom账户-10元</span></span><br><span class="line">    <span class="comment">//tracy账户+10元</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transferCancel</span><span class="params">(<span class="keyword">long</span> fromAccountId, <span class="keyword">long</span> toAccountId, <span class="keyword">int</span> amount)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//解除Tom账户锁定</span></span><br><span class="line">    <span class="comment">//接触Tracy账户锁定</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Try 逻辑中需要确保 Tom 账户的余额足够，并锁定需要使用的资源（Tom、Tracy 账户）；如果这一步操作执行成功（没有出现异常），那么将执行 Confirm 方法，如果执行失败，那么将执行 Cancel 方法。注意 Confirm、Cancel 需要做好幂等。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/006.png" alt=""></p>
+<h2 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h2><p>在上面的 TCC 事务中，转账操作其实涉及六次操作，实际项目中，在任何一个步骤都可能失败，那么当任何一个步骤失败时，TCC 框架是如何做到数据一致性的呢？</p>
+<h4 id="整体流程图"><a href="#整体流程图" class="headerlink" title="整体流程图"></a>整体流程图</h4><p>以下为 TCC 的处理流程图，它可以确保不管是在 Try 阶段，还是在 Confirm/Cancel 阶段都可以确保数据的一致性。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/007.png" alt=""></p>
+<p>从流程图上可以看到，TCC 依赖于一条事务处理记录，在开始 TCC 事务前标记创建此记录，然后在 TCC 的每个环节持续更新此记录的状态，这样就可以知道事务执行到那个环节了，当一次执行失败，进行重试时同样根据此数据来确定当前阶段，并判断应该执行什么操作。</p>
+<p>因为存在失败重试的逻辑，所以 Cancel、Commit 方法必须实现幂等。其实在分布式开发中，凡是涉及到写操作的地方都应该实现幂等。</p>
+<h4 id="TCC-核心处理逻辑"><a href="#TCC-核心处理逻辑" class="headerlink" title="TCC 核心处理逻辑"></a>TCC 核心处理逻辑</h4><p>因为使用了 <code>@Compensable</code> 注解，所以当调用 <code>transferTry</code> 方法前，首先进入代理类中。在 TCC 中有两个 <code>Interceptor</code> 会对 <code>@Compensable</code> 标注的方法生效，他们分别是：<code>CompensableTransactionInterceptor</code>（TCC 主要逻辑在此 <code>Interceptor</code> 中完成）、<code>ResourceCoordinatorInterceptor</code>（处理资源相关的事宜）。</p>
+<p><code>CompensableTransactionInterceptor#interceptCompensableMethod</code> 是 TCC 的核心处理逻辑。<code>interceptCompensableMethod</code> 封装请求数据，为 TCC 事务做准备，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">interceptCompensableMethod</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    Method method = CompensableMethodUtils.getCompensableMethod(pjp);</span><br><span class="line">    Compensable compensable = method.getAnnotation(Compensable.class);</span><br><span class="line">    Propagation propagation = compensable.propagation();</span><br><span class="line">    TransactionContext transactionContext = FactoryBuilder.factoryOf(compensable.transactionContextEditor())</span><br><span class="line">                                                          .getInstance()</span><br><span class="line">                                                          .get(pjp.getTarget(), method, pjp.getArgs());</span><br><span class="line">    <span class="keyword">boolean</span> asyncConfirm = compensable.asyncConfirm();</span><br><span class="line">    <span class="keyword">boolean</span> asyncCancel = compensable.asyncCancel();</span><br><span class="line">    <span class="keyword">boolean</span> isTransactionActive = transactionManager.isTransactionActive();</span><br><span class="line">    <span class="keyword">if</span> (!TransactionUtils.isLegalTransactionContext(isTransactionActive, propagation, transactionContext)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> SystemException(<span class="string">"no active compensable transaction while propagation is mandatory for method "</span> + method.getName());</span><br><span class="line">    &#125;</span><br><span class="line">    MethodType methodType = CompensableMethodUtils.calculateMethodType(propagation, isTransactionActive, transactionContext);</span><br><span class="line">    <span class="keyword">switch</span> (methodType) &#123;</span><br><span class="line">        <span class="keyword">case</span> ROOT:</span><br><span class="line">            <span class="keyword">return</span> rootMethodProceed(pjp, asyncConfirm, asyncCancel);</span><br><span class="line">        <span class="keyword">case</span> PROVIDER:</span><br><span class="line">            <span class="keyword">return</span> providerMethodProceed(pjp, transactionContext, asyncConfirm, asyncCancel);</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> pjp.proceed();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>rootMethodProceed</code> 是 TCC 和核心处理逻辑，实现了对 Try、Confirm、Cancel 的执行，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">rootMethodProceed</span><span class="params">(ProceedingJoinPoint pjp, <span class="keyword">boolean</span> asyncConfirm, <span class="keyword">boolean</span> asyncCancel)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    Object returnValue = <span class="keyword">null</span>;</span><br><span class="line">    Transaction transaction = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        transaction = transactionManager.begin();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">           returnValue = pjp.proceed();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable tryingException) &#123;</span><br><span class="line">            <span class="keyword">if</span> (isDelayCancelException(tryingException)) &#123;</span><br><span class="line">               transactionManager.syncTransaction();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               logger.warn(String.format(<span class="string">"compensable transaction trying failed. transaction content:%s"</span>, JSON.toJSONString(transaction)), tryingException);</span><br><span class="line">               transactionManager.rollback(asyncCancel);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">throw</span> tryingException;</span><br><span class="line">        &#125;</span><br><span class="line">       transactionManager.commit(asyncConfirm);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        transactionManager.cleanAfterCompletion(transaction);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> returnValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个方法中我们看到，首先执行的是 <code>@Compensable</code> 注解标注的方法（Try），如果抛出异常，那么执行 rollback 方法（Cancel），否则执行 <code>commit</code> 方法（ Confirm ）。</p>
+<h4 id="异常处理流程"><a href="#异常处理流程" class="headerlink" title="异常处理流程"></a>异常处理流程</h4><p>考虑到在 Try、Cancel、Confirm 过程中都可能发生异常，所以在任何一步失败时，系统都能够要么回到最初（未转账）状态，要么到达最终（已转账）状态。下面讨论一下 TCC 代码层面是如何保证一致性的。</p>
+<p><strong>Begin</strong><br>在前面的代码中，可以看到执行 try 之前，TCC 通过 <code>transactionManager.begin()</code> 开启了一个事务，这个 begin 方法的核心是：</p>
+<ol>
+<li>创建一个记录，用于记录事务执行到那个环节了；</li>
+<li>注册当前事务到 <code>TransactionManager</code> 中，在 Confirm、Cancel 过程中可以使用此 <code>Transaction</code> 来 commit 或者 rollback；</li>
+</ol>
+<p><code>TransactionManager#begin</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Transaction <span class="title">begin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   Transaction transaction = <span class="keyword">new</span> Transaction(TransactionType.ROOT);</span><br><span class="line">   transactionRepository.create(transaction);</span><br><span class="line">   registerTransaction(transaction);</span><br><span class="line">   <span class="keyword">return</span> transaction;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>CachableTransactionRepository#create</code> 创建一个用于标识事务执行环节的记录，然后将 <code>transaction</code> 放到缓存中区。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">create</span><span class="params">(Transaction transaction)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> result = doCreate(transaction);</span><br><span class="line">    <span class="keyword">if</span> (result &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        putToCache(transaction);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>CachableTransactionRepository</code> 有多个子类（<code>FileSystemTransactionRepository</code>、<code>JdbcTransactionRepository</code>、<code>RedisTransactionRepository</code>、<code>ZooKeeperTransactionRepository</code>），通过这些类可以实现记录 db、file、redis、zk 等的解决方案。</p>
+<p><strong>commit/rollback</strong><br>在commit、rollback中，都有这样一行代码，用于更新事务状态：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">transactionRepository.update(transaction);</span><br></pre></td></tr></table></figure>
+<p>这行代码将当前事务的状态标记为 commit/rollback，如果失败会抛出异常，不会执行后续的 Confirm/Cancel 方法；如果成功，才会执行 Confirm/Cancel 方法。</p>
+<p><strong>Scheduler</strong><br>如果在 try/commit/rollback 过程中失败了，请求( <code>transferTry</code> 方法)将会立即返回，TCC 在这里引入了重试机制，即通过定时程序查询执行失败的任务，然后进行补偿操作。具体见：<code>TransactionRecovery#startRecover</code> 查询所有异常事务，然后逐个进行处理。注意重试操作有一个最大重试次数的限制，如果超过最大重试次数，此事务将会被忽略。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startRecover</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Transaction&gt; transactions = loadErrorTransactions();</span><br><span class="line">   recoverErrorTransactions(transactions);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> List&lt;Transaction&gt; <span class="title">loadErrorTransactions</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> currentTimeInMillis = Calendar.getInstance().getTimeInMillis();</span><br><span class="line">    TransactionRepository transactionRepository = transactionConfigurator.getTransactionRepository();</span><br><span class="line">    RecoverConfig recoverConfig = transactionConfigurator.getRecoverConfig();</span><br><span class="line">    <span class="keyword">return</span> transactionRepository.findAllUnmodifiedSince(<span class="keyword">new</span> Date(currentTimeInMillis - recoverConfig.getRecoverDuration() * <span class="number">1000</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">recoverErrorTransactions</span><span class="params">(List&lt;Transaction&gt; transactions)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Transaction transaction : transactions) &#123;</span><br><span class="line">        <span class="keyword">if</span> (transaction.getRetriedCount() &gt; transactionConfigurator.getRecoverConfig().getMaxRetryCount()) &#123;</span><br><span class="line">           logger.error(String.format(<span class="string">"recover failed with max retry count,will not try again. txid:%s, status:%s,retried count:%d,transaction content:%s"</span>, transaction.getXid(), transaction.getStatus().getId(), transaction.getRetriedCount(), JSON.toJSONString(transaction)));</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (transaction.getTransactionType().equals(TransactionType.BRANCH)</span><br><span class="line">                &amp;&amp; (transaction.getCreateTime().getTime() +</span><br><span class="line">               transactionConfigurator.getRecoverConfig().getMaxRetryCount() *</span><br><span class="line">                       transactionConfigurator.getRecoverConfig().getRecoverDuration() * <span class="number">1000</span></span><br><span class="line">                &gt; System.currentTimeMillis())) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">           transaction.addRetriedCount();</span><br><span class="line">            <span class="keyword">if</span> (transaction.getStatus().equals(TransactionStatus.CONFIRMING)) &#123;</span><br><span class="line">               transaction.changeStatus(TransactionStatus.CONFIRMING);</span><br><span class="line">                transactionConfigurator.getTransactionRepository().update(transaction);</span><br><span class="line">                transaction.commit();</span><br><span class="line">               transactionConfigurator.getTransactionRepository().delete(transaction);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (transaction.getStatus().equals(TransactionStatus.CANCELLING)</span><br><span class="line">                    || transaction.getTransactionType().equals(TransactionType.ROOT)) &#123;</span><br><span class="line">               transaction.changeStatus(TransactionStatus.CANCELLING);</span><br><span class="line">               transactionConfigurator.getTransactionRepository().update(transaction);</span><br><span class="line">                transaction.rollback();</span><br><span class="line">               transactionConfigurator.getTransactionRepository().delete(transaction);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">            <span class="keyword">if</span> (throwable <span class="keyword">instanceof</span> OptimisticLockException</span><br><span class="line">                    || ExceptionUtils.getRootCause(throwable) <span class="keyword">instanceof</span> OptimisticLockException) &#123;</span><br><span class="line">               logger.warn(String.format(<span class="string">"optimisticLockException happened while recover. txid:%s, status:%s,retried count:%d,transaction content:%s"</span>, transaction.getXid(), transaction.getStatus().getId(), transaction.getRetriedCount(), JSON.toJSONString(transaction)), throwable);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               logger.error(String.format(<span class="string">"recover failed, txid:%s, status:%s,retried count:%d,transaction content:%s"</span>, transaction.getXid(), transaction.getStatus().getId(), transaction.getRetriedCount(), JSON.toJSONString(transaction)), throwable);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="优点缺点"><a href="#优点缺点" class="headerlink" title="优点缺点"></a>优点缺点</h2><p>目前解决分布式事务的方案中，最稳定可靠的方案有：TCC、2PC/3PC、最终一致性。这三种方案各有优劣，有自己的适用场景。下面我们简单讨论一下 TCC 主要的优缺点。</p>
+<p>TCC 的主要优点有：</p>
+<ol>
+<li>因为 Try 阶段检查并预留了资源，所以 Confirm 阶段一般都可以执行成功；</li>
+<li>资源锁定都是在业务代码中完成，不会 block 住 DB，可以做到对 DB 性能无影响；</li>
+<li>TCC 的实时性较高，所有的 DB 写操作都集中在 Confirm 中，写操作的结果实时返回（失败时因为定时程序执行时间的关系，略有延迟）;</li>
+</ol>
+<p>TCC 的主要缺点有：</p>
+<ol>
+<li>因为事务状态管理，将产生多次 DB 操作，这将损耗一定的性能，并使得整个TCC事务时间拉长；</li>
+<li>事务涉及方越多，Try、Confirm、Cancel 中的代码就越复杂，可复用性就越底（这一点主要是相对最终一致性方案而言的）。另外涉及方越多，这几个阶段的处理时间越长，失败的可能性也越高；</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目架构"><span class="toc-number">1.</span> <span class="toc-text">项目架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例分析"><span class="toc-number">2.</span> <span class="toc-text">示例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#转账面临的主要问题"><span class="toc-number">2.0.1.</span> <span class="toc-text">转账面临的主要问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCC-解决问题的思路"><span class="toc-number">2.0.2.</span> <span class="toc-text">TCC 解决问题的思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCC-处理逻辑"><span class="toc-number">2.0.3.</span> <span class="toc-text">TCC 处理逻辑</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理分析"><span class="toc-number">3.</span> <span class="toc-text">原理分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#整体流程图"><span class="toc-number">3.0.1.</span> <span class="toc-text">整体流程图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCC-核心处理逻辑"><span class="toc-number">3.0.2.</span> <span class="toc-text">TCC 核心处理逻辑</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#异常处理流程"><span class="toc-number">3.0.3.</span> <span class="toc-text">异常处理流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优点缺点"><span class="toc-number">4.</span> <span class="toc-text">优点缺点</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&text=分布式事务 TCC 原理"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&is_video=false&description=分布式事务 TCC 原理"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=分布式事务 TCC 原理&body=Check out this article: http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&title=分布式事务 TCC 原理"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/03/16/分布式事务/分布式事务 TCC 原理/&name=分布式事务 TCC 原理&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
