@@ -13,10 +13,12 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="XAXA 又称两阶段提交，顾名思义就是要分两步提交。存在一个负责协调各个本地资源管理器的事务管理器，本地资源管理器一般是由数据库实现，事务管理器在第一阶段的时候询问各个资源管理器是否都就绪？如果收到每个资源的回复都是 yes，则在第二阶段提交事务，如果其中任意一个资源的回复是 no, 则回滚事务。 大致的流程：  第一阶段（prepare）事务管理器向所有本地资源管理器发起请求，询问是否是 rea">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-03-16T16:33:45.790Z">
+<meta property="og:image" content="https://xiaomi-info.github.io/2020/01/02/distributed-transaction/bank-transfer.jpg">
+<meta property="og:updated_time" content="2021-03-17T09:21:03.468Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringCloud 分布式事务解决方案">
 <meta name="twitter:description" content="XAXA 又称两阶段提交，顾名思义就是要分两步提交。存在一个负责协调各个本地资源管理器的事务管理器，本地资源管理器一般是由数据库实现，事务管理器在第一阶段的时候询问各个资源管理器是否都就绪？如果收到每个资源的回复都是 yes，则在第二阶段提交事务，如果其中任意一个资源的回复是 no, 则回滚事务。 大致的流程：  第一阶段（prepare）事务管理器向所有本地资源管理器发起请求，询问是否是 rea">
+<meta name="twitter:image" content="https://xiaomi-info.github.io/2020/01/02/distributed-transaction/bank-transfer.jpg">
     
     
         
@@ -74,10 +76,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2021/03/16/分布式事务/分布式事务 理论基础/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2021/03/16/SpringCloud/SpringCloud 提高部署速度/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2021/03/16/SpringCloud/SpringCloud 提高部署速度/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2021/03/16/Swagger/Swagger 教程/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -104,7 +106,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#XA"><span class="toc-number">1.</span> <span class="toc-text">XA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCC"><span class="toc-number">2.</span> <span class="toc-text">TCC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地消息表"><span class="toc-number">3.</span> <span class="toc-text">本地消息表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大努力通知"><span class="toc-number">4.</span> <span class="toc-text">最大努力通知</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠消息最终一致性"><span class="toc-number">5.</span> <span class="toc-text">可靠消息最终一致性</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#XA"><span class="toc-number">1.</span> <span class="toc-text">XA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCC"><span class="toc-number">2.</span> <span class="toc-text">TCC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地消息表"><span class="toc-number">3.</span> <span class="toc-text">本地消息表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大努力通知"><span class="toc-number">4.</span> <span class="toc-text">最大努力通知</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠消息最终一致性"><span class="toc-number">5.</span> <span class="toc-text">可靠消息最终一致性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">6.</span> <span class="toc-text">使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#XA-1"><span class="toc-number">6.0.1.</span> <span class="toc-text">XA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCC-1"><span class="toc-number">6.0.2.</span> <span class="toc-text">TCC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#可靠消息最终一致性-1"><span class="toc-number">6.0.3.</span> <span class="toc-text">可靠消息最终一致性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#本地消息表-1"><span class="toc-number">6.0.4.</span> <span class="toc-text">本地消息表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最大努力通知-1"><span class="toc-number">6.0.5.</span> <span class="toc-text">最大努力通知</span></a></li></ol></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -130,7 +132,7 @@
       
         <time datetime="2021-03-16T00:00:00.000Z" itemprop="datePublished">2021-03-16</time>
         
-        (Updated: <time datetime="2021-03-16T16:33:45.790Z" itemprop="dateModified">2021-03-16</time>)
+        (Updated: <time datetime="2021-03-17T09:21:03.468Z" itemprop="dateModified">2021-03-17</time>)
         
       
     </div>
@@ -196,7 +198,42 @@
 <li>这里会有个专门消费 MQ 的服务，这个服务会消费 MQ 并调用系统 B 的接口；</li>
 <li>要是系统 B 执行成功就 ok 了；要是系统 B 执行失败了，那么最大努力通知服务就定时尝试重新调用系统 B, 反复 N 次，最后还是不行就放弃。</li>
 </ol>
-<h2 id="可靠消息最终一致性"><a href="#可靠消息最终一致性" class="headerlink" title="可靠消息最终一致性"></a>可靠消息最终一致性</h2>
+<h2 id="可靠消息最终一致性"><a href="#可靠消息最终一致性" class="headerlink" title="可靠消息最终一致性"></a>可靠消息最终一致性</h2><p>123</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>123</p>
+<h4 id="XA-1"><a href="#XA-1" class="headerlink" title="XA"></a>XA</h4><p>目前支付宝使用两阶段提交思想实现了分布式事务服务 (Distributed Transaction Service, DTS) ，它是一个分布式事务框架，用来保障在大规模分布式环境下事务的最终一致性。</p>
+<blockquote>
+<p>开源版本为 Seata。</p>
+</blockquote>
+<h4 id="TCC-1"><a href="#TCC-1" class="headerlink" title="TCC"></a>TCC</h4><p>TCC 需要事务接口提供 try, confirm, cancel 三个接口，提高了编程的复杂性。依赖于业务方来配合提供这样的接口，推行难度大，所以一般不推荐使用这种方式。</p>
+<h4 id="可靠消息最终一致性-1"><a href="#可靠消息最终一致性-1" class="headerlink" title="可靠消息最终一致性"></a>可靠消息最终一致性</h4><p>目前市面上支持该方案的 mq 只有阿里的 rocketmq, 该方案应用场景也比较多，比如用户注册成功后发送邮件、电商系统给用户发送优惠券等需要保证最终一致性的场景。</p>
+<h4 id="本地消息表-1"><a href="#本地消息表-1" class="headerlink" title="本地消息表"></a>本地消息表</h4><p>跨行转账可通过该方案实现。</p>
+<p>用户 A 向用户 B 发起转账，首先系统会扣掉用户 A 账户中的金额，将该转账消息写入消息表中，如果事务执行失败则转账失败，如果转账成功，系统中会有定时轮询消息表，往 mq 中写入转账消息，失败重试。mq 消息会被实时消费并往用户 B 中账户增加转账金额，执行失败会不断重试。</p>
+<p><img src="https://xiaomi-info.github.io/2020/01/02/distributed-transaction/bank-transfer.jpg" alt=""></p>
+<p>小米海外商城用户订单数据状态变更，会将变更状态记录消息表中，脚本将订单状态消息写入 mq，最终消费 mq 给用户发送邮件、短信、push 等。</p>
+<h4 id="最大努力通知-1"><a href="#最大努力通知-1" class="headerlink" title="最大努力通知"></a>最大努力通知</h4><p>最大努力通知最常见的场景就是支付回调，支付服务收到第三方服务支付成功通知后，先更新自己库中订单支付状态，然后同步通知订单服务支付成功。如果此次同步通知失败，会通过异步脚步不断重试地调用订单服务的接口。</p>
+<pre class="mermaid">sequenceDiagram
+    participant 微信服务
+    participant 支付服务
+    loop 最大重试N次
+        微信服务->>支付服务: 支付成功
+        支付服务-->>微信服务: 处理失败
+    end
+    支付服务-->>微信服务: 处理成功</pre>
+
+<p>小米海外商城目前除了支付回调外，最常用的场景是订单数据同步。例如系统 A、B 进行数据同步，当系统 A 发生订单数据变更，先将数据变更消息写入小米 notify 系统（作用等同 mq），然后 notify 系统异步处理该消息来调用系统 B 提供的接口并进行重试到最大次数。</p>
+<pre class="mermaid">sequenceDiagram
+   participant 服务A
+   participant Notify
+   participant 服务B
+
+   服务A ->> Notify: 订单同步
+   Notify -->> 服务A: 处理成功
+
+   loop 最大重试N次
+      Notify ->> 服务B: 订单同步
+      服务B -->> Notify: 处理失败
+   end
+   服务B -->> Notify: 处理成功</pre>
   </div>
 </article>
 
@@ -223,7 +260,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#XA"><span class="toc-number">1.</span> <span class="toc-text">XA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCC"><span class="toc-number">2.</span> <span class="toc-text">TCC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地消息表"><span class="toc-number">3.</span> <span class="toc-text">本地消息表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大努力通知"><span class="toc-number">4.</span> <span class="toc-text">最大努力通知</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠消息最终一致性"><span class="toc-number">5.</span> <span class="toc-text">可靠消息最终一致性</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#XA"><span class="toc-number">1.</span> <span class="toc-text">XA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCC"><span class="toc-number">2.</span> <span class="toc-text">TCC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地消息表"><span class="toc-number">3.</span> <span class="toc-text">本地消息表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大努力通知"><span class="toc-number">4.</span> <span class="toc-text">最大努力通知</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠消息最终一致性"><span class="toc-number">5.</span> <span class="toc-text">可靠消息最终一致性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">6.</span> <span class="toc-text">使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#XA-1"><span class="toc-number">6.0.1.</span> <span class="toc-text">XA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCC-1"><span class="toc-number">6.0.2.</span> <span class="toc-text">TCC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#可靠消息最终一致性-1"><span class="toc-number">6.0.3.</span> <span class="toc-text">可靠消息最终一致性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#本地消息表-1"><span class="toc-number">6.0.4.</span> <span class="toc-text">本地消息表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最大努力通知-1"><span class="toc-number">6.0.5.</span> <span class="toc-text">最大努力通知</span></a></li></ol></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -275,6 +312,16 @@
     </nav>
   </div>
 </footer>
+
+
+   <script src="/js/search.js"></script>
+   <script src='/js/mermaid.js'></script>
+   <!-- <script src='https://cdn.jsdelivr.net/npm/mermaid@8.6.0/dist/mermaid.js'></script> -->
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({});
+  }
+</script>
 
 
 <!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
