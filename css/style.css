@@ -496,6 +496,9 @@ article .content blockquote {
 .mermaid {
   text-align: center;
 }
+.mermaid .messageText {
+  stroke: none !important;
+}
 body table {
   display: table !important;
 }
