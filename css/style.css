@@ -473,7 +473,10 @@ body table {
 }
 article .content img,
 article .content video {
-  width: 80% !important;
+  width: 102% !important;
+  margin: -9px !important;
+  padding-top: 9px !important;
+  max-width: none !important;
 }
 figure::-webkit-scrollbar {
   background-color: rgba(100,1,1,0);
