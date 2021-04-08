@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="在大型应用开发的时候，页面可以划分成很多部分。往往不同的页面，也会有相同的部分。例如可能会有相同的头部导航。 但是如果每个页面都独自开发，这无疑增加了我们开发的成本。所以我们会把页面的不同部分拆分成独立的组件，然后在不同页面就可以共享这些组件，避免重复开发。 在 Vue 里，所有的 Vue 实例都是组件。例如，你可能会有页头、侧边栏、内容区等组件，每个组件又包含了其它的像导航链接、博文之类的组件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue 组件化">
+<meta property="og:url" content="http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在大型应用开发的时候，页面可以划分成很多部分。往往不同的页面，也会有相同的部分。例如可能会有相同的头部导航。 但是如果每个页面都独自开发，这无疑增加了我们开发的成本。所以我们会把页面的不同部分拆分成独立的组件，然后在不同页面就可以共享这些组件，避免重复开发。 在 Vue 里，所有的 Vue 实例都是组件。例如，你可能会有页头、侧边栏、内容区等组件，每个组件又包含了其它的像导航链接、博文之类的组件。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210406144753.png">
+<meta property="og:updated_time" content="2021-04-08T08:20:04.097Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue 组件化">
+<meta name="twitter:description" content="在大型应用开发的时候，页面可以划分成很多部分。往往不同的页面，也会有相同的部分。例如可能会有相同的头部导航。 但是如果每个页面都独自开发，这无疑增加了我们开发的成本。所以我们会把页面的不同部分拆分成独立的组件，然后在不同页面就可以共享这些组件，避免重复开发。 在 Vue 里，所有的 Vue 实例都是组件。例如，你可能会有页头、侧边栏、内容区等组件，每个组件又包含了其它的像导航链接、博文之类的组件。">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210406144753.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Vue 组件化</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/06/前端开发/Vue2/Vue 生命周期钩子函数/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/06/前端开发/Vue2/Vue 计算属性和监听器/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&text=Vue 组件化"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&is_video=false&description=Vue 组件化"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Vue 组件化&body=Check out this article: http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&name=Vue 组件化&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#全局组件"><span class="toc-number">1.</span> <span class="toc-text">全局组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件的复用"><span class="toc-number">2.</span> <span class="toc-text">组件的复用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#局部组件"><span class="toc-number">3.</span> <span class="toc-text">局部组件</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Vue 组件化
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-04-06T00:00:06.000Z" itemprop="datePublished">2021-04-06</time>
+        
+        (Updated: <time datetime="2021-04-08T08:20:04.097Z" itemprop="dateModified">2021-04-08</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/前端开发/">前端开发</a> › <a class="category-link" href="/categories/前端开发/Vue2/">Vue2</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>在大型应用开发的时候，页面可以划分成很多部分。往往不同的页面，也会有相同的部分。例如可能会有相同的头部导航。</p>
+<p>但是如果每个页面都独自开发，这无疑增加了我们开发的成本。所以我们会把页面的不同部分拆分成独立的组件，然后在不同页面就可以共享这些组件，避免重复开发。</p>
+<p>在 Vue 里，所有的 Vue 实例都是组件。例如，你可能会有页头、侧边栏、内容区等组件，每个组件又包含了其它的像导航链接、博文之类的组件。</p>
+<h2 id="全局组件"><a href="#全局组件" class="headerlink" title="全局组件"></a>全局组件</h2><p>我们通过 Vue 的 <code>component</code> 方法来定义一个全局组件。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">   <span class="comment">&lt;!--使用定义好的全局组件--&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">counter</span>&gt;</span><span class="tag">&lt;/<span class="name">counter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"../node_modules/vue/dist/vue.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">   // 定义全局组件，两个参数：1，组件名称。2，组件参数</span></span><br><span class="line"><span class="undefined">   Vue.component("counter", &#123;</span></span><br><span class="line"><span class="xml">      template: '<span class="tag">&lt;<span class="name">button</span> <span class="attr">v-on:click</span>=<span class="string">"count++"</span>&gt;</span>你点了我 &#123;&#123; count &#125;&#125; 次，我记住了.<span class="tag">&lt;/<span class="name">button</span>&gt;</span>',</span></span><br><span class="line"><span class="undefined">      data() &#123;</span></span><br><span class="line"><span class="undefined">         return &#123;</span></span><br><span class="line"><span class="undefined">            count: 0</span></span><br><span class="line"><span class="undefined">         &#125;</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="undefined">   &#125;);</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">   let app = new Vue(&#123;</span></span><br><span class="line"><span class="undefined">      el: "#app"</span></span><br><span class="line"><span class="undefined">   &#125;);</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210406144753.png" alt=""></p>
+<ol>
+<li>组件其实也是一个 Vue 实例，因此它在定义时也会接收：<code>data</code>、<code>methods</code>、生命周期函数等；</li>
+<li>不同的是组件不会与页面的元素绑定，否则就无法复用了，因此没有 <code>el</code> 属性；</li>
+<li>但是组件渲染需要 HTML 模板，所以增加了 <code>template</code> 属性，值就是 HTML 模板；</li>
+<li>全局组件定义完毕，任何 Vue 实例都可以直接在 HTML 中通过组件名称来使用组件了；</li>
+<li><code>data</code> 必须是一个函数，不再是一个对象；</li>
+</ol>
+<h2 id="组件的复用"><a href="#组件的复用" class="headerlink" title="组件的复用"></a>组件的复用</h2><p>定义好的组件，可以任意复用多次：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">   <span class="comment">&lt;!--使用定义好的全局组件--&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">counter</span>&gt;</span><span class="tag">&lt;/<span class="name">counter</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">counter</span>&gt;</span><span class="tag">&lt;/<span class="name">counter</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">counter</span>&gt;</span><span class="tag">&lt;/<span class="name">counter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>组件的 data 属性必须是函数！<br>一个组件的 data 选项必须是一个函数，因此每个实例可以维护一份被返回对象的独立的拷贝；</p>
+</blockquote>
+<h2 id="局部组件"><a href="#局部组件" class="headerlink" title="局部组件"></a>局部组件</h2><p>一旦全局注册，就意味着即便以后你不再使用这个组件，它依然会随着 Vue 的加载而加载。因此，对于一些并不频繁使用的组件，我们会采用局部注册。</p>
+<p>我们先在外部定义一个对象，结构与创建组件时传递的第二个参数一致：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">   const counter = &#123;</span></span><br><span class="line"><span class="xml">      template: '<span class="tag">&lt;<span class="name">button</span> <span class="attr">v-on:click</span>=<span class="string">"count++"</span>&gt;</span>你点了我 &#123;&#123; count &#125;&#125; 次，我记住了.<span class="tag">&lt;/<span class="name">button</span>&gt;</span>',</span></span><br><span class="line"><span class="undefined">      data() &#123;</span></span><br><span class="line"><span class="undefined">         return &#123;</span></span><br><span class="line"><span class="undefined">            count: 0</span></span><br><span class="line"><span class="undefined">         &#125;</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="undefined">   &#125;;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后在 Vue 中使用它：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">   let app = new Vue(&#123;</span></span><br><span class="line"><span class="undefined">      el: "#app", </span></span><br><span class="line"><span class="undefined">      components: &#123;</span></span><br><span class="line"><span class="undefined">         counter: counter // 将定义的对象注册为组件</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="undefined">   &#125;);</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>components</code> 就是当前 vue 对象子组件集合：</p>
+<ol>
+<li>其 <code>key</code> 就是子组件名称；</li>
+<li>其值就是组件对象名；</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#全局组件"><span class="toc-number">1.</span> <span class="toc-text">全局组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件的复用"><span class="toc-number">2.</span> <span class="toc-text">组件的复用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#局部组件"><span class="toc-number">3.</span> <span class="toc-text">局部组件</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&text=Vue 组件化"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&is_video=false&description=Vue 组件化"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Vue 组件化&body=Check out this article: http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&title=Vue 组件化"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/06/前端开发/Vue2/Vue 组件化/&name=Vue 组件化&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

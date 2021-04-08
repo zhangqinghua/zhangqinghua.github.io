@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="在分布式系统中，每个节点都可以知晓自己操作的成功或者失败，却无法知道其它节点操作的成功或失败。当一个事务跨多个节点时，为了保持事务的原子性和一致性，而引入一个协调者来统一掌控所有参与者的操作结果，并指示它们是否要把操作结果进行真正的提交或者回滚。 二阶段提交二阶段提交（Two-phase Commit，2PC）是常用的分布式事务解决方案，即将食物的提交过程分为两个阶段来进行处理。 阶段：  准备阶">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloud 分布式事务协议">
+<meta property="og:url" content="http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在分布式系统中，每个节点都可以知晓自己操作的成功或者失败，却无法知道其它节点操作的成功或失败。当一个事务跨多个节点时，为了保持事务的原子性和一致性，而引入一个协调者来统一掌控所有参与者的操作结果，并指示它们是否要把操作结果进行真正的提交或者回滚。 二阶段提交二阶段提交（Two-phase Commit，2PC）是常用的分布式事务解决方案，即将食物的提交过程分为两个阶段来进行处理。 阶段：  准备阶">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-04-08T08:20:04.109Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringCloud 分布式事务协议">
+<meta name="twitter:description" content="在分布式系统中，每个节点都可以知晓自己操作的成功或者失败，却无法知道其它节点操作的成功或失败。当一个事务跨多个节点时，为了保持事务的原子性和一致性，而引入一个协调者来统一掌控所有参与者的操作结果，并指示它们是否要把操作结果进行真正的提交或者回滚。 二阶段提交二阶段提交（Two-phase Commit，2PC）是常用的分布式事务解决方案，即将食物的提交过程分为两个阶段来进行处理。 阶段：  准备阶">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>SpringCloud 分布式事务协议</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/02/17/后端开发/SpringCloud/SpringCloud Nocas/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/01/11/面试题/尚硅谷Java大厂面试题全集/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&text=SpringCloud 分布式事务协议"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&is_video=false&description=SpringCloud 分布式事务协议"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SpringCloud 分布式事务协议&body=Check out this article: http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&name=SpringCloud 分布式事务协议&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#二阶段提交"><span class="toc-number">1.</span> <span class="toc-text">二阶段提交</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#第一阶段：投票阶段"><span class="toc-number">1.0.1.</span> <span class="toc-text">第一阶段：投票阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第二阶段：提交执行"><span class="toc-number">1.0.2.</span> <span class="toc-text">第二阶段：提交执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#失败情况"><span class="toc-number">1.0.3.</span> <span class="toc-text">失败情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#两阶段案例"><span class="toc-number">1.0.4.</span> <span class="toc-text">两阶段案例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三阶段提交-3PC"><span class="toc-number">2.</span> <span class="toc-text">三阶段提交 3PC</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        SpringCloud 分布式事务协议
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-02-17T00:00:01.000Z" itemprop="datePublished">2021-02-17</time>
+        
+        (Updated: <time datetime="2021-04-08T08:20:04.109Z" itemprop="dateModified">2021-04-08</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/SpringCloud/">SpringCloud</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>在分布式系统中，每个节点都可以知晓自己操作的成功或者失败，却无法知道其它节点操作的成功或失败。当一个事务跨多个节点时，为了保持事务的原子性和一致性，而引入一个协调者来统一掌控所有参与者的操作结果，并指示它们是否要把操作结果进行真正的提交或者回滚。</p>
+<h2 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h2><p>二阶段提交（Two-phase Commit，2PC）是常用的分布式事务解决方案，即将食物的提交过程分为两个阶段来进行处理。</p>
+<p>阶段：</p>
+<ol>
+<li>准备阶段；</li>
+<li>提交阶段；</li>
+</ol>
+<p>参与角色：</p>
+<ol>
+<li>协调者：事务的发起者；</li>
+<li>参与者：事务的执行者；</li>
+</ol>
+<h4 id="第一阶段：投票阶段"><a href="#第一阶段：投票阶段" class="headerlink" title="第一阶段：投票阶段"></a>第一阶段：投票阶段</h4><h4 id="第二阶段：提交执行"><a href="#第二阶段：提交执行" class="headerlink" title="第二阶段：提交执行"></a>第二阶段：提交执行</h4><p>当协调者从所有参与者节点获得相应的消息都为同意时：</p>
+<ol>
+<li>协调者节点向所有参与者节点发出“正式提交”的请求；</li>
+<li>参与者节点正式完成操作后，并释放在整个事务期间占用的资源；</li>
+<li>参与者节点向协调者节点发送 ack 完成消息；</li>
+<li>协调者节点收到所有参与者节点的反馈的 ack 完成消息后，完成事务；</li>
+</ol>
+<h4 id="失败情况"><a href="#失败情况" class="headerlink" title="失败情况"></a>失败情况</h4><p>如果任一参与者节点在第一阶段返回的响应消息为中止，或者协调者节点在第一阶段的询问超时之前无法获取所有参与者节点的响应消息时：</p>
+<ol>
+<li>协调者节点向所有参与者节点发出“回滚操作”的请求；</li>
+<li>参与者节点利用阶段 1 写入的undo 信息执行回滚，并释放在整个事务期间内占用的资源；</li>
+<li>参与者节点向协调者节点发送 ack 回滚完成消息；</li>
+<li>协调者节点受到所有参与者节点反馈的 ack 回滚完成消息后，取消事务；</li>
+</ol>
+<p>不管最后结果如何，第二阶段都会结束当前的事务。</p>
+<h4 id="两阶段案例"><a href="#两阶段案例" class="headerlink" title="两阶段案例"></a>两阶段案例</h4><p>学校运动会上，一百米决赛正准备开始，裁判对每个人分别询问：</p>
+<ol>
+<li>裁判：张三同学你准备好了吗？准备好了进第一赛道；</li>
+<li>张三：准备好了，随机进入第一赛道做好冲击姿势；</li>
+<li>裁判：李四同学你准备好了吗？准备好了进第二赛道；</li>
+<li>裁判：王五同学你准备好了吗？准备好了进第三赛道；</li>
+<li>李四：准备好了。。。</li>
+<li>王五：准备好了。。。</li>
+<li>。。。</li>
+<li>裁判：收到所有人的 OK 回复后，再次下令；</li>
+<li>裁判：跑。。。</li>
+<li>张三、李四执行完毕到达终点，汇报给裁判；</li>
+<li>王五冲刺失败，汇报给了裁判；</li>
+</ol>
+<p>二阶段提交看起来确实能够提供原子性的操作，但是不幸的是，二阶段提交还是有几个缺点：</p>
+<ol>
+<li>性能问题<br>执行过程中，所有参与节点都是事务阻塞型的。当参与者占有公共资源时，其它第三方节点访问公共资源不得不处于阻塞状态； </li>
+<li>可靠性问题<br>参与者发送故障，协调者需要给每个参与者额外指定超时时间，超时后整个事务失败。协调者发生故障，参与者会一直阻塞下去。需要额外的备机进行容错。</li>
+<li>数据一致性问题<br>协调者在发出 commit 消息后宕机，而唯一接收到这条消息的参与者同时也宕机了。那么即使协调者通过选举协议产生了新的协调者，这条事务的状态也是不确定的，没人知道事务是否已经提交。</li>
+</ol>
+<blockquote>
+<p>优点：尽量保证了数据的强一致性，适合对数据强一致性要求很高的关键领域（其实也不能 100% 保证强一致性）。</p>
+<p>缺点：实现复杂，牺牲了可用性，对性能影响较大，不适合高并发高性能的场景。</p>
+</blockquote>
+<h2 id="三阶段提交-3PC"><a href="#三阶段提交-3PC" class="headerlink" title="三阶段提交 3PC"></a>三阶段提交 3PC</h2><p>三阶段提交协议，是二阶段提交协议的改进版本，三阶段提交有两个改动点：</p>
+<ol>
+<li>在协调者和参与者中都引入超时机制；</li>
+<li>在第一阶段和第二阶段中插入一个准备阶段。保证了在最后提交阶段之前各参与节点的状态是一致的；</li>
+</ol>
+<p>也就是说，除了引入超时机制之外，3PC 把 2PC 的准备阶段再次一分为二，这样三阶段提交就有了 canCommit、preCommit、doCommit 三个阶段。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#二阶段提交"><span class="toc-number">1.</span> <span class="toc-text">二阶段提交</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#第一阶段：投票阶段"><span class="toc-number">1.0.1.</span> <span class="toc-text">第一阶段：投票阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第二阶段：提交执行"><span class="toc-number">1.0.2.</span> <span class="toc-text">第二阶段：提交执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#失败情况"><span class="toc-number">1.0.3.</span> <span class="toc-text">失败情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#两阶段案例"><span class="toc-number">1.0.4.</span> <span class="toc-text">两阶段案例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三阶段提交-3PC"><span class="toc-number">2.</span> <span class="toc-text">三阶段提交 3PC</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&text=SpringCloud 分布式事务协议"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&is_video=false&description=SpringCloud 分布式事务协议"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SpringCloud 分布式事务协议&body=Check out this article: http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&title=SpringCloud 分布式事务协议"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/&name=SpringCloud 分布式事务协议&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

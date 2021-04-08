@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="新增的 APIES6 给 Object 拓展了许多新的方法，如：  keys(obj)获取对象的所有 key 形成的数组。 values(obj)获取对象的所有 value 形成的数组。 entries(obj)获取对象的所有 key 和 value 形成的二维数组。格式：[[k1,v1],[k2,v2],...]。 assign(dest, ...src)将多个 src 对象的值 拷贝到 des">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6 对象优化">
+<meta property="og:url" content="http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="新增的 APIES6 给 Object 拓展了许多新的方法，如：  keys(obj)获取对象的所有 key 形成的数组。 values(obj)获取对象的所有 value 形成的数组。 entries(obj)获取对象的所有 key 和 value 形成的二维数组。格式：[[k1,v1],[k2,v2],...]。 assign(dest, ...src)将多个 src 对象的值 拷贝到 des">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-04-08T08:20:04.097Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES6 对象优化">
+<meta name="twitter:description" content="新增的 APIES6 给 Object 拓展了许多新的方法，如：  keys(obj)获取对象的所有 key 形成的数组。 values(obj)获取对象的所有 value 形成的数组。 entries(obj)获取对象的所有 key 和 value 形成的二维数组。格式：[[k1,v1],[k2,v2],...]。 assign(dest, ...src)将多个 src 对象的值 拷贝到 des">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>ES6 对象优化</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/06/前端开发/ES6/ES6 数组操作/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/06/前端开发/ES6/ES6 函数优化/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&text=ES6 对象优化"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&is_video=false&description=ES6 对象优化"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ES6 对象优化&body=Check out this article: http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&name=ES6 对象优化&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#新增的-API"><span class="toc-number">1.</span> <span class="toc-text">新增的 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#声明对象简写"><span class="toc-number">2.</span> <span class="toc-text">声明对象简写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象函数属性简写"><span class="toc-number">3.</span> <span class="toc-text">对象函数属性简写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象扩展运算符"><span class="toc-number">4.</span> <span class="toc-text">对象扩展运算符</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        ES6 对象优化
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-04-06T00:00:14.000Z" itemprop="datePublished">2021-04-06</time>
+        
+        (Updated: <time datetime="2021-04-08T08:20:04.097Z" itemprop="dateModified">2021-04-08</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/前端开发/">前端开发</a> › <a class="category-link" href="/categories/前端开发/ES6/">ES6</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="新增的-API"><a href="#新增的-API" class="headerlink" title="新增的 API"></a>新增的 API</h2><p>ES6 给 Object 拓展了许多新的方法，如：</p>
+<ol>
+<li><code>keys(obj)</code><br>获取对象的所有 key 形成的数组。</li>
+<li><code>values(obj)</code><br>获取对象的所有 value 形成的数组。</li>
+<li><code>entries(obj)</code><br>获取对象的所有 key 和 value 形成的二维数组。格式：<code>[[k1,v1],[k2,v2],...]</code>。</li>
+<li><code>assign(dest, ...src)</code><br>将多个 <code>src</code> 对象的值 拷贝到 <code>dest</code> 中。（第一层为深拷贝，第二层为浅拷贝）。</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> person = &#123; </span><br><span class="line">   name: <span class="string">"jack"</span>, </span><br><span class="line">   age: <span class="number">21</span>,</span><br><span class="line">   language: [<span class="string">'java'</span>, <span class="string">'js'</span>, <span class="string">'css'</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ["name", "age", "language"] </span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.keys(person));</span><br><span class="line"></span><br><span class="line"><span class="comment">// ["jack", 21, Array(3)] </span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.values(person));</span><br><span class="line"></span><br><span class="line"><span class="comment">// [Array(2), Array(2), Array(2)]</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.entries(person));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> target = &#123; <span class="attr">a</span>: <span class="number">1</span> &#125;; </span><br><span class="line"><span class="keyword">const</span> source1 = &#123; <span class="attr">b</span>: <span class="number">2</span> &#125;; </span><br><span class="line"><span class="keyword">const</span> source2 = &#123; <span class="attr">c</span>: <span class="number">3</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Object.assign 方法的第一个参数是目标对象，后面的参数都是源对象。</span></span><br><span class="line"><span class="built_in">Object</span>.assign(target, source1, source2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// &#123;a: 1, b: 2, c: 3&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(target)</span><br></pre></td></tr></table></figure>
+<h2 id="声明对象简写"><a href="#声明对象简写" class="headerlink" title="声明对象简写"></a>声明对象简写</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> age = <span class="number">23</span></span><br><span class="line"><span class="keyword">const</span> name = <span class="string">"张三"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 传统</span></span><br><span class="line"><span class="keyword">const</span> person1 = &#123; <span class="attr">age</span>: age, <span class="attr">name</span>: name &#125; </span><br><span class="line"><span class="built_in">console</span>.log(person1)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6：属性名和属性值变量名一样，可以省略</span></span><br><span class="line"><span class="keyword">const</span> person2 = &#123; age, name &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// &#123;age: 23, name: "张三"&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(person2)</span><br></pre></td></tr></table></figure>
+<h2 id="对象函数属性简写"><a href="#对象函数属性简写" class="headerlink" title="对象函数属性简写"></a>对象函数属性简写</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> person = &#123;</span><br><span class="line">        name: <span class="string">"jack"</span>,</span><br><span class="line">        <span class="comment">// 之前写法</span></span><br><span class="line">        eat1: <span class="function"><span class="keyword">function</span>(<span class="params">food</span>) </span>&#123;</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">" eating "</span> + food);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 新的写法</span></span><br><span class="line">        eat3(food) &#123;</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">" eating "</span> + food);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 箭头函数 this 不能使用对象.属性</span></span><br><span class="line">        eat2: <span class="function"><span class="params">food</span> =&gt;</span> <span class="built_in">console</span>.log(person.name + <span class="string">" eating "</span> + food),</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">person.eat1(<span class="string">"banana"</span>);</span><br><span class="line">person.eat2(<span class="string">"apple"</span>);</span><br><span class="line">person.eat3(<span class="string">"orage"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="对象扩展运算符"><a href="#对象扩展运算符" class="headerlink" title="对象扩展运算符"></a>对象扩展运算符</h2><p>拓展运算符 <code>...</code> 用于取出参数对象所有可遍历属性然后拷贝到当前对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 拷贝对象（深拷贝）</span></span><br><span class="line"><span class="keyword">let</span> person = &#123;<span class="attr">name</span>: <span class="string">"Amy"</span>, <span class="attr">age</span>: <span class="number">15</span>&#125;;</span><br><span class="line"><span class="keyword">let</span> somone = &#123;... person&#125;;</span><br><span class="line"><span class="comment">// &#123;name: "Amy", age: 15&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(someone); </span><br><span class="line"> </span><br><span class="line"><span class="comment">// 2. 合并对象</span></span><br><span class="line"><span class="keyword">let</span> age = &#123;<span class="attr">age</span>: <span class="number">15</span>&#125;;</span><br><span class="line"><span class="keyword">let</span> name = &#123;<span class="attr">name</span>: <span class="string">"Amy"</span>&#125;;</span><br><span class="line"><span class="comment">// 如果两个对象的字段名重复，后面对象字段会覆盖前面对象的字段值</span></span><br><span class="line"><span class="keyword">let</span> person = &#123;...age, ...name&#125;;</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#新增的-API"><span class="toc-number">1.</span> <span class="toc-text">新增的 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#声明对象简写"><span class="toc-number">2.</span> <span class="toc-text">声明对象简写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象函数属性简写"><span class="toc-number">3.</span> <span class="toc-text">对象函数属性简写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象扩展运算符"><span class="toc-number">4.</span> <span class="toc-text">对象扩展运算符</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&text=ES6 对象优化"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&is_video=false&description=ES6 对象优化"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ES6 对象优化&body=Check out this article: http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&title=ES6 对象优化"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/06/前端开发/ES6/ES6 对象优化/&name=ES6 对象优化&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
