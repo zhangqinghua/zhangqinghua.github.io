@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="uptime 查询平均负载uptime 命令能够打印系统总共运行了多长时间和系统的平均负载。uptime 命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的 1 分钟、5 分钟和 15 分钟内的平均负载。 系统平均负载是指在特定时间间隔内运行队列中的平均进程数。如果每个 CPU 内核的当前活动进程数不大于 3 的话，那么系统的性能是良好的。如果每个 C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 整机状态">
+<meta property="og:url" content="http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="uptime 查询平均负载uptime 命令能够打印系统总共运行了多长时间和系统的平均负载。uptime 命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的 1 分钟、5 分钟和 15 分钟内的平均负载。 系统平均负载是指在特定时间间隔内运行队列中的平均进程数。如果每个 CPU 内核的当前活动进程数不大于 3 的话，那么系统的性能是良好的。如果每个 C">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-04-08T09:14:09.371Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 整机状态">
+<meta name="twitter:description" content="uptime 查询平均负载uptime 命令能够打印系统总共运行了多长时间和系统的平均负载。uptime 命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的 1 分钟、5 分钟和 15 分钟内的平均负载。 系统平均负载是指在特定时间间隔内运行队列中的平均进程数。如果每个 CPU 内核的当前活动进程数不大于 3 的话，那么系统的性能是良好的。如果每个 C">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Linux 整机状态</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/08/部署运维/Linux 手册/Linux 防火墙设置/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/08/部署运维/Linux 手册/Linux 磁盘命令/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&text=Linux 整机状态"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&is_video=false&description=Linux 整机状态"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linux 整机状态&body=Check out this article: http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&name=Linux 整机状态&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#uptime-查询平均负载"><span class="toc-number">1.</span> <span class="toc-text">uptime 查询平均负载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#top-实时查询系统运行情况"><span class="toc-number">2.</span> <span class="toc-text">top 实时查询系统运行情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查询进程的线程消耗时间排行"><span class="toc-number">3.</span> <span class="toc-text">查询进程的线程消耗时间排行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见问题"><span class="toc-number"></span> <span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#假如生产环境出现-CPU-占用过高，请谈谈你的分析思路和定位？"><span class="toc-number">1.</span> <span class="toc-text">假如生产环境出现 CPU 占用过高，请谈谈你的分析思路和定位？</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Linux 整机状态
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-04-08T00:01:00.000Z" itemprop="datePublished">2021-04-08</time>
+        
+        (Updated: <time datetime="2021-04-08T09:14:09.371Z" itemprop="dateModified">2021-04-08</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/部署运维/">部署运维</a> › <a class="category-link" href="/categories/部署运维/Linux-手册/">Linux 手册</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h4 id="uptime-查询平均负载"><a href="#uptime-查询平均负载" class="headerlink" title="uptime 查询平均负载"></a>uptime 查询平均负载</h4><p><code>uptime</code> 命令能够打印系统总共运行了多长时间和系统的平均负载。<code>uptime</code> 命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的 1 分钟、5 分钟和 15 分钟内的平均负载。</p>
+<p>系统平均负载是指在特定时间间隔内运行队列中的平均进程数。如果每个 CPU 内核的当前活动进程数不大于 3 的话，那么系统的性能是良好的。如果每个 CPU 内核的任务数大于 5，那么这台机器的性能有严重问题。如果你的 Linux 主机是 1 个双核 CPU 的话，当 load Average 为 6 的时候说明机器已经被充分使用了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 10:10                          系统当前时间</span></span><br><span class="line"><span class="comment"># up 3 days, 59 mins             主机已运行时间,时间越大，说明你的机器越稳定。</span></span><br><span class="line"><span class="comment"># 2 users                        用户连接数，是总连接数而不是用户数</span></span><br><span class="line"><span class="comment"># load averages: 2.87 2.50 2.29  系统平均负载，统计最近1，5，15分钟的系统平均负载</span></span><br><span class="line">zhangqinghua$ uptime</span><br><span class="line">10:10  up 3 days, 59 mins, 2 users, load averages: 2.87 2.50 2.29</span><br></pre></td></tr></table></figure>
+<h4 id="top-实时查询系统运行情况"><a href="#top-实时查询系统运行情况" class="headerlink" title="top 实时查询系统运行情况"></a>top 实时查询系统运行情况</h4><p><code>top</code> 命令可以实时动态地查看系统的整体运行情况，是一个综合了多方信息监测系统性能和运行信息的实用工具。通过 <code>top</code> 命令所提供的互动式界面，用热键可以管理。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># top - 11:07:27                 当前系统时间</span></span><br><span class="line"><span class="comment"># up 31 days                     系统已经运行了31天</span></span><br><span class="line"><span class="comment"># 2 users                        2个用户当前登录</span></span><br><span class="line"><span class="comment"># load average                   系统负载，统计最近1，5，15分钟的系统平均负载</span></span><br><span class="line"><span class="comment"># Tasks:  82 total               总进程数</span></span><br><span class="line"><span class="comment"># 1 running                      正在运行的进程数</span></span><br><span class="line"><span class="comment"># 81 sleeping                    睡眠的进程数</span></span><br><span class="line"><span class="comment"># 0 stopped                      停止的进程数</span></span><br><span class="line"><span class="comment"># 0 zombie                       冻结进程数</span></span><br><span class="line"><span class="comment"># %Cpu(s)   0.3 us               用户空间占用CPU百分比</span></span><br><span class="line"><span class="comment"># %Cpu(s)   0.5 us               内核空间占用CPU百分比</span></span><br><span class="line"><span class="comment"># %Cpu(s)   0.0 ni               用户进程空间内改变过优先级的进程占用CPU百分比</span></span><br><span class="line"><span class="comment"># %Cpu(s)   99  id               空闲CPU百分比</span></span><br><span class="line"><span class="comment"># %Cpu(s)   0.0 wa               等待输入输出的CPU时间百分比</span></span><br><span class="line"><span class="comment"># %Cpu(s)   0.0 hi               硬中断（Hardware IRQ）占用CPU的百分比</span></span><br><span class="line"><span class="comment"># %Cpu(s)   0.0 si               软中断（Software Interrupts）占用CPU的百分比</span></span><br><span class="line"><span class="comment"># %Cpu(s)   0.0 st               ?</span></span><br><span class="line"><span class="comment"># KiB Mem :  3881692 total       物理内存总量</span></span><br><span class="line"><span class="comment"># KiB Mem :  2273716 used        使用的物理内存总量</span></span><br><span class="line"><span class="comment"># KiB Mem :  157092  free        空闲内存总量</span></span><br><span class="line"><span class="comment"># KiB Mem :  1450884 buff/cache  用作内核缓存的内存量</span></span><br><span class="line"><span class="comment"># KiB Swap:  0 total             交换区总量</span></span><br><span class="line"><span class="comment"># KiB Swap:  0 free              空闲交换区总量</span></span><br><span class="line"><span class="comment"># KiB Swap:  0 used              使用的交换区总量</span></span><br><span class="line"><span class="comment"># KiB Swap:  1331200 avail Mem   代表可用于进程下一次分配的物理内存数量</span></span><br><span class="line"></span><br><span class="line">top - 11:07:27 up 31 days,  2:16,  2 users,  load average: 0.01, 0.30, 0.33</span><br><span class="line">Tasks:  82 total,   1 running,  81 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.3 us,  0.5 sy,  0.0 ni, 99.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">KiB Mem :  3881692 total,   157092 free,  2273716 used,  1450884 buff/cache</span><br><span class="line">KiB Swap:        0 total,        0 free,        0 used.  1331200 avail Mem </span><br><span class="line"></span><br><span class="line"><span class="comment"># PID 进程Id</span></span><br><span class="line"><span class="comment"># USER   	进程所有者的用户名</span></span><br><span class="line"><span class="comment"># PR        优先级</span></span><br><span class="line"><span class="comment"># NI        nice值。负值表示高优先级，正值表示低优先级</span></span><br><span class="line"><span class="comment"># VIRT      进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES</span></span><br><span class="line"><span class="comment"># RES       进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA</span></span><br><span class="line"><span class="comment"># SHR       共享内存大小，单位kb</span></span><br><span class="line"><span class="comment"># S         进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程</span></span><br><span class="line"><span class="comment"># %CPU      上次更新到现在的CPU时间占用百分比</span></span><br><span class="line"><span class="comment"># %MEM      进程使用的物理内存百分比</span></span><br><span class="line"><span class="comment"># TIME+     进程使用的CPU时间总计，单位1/100秒</span></span><br><span class="line"><span class="comment"># COMMAND   命令名/命令行</span></span><br><span class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</span><br><span class="line">29336 root      20   0 3570612 621528  13748 S   3.0 16.0  16:02.36 java</span><br><span class="line">23436 root      20   0 1294092  12612   6860 S   1.0  0.3  12:18.56 staragent-core</span><br><span class="line"> 1052 root      20   0 1005228  16268   3256 S   0.3  0.4  86:54.00 /usr/<span class="built_in">local</span>/clou</span><br><span class="line">32750 root      20   0 3921148 414736  13172 S   0.3 10.7   1:17.68 java</span><br></pre></td></tr></table></figure>
+<p>在 <code>top</code> 命令执行过程中可以使用的一些交互命令：</p>
+<ol>
+<li><code>P</code>   根据CPU使用百分比大小进行排序；</li>
+<li><code>M</code>   根据驻留内存大小进行排序；</li>
+<li><code>T</code>   根据时间/累计时间进行排序；</li>
+<li><code>c</code>   切换显示命令名称和完整命令行；</li>
+<li><code>k</code>   终止一个进程；</li>
+<li><code>q</code>   退出程序；</li>
+</ol>
+<h4 id="查询进程的线程消耗时间排行"><a href="#查询进程的线程消耗时间排行" class="headerlink" title="查询进程的线程消耗时间排行"></a>查询进程的线程消耗时间排行</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -m 显示所有的线程</span></span><br><span class="line"><span class="comment"># -p pid 进程使用CPU的时间</span></span><br><span class="line"><span class="comment"># -o 该参数后是用户自定义格式</span></span><br><span class="line">[root@iZwz9cp52a5yqx9b86ehecZ icebartech-mlen]<span class="comment"># ps -mp 29336 -o THREAD,tid,time</span></span><br><span class="line">USER     %CPU PRI SCNT WCHAN  USER SYSTEM   TID     TIME</span><br><span class="line">root      1.1   -    - -         -      -     - 00:18:56</span><br><span class="line">root      0.0  19    - futex_    -      - 29336 00:00:00</span><br><span class="line">root      0.0  19    - futex_    -      - 29337 00:00:24</span><br><span class="line">root      0.0  19    - futex_    -      - 29338 00:00:20</span><br></pre></td></tr></table></figure>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h4 id="假如生产环境出现-CPU-占用过高，请谈谈你的分析思路和定位？"><a href="#假如生产环境出现-CPU-占用过高，请谈谈你的分析思路和定位？" class="headerlink" title="假如生产环境出现 CPU 占用过高，请谈谈你的分析思路和定位？"></a>假如生产环境出现 CPU 占用过高，请谈谈你的分析思路和定位？</h4><p>需要结合 Linux 和 JDK 命令一块分析。</p>
+<ol>
+<li>top 命令找出 CPU 占用最高的进程；</li>
+<li>ps -ef 或 jps 进一步定位，得知是一个怎样的后台程序；</li>
+<li>定位到具体线程或者代码；</li>
+<li>将需要的线程 Id 转换为 16 进制格式（英文小写）；</li>
+<li>jstack</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#uptime-查询平均负载"><span class="toc-number">1.</span> <span class="toc-text">uptime 查询平均负载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#top-实时查询系统运行情况"><span class="toc-number">2.</span> <span class="toc-text">top 实时查询系统运行情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查询进程的线程消耗时间排行"><span class="toc-number">3.</span> <span class="toc-text">查询进程的线程消耗时间排行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见问题"><span class="toc-number"></span> <span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#假如生产环境出现-CPU-占用过高，请谈谈你的分析思路和定位？"><span class="toc-number">1.</span> <span class="toc-text">假如生产环境出现 CPU 占用过高，请谈谈你的分析思路和定位？</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&text=Linux 整机状态"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&is_video=false&description=Linux 整机状态"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linux 整机状态&body=Check out this article: http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&title=Linux 整机状态"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/08/部署运维/Linux 手册/Linux 整机状态/&name=Linux 整机状态&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
