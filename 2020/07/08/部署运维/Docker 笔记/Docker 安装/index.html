@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Docker 运行需要占据 50MB 的内存。 Centos 人工安装卸载旧版本（如果安装过旧版本的话）12345678910[root@vultr ~]# sudo yum remove docker  docker-common docker-selinux docker-engineFailed to set locale, defaulting to CNo match for argum">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-18T16:25:09.832Z">
+<meta property="og:updated_time" content="2021-04-21T09:12:00.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 安装">
 <meta name="twitter:description" content="Docker 运行需要占据 50MB 的内存。 Centos 人工安装卸载旧版本（如果安装过旧版本的话）12345678910[root@vultr ~]# sudo yum remove docker  docker-common docker-selinux docker-engineFailed to set locale, defaulting to CNo match for argum">
@@ -130,7 +130,7 @@
       
         <time datetime="2020-07-08T00:00:00.000Z" itemprop="datePublished">2020-07-08</time>
         
-        (Updated: <time datetime="2021-04-18T16:25:09.832Z" itemprop="dateModified">2021-04-18</time>)
+        (Updated: <time datetime="2021-04-21T09:12:00.262Z" itemprop="dateModified">2021-04-21</time>)
         
       
     </div>
@@ -175,16 +175,18 @@
 <li>任务栏 Docker 图标上右键 –&gt; Setting -&gt; Docker Engine；</li>
 <li>修改配置文件 “registry-mirrors” 的值，然后应用重启就好了；</li>
 </ol>
-<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><ol>
-<li>requires containerd.io &gt;= 1.2.2-3<br>CentOS 8.0 安装 docker 报错：Problem: package docker-ce-3:19.03.8-3.el7.x86_64 requires containerd.io &gt;= 1.2.2-3。</li>
-</ol>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>requires containerd.io &gt;= 1.2.2-3</strong><br>CentOS 8.0 安装 docker 报错：Problem: package docker-ce-3:19.03.8-3.el7.x86_64 requires containerd.io &gt;= 1.2.2-3。</p>
 <p>这是因为 containerd.io 版本过低，需要更新。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># yum install -y wget</span></span><br><span class="line">[root@localhost ~]<span class="comment"># wget https://download.docker.com/linux/centos/7/x86_64/edge/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm</span></span><br><span class="line">[root@localhost ~]<span class="comment"># yum install -y  containerd.io-1.2.6-3.3.el7.x86_64.rpm</span></span><br></pre></td></tr></table></figure>
-<ol>
-<li>ERROR: Unsupported distribution ‘amzn’<br>问题：亚马逊云安装Docker提示这个异常。。。<br>原因：软件库太老。<br>解决：<code>sudo yum update -y &amp;&amp; sudo yum install docker -y</code></li>
-</ol>
+<p><strong>ERROR: Unsupported distribution ‘amzn’</strong><br>问题：亚马逊云安装Docker提示这个异常。。。<br>原因：软件库太老。<br>解决：<code>sudo yum update -y &amp;&amp; sudo yum install docker -y</code></p>
 <p><strong>one of the sub-processes failed: com.docker.driver.amd64-linux -addr fd:3 -debug (pid: 3464)</strong><br>场景：黑苹果 MacOS 15.7 启动 Docker 失败。<br>原因：版本太新？<br>解决：直接从官网下载 2.3.0.3 版本即可。</p>
 <p><strong>The data couldn’t be read because it is missing.</strong><br>场景：黑苹果 MacOS 15.7 启动 Docker 失败。<br>原因：没有开启因特尔虚拟技术。<br>解决：开启主板的英特尔虚拟化技术。<br>参考：<a href="https://blog.csdn.net/qq1784855023/article/details/106911545">https://blog.csdn.net/qq1784855023/article/details/106911545</a></p>
+<p><strong>Environment error: FAIL: Hypervisor framework fails</strong></p>
+<ol>
+<li>场景：MacOS14.5 安装 Docker Desktop 启动失败。</li>
+<li>原因：没有开启因特尔虚拟化技术。</li>
+<li>解决：进入 BIOS -&gt; Advanced -&gt; Processor Configuration -&gt; IntelVirtualization Technolog -&gt; enable。</li>
+</ol>
 
   </div>
 </article>
