@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="关闭 TxManager 后，TxClient 一直处于连接不上的状态。即使重启 TxManager 也没有相应。  将 TxClient 的重试次数改成无限。">
+    <meta name="description" content="关闭 TxManager 后，TxClient 一直处于连接不上的状态。即使重启 TxManager 也没有相应。  将 TxClient 的重试次数改成无限。  1234567891011121314/*** TxLCN 断开无限重试* 1. 默认配置下TxManager下线后，TxClient会重试6次重连。如果6次都没有连上TxManager，则不再进行尝试。*    这时即使重启了TxMa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式事务 TX-LCN 改进优化">
 <meta property="og:url" content="http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 TX-LCN 改进优化/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="关闭 TxManager 后，TxClient 一直处于连接不上的状态。即使重启 TxManager 也没有相应。  将 TxClient 的重试次数改成无限。">
+<meta property="og:description" content="关闭 TxManager 后，TxClient 一直处于连接不上的状态。即使重启 TxManager 也没有相应。  将 TxClient 的重试次数改成无限。  1234567891011121314/*** TxLCN 断开无限重试* 1. 默认配置下TxManager下线后，TxClient会重试6次重连。如果6次都没有连上TxManager，则不再进行尝试。*    这时即使重启了TxMa">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-25T03:00:23.586Z">
+<meta property="og:updated_time" content="2021-04-25T07:04:25.555Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式事务 TX-LCN 改进优化">
-<meta name="twitter:description" content="关闭 TxManager 后，TxClient 一直处于连接不上的状态。即使重启 TxManager 也没有相应。  将 TxClient 的重试次数改成无限。">
+<meta name="twitter:description" content="关闭 TxManager 后，TxClient 一直处于连接不上的状态。即使重启 TxManager 也没有相应。  将 TxClient 的重试次数改成无限。  1234567891011121314/*** TxLCN 断开无限重试* 1. 默认配置下TxManager下线后，TxClient会重试6次重连。如果6次都没有连上TxManager，则不再进行尝试。*    这时即使重启了TxMa">
     
     
         
@@ -130,7 +130,7 @@
       
         <time datetime="2021-03-16T00:00:32.000Z" itemprop="datePublished">2021-03-16</time>
         
-        (Updated: <time datetime="2021-04-25T03:00:23.586Z" itemprop="dateModified">2021-04-25</time>)
+        (Updated: <time datetime="2021-04-25T07:04:25.555Z" itemprop="dateModified">2021-04-25</time>)
         
       
     </div>
@@ -154,7 +154,7 @@
 <ol>
 <li>将 TxClient 的重试次数改成无限。</li>
 </ol>
-
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* TxLCN 断开无限重试</span></span><br><span class="line"><span class="comment">* 1. 默认配置下TxManager下线后，TxClient会重试6次重连。如果6次都没有连上TxManager，则不再进行尝试。</span></span><br><span class="line"><span class="comment">*    这时即使重启了TxManager，也需要重启TxClient。</span></span><br><span class="line"><span class="comment">* 2. 所以我希望TxClient能够无限尝试重连TxManager。</span></span><br><span class="line"><span class="comment">* 3. 设置次数，14400 * 30 = 一个月</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@Primary</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RpcConfig <span class="title">rpcConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   RpcConfig rpcConfig = <span class="keyword">new</span> RpcConfig();</span><br><span class="line">   rpcConfig.setReconnectCount(<span class="number">14400</span> * <span class="number">30</span>);</span><br><span class="line">   <span class="keyword">return</span> rpcConfig;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
   </div>
 </article>
 
