@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="锁的种类从类型上来看，可以分为共享锁、排它锁。从范围来看，可以分为表锁、行锁，间隙锁、页锁等。其中表锁中又有意向锁。以上锁根据存储引擎不同，生效的锁也不同。  共享锁事务拿到某一行记录的共享锁，才可以读取这一行，并阻止别的事物对其添加X锁。共享锁的目的是提高读读并发  排他锁事务拿到某一行记录的排它锁，才可以修改或者删除这一行。排他锁的目的是为了保证数据的一致性  意向共享锁预示事务有意向对表中的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 锁定机制">
+<meta property="og:url" content="http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="锁的种类从类型上来看，可以分为共享锁、排它锁。从范围来看，可以分为表锁、行锁，间隙锁、页锁等。其中表锁中又有意向锁。以上锁根据存储引擎不同，生效的锁也不同。  共享锁事务拿到某一行记录的共享锁，才可以读取这一行，并阻止别的事物对其添加X锁。共享锁的目的是提高读读并发  排他锁事务拿到某一行记录的排它锁，才可以修改或者删除这一行。排他锁的目的是为了保证数据的一致性  意向共享锁预示事务有意向对表中的">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-f25ed246387e60fbeb5b7ec9ed9028b1_720w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-759e2202ee64b45fb4bc8cdea640c813_720w.jpg">
+<meta property="og:updated_time" content="2021-04-25T03:00:23.590Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL 锁定机制">
+<meta name="twitter:description" content="锁的种类从类型上来看，可以分为共享锁、排它锁。从范围来看，可以分为表锁、行锁，间隙锁、页锁等。其中表锁中又有意向锁。以上锁根据存储引擎不同，生效的锁也不同。  共享锁事务拿到某一行记录的共享锁，才可以读取这一行，并阻止别的事物对其添加X锁。共享锁的目的是提高读读并发  排他锁事务拿到某一行记录的排它锁，才可以修改或者删除这一行。排他锁的目的是为了保证数据的一致性  意向共享锁预示事务有意向对表中的">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-f25ed246387e60fbeb5b7ec9ed9028b1_720w.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>MySQL 锁定机制</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/07/07/数据存储/MySQL 手册/MySQL 存储引擎/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/07/07/数据存储/MySQL 手册/MySQL 事务机制/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&text=MySQL 锁定机制"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&is_video=false&description=MySQL 锁定机制"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=MySQL 锁定机制&body=Check out this article: http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&name=MySQL 锁定机制&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的种类"><span class="toc-number">1.</span> <span class="toc-text">锁的种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的支持"><span class="toc-number">2.</span> <span class="toc-text">锁的支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的对比"><span class="toc-number">3.</span> <span class="toc-text">锁的对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#间隙锁"><span class="toc-number">4.</span> <span class="toc-text">间隙锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#间隙锁的危害"><span class="toc-number">4.0.1.</span> <span class="toc-text">间隙锁的危害</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#间隙锁的触发"><span class="toc-number">4.0.2.</span> <span class="toc-text">间隙锁的触发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#间隙锁的范围"><span class="toc-number">4.0.3.</span> <span class="toc-text">间隙锁的范围</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">5.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#死锁判定"><span class="toc-number">6.</span> <span class="toc-text">死锁判定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现原理"><span class="toc-number">7.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的操作"><span class="toc-number">8.</span> <span class="toc-text">锁的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#加锁"><span class="toc-number">8.0.1.</span> <span class="toc-text">加锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解锁"><span class="toc-number">8.0.2.</span> <span class="toc-text">解锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#行锁分析"><span class="toc-number">8.0.3.</span> <span class="toc-text">行锁分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MVCC-机制"><span class="toc-number">9.</span> <span class="toc-text">MVCC 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#隐藏列"><span class="toc-number">9.0.1.</span> <span class="toc-text">隐藏列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undo-log"><span class="toc-number">9.0.2.</span> <span class="toc-text">undo log</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#readview"><span class="toc-number">9.0.3.</span> <span class="toc-text">readview</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#举例说明"><span class="toc-number">9.0.4.</span> <span class="toc-text">举例说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁"><span class="toc-number">10.</span> <span class="toc-text">锁</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        MySQL 锁定机制
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-07-07T00:00:06.000Z" itemprop="datePublished">2020-07-07</time>
+        
+        (Updated: <time datetime="2021-04-25T03:00:23.590Z" itemprop="dateModified">2021-04-25</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/数据存储/">数据存储</a> › <a class="category-link" href="/categories/数据存储/MySQL-手册/">MySQL 手册</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="锁的种类"><a href="#锁的种类" class="headerlink" title="锁的种类"></a>锁的种类</h2><p>从类型上来看，可以分为共享锁、排它锁。从范围来看，可以分为表锁、行锁，间隙锁、页锁等。其中表锁中又有意向锁。以上锁根据存储引擎不同，生效的锁也不同。</p>
+<ol>
+<li><p>共享锁<br>事务拿到某一行记录的共享锁，才可以读取这一行，并阻止别的事物对其添加X锁。<br>共享锁的目的是提高读读并发</p>
+</li>
+<li><p>排他锁<br>事务拿到某一行记录的排它锁，才可以修改或者删除这一行。<br>排他锁的目的是为了保证数据的一致性</p>
+</li>
+<li><p>意向共享锁<br>预示事务有意向对表中的某些行加共享锁。</p>
+</li>
+<li><p>意向排他锁<br>预示着事务有意向对表中的某些行加排他锁。</p>
+</li>
+<li><p>记录锁<br>对单条索引记录进行加锁，锁住的是索引记录而非记录本身，即使表中没有任何索引，MySQL会自动创建一个隐式的 <code>row_id</code> 作为聚集索引来进行加锁。</p>
+</li>
+<li><p>间隙锁<br>封锁记录中的间隔，防止间隔中被其他事务插入。</p>
+<p>间隙锁主要出现在RR隔离级别，避免出现幻读。</p>
+</li>
+</ol>
+<h2 id="锁的支持"><a href="#锁的支持" class="headerlink" title="锁的支持"></a>锁的支持</h2><p>在 MySQL 中，不同的存储引擎支持不同的锁机制。比如，MyISAM 和 MEMORY 存储引擎采用的是表级锁；BDB 存储引擎采用的是页面锁，但也支持表级锁；InnoDB 存储引擎既支持行级锁，也支持表级锁，但默认情况下是采用行级锁。</p>
+<h2 id="锁的对比"><a href="#锁的对比" class="headerlink" title="锁的对比"></a>锁的对比</h2><h2 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h2><p>当我们采用范围条件查询数据时，InnoDB 会对这个范围内的数据进行加锁。比如有 <code>id</code> 为：1、3、5、7 的 4 条数据，我们查找 1-7 范围的数据。那么 1-7 都会被加上锁。2、4、6 也在 1-7 的范围中，但是不存在这些数据记录，这些 2、4、6 就被称为间隙。</p>
+<h4 id="间隙锁的危害"><a href="#间隙锁的危害" class="headerlink" title="间隙锁的危害"></a>间隙锁的危害</h4><p>范围查找时，会把整个范围的数据全部锁定住，即便这个范围内不存在的一些数据，也会被无辜的锁定住，比如我要在 1、3、5、7 中插入 2，这个时候 1-7 都被锁定住了，根本无法插入 2。在某些场景下会对性能产生很大的影响。</p>
+<h4 id="间隙锁的触发"><a href="#间隙锁的触发" class="headerlink" title="间隙锁的触发"></a>间隙锁的触发</h4><ol>
+<li>多个查询条件。</li>
+<li>单个查询条件，单不是唯一索引。</li>
+</ol>
+<p>例如 ：<code>select * from t where id = 10 for update</code>，如果此表只有 id 加索引，则不会产生间隙锁。如果 id 没有加索引或者加了索引，但是还有其它列也有索引，则会产生间隙锁。</p>
+<h4 id="间隙锁的范围"><a href="#间隙锁的范围" class="headerlink" title="间隙锁的范围"></a>间隙锁的范围</h4><p>根据检索条件向下寻找最靠近检索条件的记录值 A 作为左区间，向上寻找最靠近检索条件的记录值B作为右区间，即锁定的间隙为（A，B）。</p>
+<p>假设一张表的 <code>number</code> 字段值有：1、2、3、4、5、6、7、8、9、10、11、12。当执行查询 <code>select * from t where number = 6</code> 时，间隙锁锁定的间隙为（5，11），你再想插入 5 到 11 之间的数就会被阻塞。</p>
+<p>当你再执行 <code>update t set number = 6 where id = 1</code> 也会被阻塞。这是为什么？你想想看，要保证每次查询 number = 6 的数据行数不变，如果你将另外一条数据修改成了 6，岂不会多了一条？所以此时不会允许任何一条数据被修改成 6。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><h2 id="死锁判定"><a href="#死锁判定" class="headerlink" title="死锁判定"></a>死锁判定</h2><p>死锁是指两个或多个事务在同一资源上相互占用，并请求锁定对方占用的资源，从而导致恶性循环。</p>
+<p>产生原因：</p>
+<ol>
+<li>当事务试图以不同的顺序锁定资源时，就可能产生死锁。多个事务同时锁定同一个资源时也可能会产生死锁。</li>
+<li>锁的行为和顺序和存储引擎相关。以同样的顺序执行语句，有些存储引擎会产生死锁有些不会——死锁有双重原因：真正的数据冲突；存储引擎的实现方式。</li>
+</ol>
+<p>死锁影响：</p>
+<ol>
+<li>死锁会影响性能而不是会产生严重错误，因为InnoDB会自动检测死锁状况并回滚其中一个受影响的事务。</li>
+<li>在高并发系统上，当许多线程等待同一个锁时，死锁检测可能导致速度变慢。</li>
+<li>有时当发生死锁时，禁用死锁检测（使用 <code>innodb_deadlock_detect</code> 配置选项）可能会更有效，这时可以依赖 <code>innodb_lock_wait_timeout</code> 设置进行事务回滚。</li>
+</ol>
+<p>死锁检测：</p>
+<ol>
+<li>发生死锁后，InnoDB 一般都能自动检测到，并使一个事务释放锁并回退，另一个事务获得锁，继续完成事务。</li>
+<li>但在涉及外部锁，或涉及表锁的情况下，InnoDB 并不能完全自动检测到死锁，这需要通过设置锁等待超时参数 <code>innodb_lock_wait_timeout</code> 来解决。</li>
+</ol>
+<p>死锁恢复：</p>
+<ol>
+<li>死锁发生以后，只有部分或完全回滚其中一个事务，才能打破死锁。</li>
+<li>InnoDB 目前处理死锁的方法是，将持有最少行级排他锁的事务进行回滚。</li>
+<li>所以事务型应用程序在设计时必须考虑如何处理死锁，多数情况下只需要重新执行因死锁回滚的事务即可。</li>
+</ol>
+<p>MyISAM 避免死锁：</p>
+<ol>
+<li>在自动加锁的情况下，MyISAM 总是一次获得 SQL 语句所需要的全部锁，所以 MyISAM 表不会出现死锁。</li>
+</ol>
+<p>InnoDB 避免死锁：</p>
+<ol>
+<li>为了在单个 InnoDB 表上执行多个并发写入操作时避免死锁，可以在事务开始时通过为预期要修改的每个元祖（行）使用 <code>SELECT ... FOR UPDATE</code> 语句来获取必要的锁，即使这些行的更改语句是在之后才执行的。</li>
+<li>在事务中，如果要更新记录，应该直接申请足够级别的锁，即排他锁，而不应先申请共享锁、更新时再申请排他锁，因为这时候当用户再申请排他锁时，其他事务可能又已经获得了相同记录的共享锁，从而造成锁冲突，甚至死锁。</li>
+<li>如果事务需要修改或锁定多个表，则应在每个事务中以相同的顺序使用加锁语句。在应用中，如果不同的程序会并发存取多个表，应尽量约定以相同的顺序来访问表，这样可以大大降低产生死锁的机会。</li>
+<li>通过 <code>SELECT ... LOCK IN SHARE MODE</code> 获取行的读锁后，如果当前事务再需要对该记录进行更新操作，则很有可能造成死锁。</li>
+<li>改变事务隔离级别。</li>
+</ol>
+<p>如果出现死锁，可以用 <code>SHOW INNODB STATUS</code> 命令来确定最后一个死锁产生的原因。返回结果中包括死锁相关事务的详细信息，如引发死锁的 SQL 语句，事务已经获得的锁，正在等待什么锁，以及被回滚的事务等。据此可以分析死锁产生的原因和改进措施。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><h2 id="锁的操作"><a href="#锁的操作" class="headerlink" title="锁的操作"></a>锁的操作</h2><h4 id="加锁"><a href="#加锁" class="headerlink" title="加锁"></a>加锁</h4><p><code>LOCK TABLES</code> 用于锁定数据表，避免在备份过程中，表被更新。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 添加一个读锁</span></span><br><span class="line"><span class="keyword">LOCK</span> <span class="keyword">TABLES</span> biz_user <span class="keyword">READ</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 添加一个写锁</span></span><br><span class="line"><span class="keyword">LOCK</span> <span class="keyword">TABLES</span> biz_user WRITE;</span><br></pre></td></tr></table></figure>
+<h4 id="解锁"><a href="#解锁" class="headerlink" title="解锁"></a>解锁</h4><ol>
+<li>使用 <code>UNLOCK TABLES</code> 解锁。</li>
+<li>使用 <code>SHOW PROCESSLIST</code> 找出锁进程 <code>KILL</code> 掉。</li>
+</ol>
+<h4 id="行锁分析"><a href="#行锁分析" class="headerlink" title="行锁分析"></a>行锁分析</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> <span class="keyword">STATUS</span> <span class="keyword">LIKE</span> <span class="string">'innodb_row_lock%'</span>;</span><br><span class="line"></span><br><span class="line">Variable_name                       Value</span><br><span class="line">Innodb_row_lock_current_waits       0</span><br><span class="line">Innodb_row_lock_time                257841</span><br><span class="line">Innodb_row_lock_time_avg            17189</span><br><span class="line">Innodb_row_lock_time_max            31033</span><br><span class="line">Innodb_row_lock_waits               15</span><br></pre></td></tr></table></figure>
+<p><code>Variable_name</code> 说明：</p>
+<ol>
+<li><code>Innodb_row_lock_current_waits</code> 当前正在等待锁定的数量。</li>
+<li><code>Innodb_row_lock_time</code> 从系统启动到现在锁定的时长。</li>
+<li><code>Innodb_row_lock_time_avg</code> 每次等待锁所花平均时间。</li>
+<li><code>Innodb_row_lock_time_max</code> 从系统启动到现在锁等待最长的一次所花的时间。</li>
+<li><code>Innodb_row_lock_waits</code> 系统启动后到现在总共等待锁的次数。</li>
+</ol>
+<p>大家可以根据 <code>Variable_name</code> 这几个参数考虑是否要进行优化，如果锁定时间，锁定次数过大，那就该考虑优化了。优化手段可以参考之前索引优化的文章。</p>
+<h2 id="MVCC-机制"><a href="#MVCC-机制" class="headerlink" title="MVCC 机制"></a>MVCC 机制</h2><ol>
+<li><p>定义<br>MVCC 是一种并发控制机制，在数据库中用来控制并发执行的事务，控制事务隔离进行。</p>
+</li>
+<li><p>核心思想<br>MVCC 是通过保存数据在某个时间点的快照来进行控制的。使用MVCC就是允许同一个数据记录拥有多个不同的版本。然后在查询时通过添加相对应的约束条件，就可以获取用户想要的对应版本的数据。</p>
+</li>
+<li><p>解决什么<br>MVCC 主要是为了提供并发的读写性能，不用加锁就能让多个事务并发读写。在读多写少的场景中，读写不冲突是非常重要的，极大的增加了系统的并发性能。</p>
+</li>
+<li><p>适用条件<br>MVCC 只适用于 MySQL 隔离级别中的读已提交和可重复读。</p>
+</li>
+</ol>
+<h4 id="隐藏列"><a href="#隐藏列" class="headerlink" title="隐藏列"></a>隐藏列</h4><p>在 Innodb 中，每一行记录都有两个隐藏列：DATA_ITR_ID、DATA_ROLL_PTR。</p>
+<ol>
+<li><p>DATA_TRX_ID<br>记录最近更新这条行记录的事务 ID，大小为 6 个字节。</p>
+</li>
+<li><p>DATA_ROLL_PTR<br>表示指向该行回滚段的指针，大小为 7 个字节，InnoDB 便是通过这个指针找到之前版本的数据。该行记录上所有旧版本，在 undo 中都通过链表的形式组织。</p>
+</li>
+<li><p>DB_ROW_ID<br>行标识（隐藏单调自增 ID），大小为 6 字节，如果表没有主键，InnoDB 会自动生成一个隐藏主键，因此会出现这个列。另外，每条记录的头信息里都有一个专门的 bit 来表示当前记录是否已经被删除。</p>
+</li>
+</ol>
+<p><img src="https://pic2.zhimg.com/80/v2-f25ed246387e60fbeb5b7ec9ed9028b1_720w.jpg" alt=""></p>
+<h4 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h4><p>记录数据各版本修改历史即事务链。在多个事务并行操作某行数据的情况下，不同事务对该行数据的修改会产生多个版本，然后通过回滚指针组织成一条 undo Log 链。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-759e2202ee64b45fb4bc8cdea640c813_720w.jpg" alt=""></p>
+<h4 id="readview"><a href="#readview" class="headerlink" title="readview"></a>readview</h4><p>即读视图，用于判断哪些版本对当前事务可见。它由最小事务 Id，未提交事务 Id 数组，最大事务 Id 组成。例如：100|[105, 108, 200]|200。</p>
+<p>对于当前事务来说，这些事务都是可见的：</p>
+<ol>
+<li>事务 Id 等于当前事务 Id。</li>
+<li>事务 Id 不在未提交的事务数组中。</li>
+</ol>
+<p>如果当前事务多次查询记录，而期间记录由事务提交了，则不同行为的 readview 查询的结果也不一样。</p>
+<ol>
+<li>读未提交情况下，记录的事务提交了，readview 重新获取。则当前事务读取到了提交的事务记录。</li>
+<li>读已提交情况下，记录的事务提交了，readview 沿用旧的。则当前事务无法读取到了提交的事务记录。</li>
+</ol>
+<h4 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h4><ol>
+<li>事务 1 插入了数据 {id=101, age = 11, trx_id = 1}。</li>
+<li>事务 2 修改了数据 {id=101, age = 12, trx_id = 2}。事务 A 的数据转移到 undo log 里，事务 B 的数据执向 事务 A 的数据。</li>
+<li>事务 2 提交了数据。</li>
+<li>事务 3 修改了数据 {id=101, age = 13, trx_id = 3}。事务 B 的数据转移到 undo log 里，事务 C 的数据执向 事务 B 的数据。</li>
+<li>事务 4 修改了数据 {id=101, age = 14, trx_id = 4}。事务 C 的数据转移到 undo log 里，事务 D 的数据执向 事务 C 的数据。</li>
+<li>事务 1 查看了数据，根据 readview {1, 3, 4} 规则，在 undo log 里面找到了 {id=101, age = 11, trx_id = 1}。</li>
+<li>事务 5 查看了数据，根据 readview {1, 3, 4} 规则，在 undo log 里面找到了 {id=101, age = 13, trx_id = 2}。</li>
+<li>事务 3 提交了数据。</li>
+<li>事务 5 查看了数据，读未提交隔离级别，review {1, 4} 变化，在 undo log 里面找到了 {id=101, age = 13, trx_id = 3}。</li>
+<li>事务 5 查看了数据，读已提交隔离级别，review {1, 3, 4} 不变，在 undo log 里面找到了 {id=101, age = 13, trx_id = 2}。</li>
+</ol>
+<h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><ol>
+<li>什么是锁</li>
+<li>有哪几种锁</li>
+<li>乐观锁和悲观锁、行锁与表锁、共享锁与排他锁</li>
+<li>死锁判定原理和具体场景</li>
+<li>数据库索引，表锁；乐观锁；悲观锁</li>
+<li>乐观锁与悲观锁的使用场景</li>
+<li>谈谈数据库乐观锁与悲观锁?</li>
+<li>MySQL 如何在RR隔离级别下避免幻读问题</li>
+<li>乐观锁和悲观锁、行锁与表锁、共享锁与排他锁（inndob如何手动加共享锁与排他锁）</li>
+<li>死锁判定原理和具体场景</li>
+<li>MySQL存储引擎</li>
+<li>MySQL的表锁&amp;行锁&amp;乐观锁&amp;悲观锁,各自的使用场景</li>
+<li>MySQL数据库对应的行锁、表锁、悲观锁、乐观锁的区别</li>
+<li>数据库锁是怎么实现的</li>
+<li>数据库的锁（行锁，表锁，页级锁，意向锁，读锁，写锁，悲观锁，乐观锁，以及加锁的select sql方式）</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的种类"><span class="toc-number">1.</span> <span class="toc-text">锁的种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的支持"><span class="toc-number">2.</span> <span class="toc-text">锁的支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的对比"><span class="toc-number">3.</span> <span class="toc-text">锁的对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#间隙锁"><span class="toc-number">4.</span> <span class="toc-text">间隙锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#间隙锁的危害"><span class="toc-number">4.0.1.</span> <span class="toc-text">间隙锁的危害</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#间隙锁的触发"><span class="toc-number">4.0.2.</span> <span class="toc-text">间隙锁的触发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#间隙锁的范围"><span class="toc-number">4.0.3.</span> <span class="toc-text">间隙锁的范围</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">5.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#死锁判定"><span class="toc-number">6.</span> <span class="toc-text">死锁判定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现原理"><span class="toc-number">7.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的操作"><span class="toc-number">8.</span> <span class="toc-text">锁的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#加锁"><span class="toc-number">8.0.1.</span> <span class="toc-text">加锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解锁"><span class="toc-number">8.0.2.</span> <span class="toc-text">解锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#行锁分析"><span class="toc-number">8.0.3.</span> <span class="toc-text">行锁分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MVCC-机制"><span class="toc-number">9.</span> <span class="toc-text">MVCC 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#隐藏列"><span class="toc-number">9.0.1.</span> <span class="toc-text">隐藏列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undo-log"><span class="toc-number">9.0.2.</span> <span class="toc-text">undo log</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#readview"><span class="toc-number">9.0.3.</span> <span class="toc-text">readview</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#举例说明"><span class="toc-number">9.0.4.</span> <span class="toc-text">举例说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁"><span class="toc-number">10.</span> <span class="toc-text">锁</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&text=MySQL 锁定机制"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&is_video=false&description=MySQL 锁定机制"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=MySQL 锁定机制&body=Check out this article: http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&title=MySQL 锁定机制"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/07/07/数据存储/MySQL 手册/MySQL 锁定机制/&name=MySQL 锁定机制&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
