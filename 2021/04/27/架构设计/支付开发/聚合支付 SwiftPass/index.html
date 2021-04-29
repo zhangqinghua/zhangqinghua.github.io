@@ -6,14 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta property="og:type" content="article">
+    <meta name="description" content="公司官网：https://www.swiftpass.cn开发文档：https://open.swiftpass.cn 微信公众号/小程序接口参考：https://open.swiftpass.cn/openapi/doc?index_1=67&amp;amp;index_2=1&amp;amp;chapter_1=1202&amp;amp;chapter_2=1203 场景介绍商户已有H5商城网站，用户通过消息或扫描二">
+<meta property="og:type" content="article">
 <meta property="og:title" content="聚合支付 SwiftPass">
 <meta property="og:url" content="http://yoursite.com/2021/04/27/架构设计/支付开发/聚合支付 SwiftPass/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="公司官网：https://www.swiftpass.cn开发文档：https://open.swiftpass.cn 微信公众号/小程序接口参考：https://open.swiftpass.cn/openapi/doc?index_1=67&amp;amp;index_2=1&amp;amp;chapter_1=1202&amp;amp;chapter_2=1203 场景介绍商户已有H5商城网站，用户通过消息或扫描二">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-28T13:03:01.302Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210429145011.png">
+<meta property="og:updated_time" content="2021-04-29T11:55:49.034Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="聚合支付 SwiftPass">
+<meta name="twitter:description" content="公司官网：https://www.swiftpass.cn开发文档：https://open.swiftpass.cn 微信公众号/小程序接口参考：https://open.swiftpass.cn/openapi/doc?index_1=67&amp;amp;index_2=1&amp;amp;chapter_1=1202&amp;amp;chapter_2=1203 场景介绍商户已有H5商城网站，用户通过消息或扫描二">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210429145011.png">
     
     
         
@@ -101,7 +106,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#微信公众号-小程序接口"><span class="toc-number">1.</span> <span class="toc-text">微信公众号/小程序接口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#场景介绍"><span class="toc-number">1.0.1.</span> <span class="toc-text">场景介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：初始化请求"><span class="toc-number">1.0.2.</span> <span class="toc-text">后端：初始化请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#前端：小程序调起支付"><span class="toc-number">1.0.3.</span> <span class="toc-text">前端：小程序调起支付</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#前端：公众号调起支付"><span class="toc-number">1.0.4.</span> <span class="toc-text">前端：公众号调起支付</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#前端：支付通知"><span class="toc-number">1.0.5.</span> <span class="toc-text">前端：支付通知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：支付通知"><span class="toc-number">1.0.6.</span> <span class="toc-text">后端：支付通知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：订单查询"><span class="toc-number">1.0.7.</span> <span class="toc-text">后端：订单查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：申请退款"><span class="toc-number">1.0.8.</span> <span class="toc-text">后端：申请退款</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：查询退款"><span class="toc-number">1.0.9.</span> <span class="toc-text">后端：查询退款</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：关闭订单"><span class="toc-number">1.0.10.</span> <span class="toc-text">后端：关闭订单</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：通用方法"><span class="toc-number">1.0.11.</span> <span class="toc-text">后端：通用方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补单机制"><span class="toc-number">2.</span> <span class="toc-text">补单机制</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -127,7 +132,7 @@
       
         <time datetime="2021-04-27T00:00:56.000Z" itemprop="datePublished">2021-04-27</time>
         
-        (Updated: <time datetime="2021-04-28T13:03:01.302Z" itemprop="dateModified">2021-04-28</time>)
+        (Updated: <time datetime="2021-04-29T11:55:49.034Z" itemprop="dateModified">2021-04-29</time>)
         
       
     </div>
@@ -147,7 +152,29 @@
   
 
   <div class="content" itemprop="articleBody">
-    
+    <p>公司官网：<a href="https://www.swiftpass.cn">https://www.swiftpass.cn</a><br>开发文档：<a href="https://open.swiftpass.cn">https://open.swiftpass.cn</a></p>
+<h2 id="微信公众号-小程序接口"><a href="#微信公众号-小程序接口" class="headerlink" title="微信公众号/小程序接口"></a>微信公众号/小程序接口</h2><p>参考：<a href="https://open.swiftpass.cn/openapi/doc?index_1=67&amp;index_2=1&amp;chapter_1=1202&amp;chapter_2=1203">https://open.swiftpass.cn/openapi/doc?index_1=67&amp;index_2=1&amp;chapter_1=1202&amp;chapter_2=1203</a></p>
+<h4 id="场景介绍"><a href="#场景介绍" class="headerlink" title="场景介绍"></a>场景介绍</h4><p>商户已有H5商城网站，用户通过消息或扫描二维码在微信内打开网页时，可以调用微信支付完成下单购买的流程。</p>
+<p>步骤：</p>
+<ol>
+<li>商户下发图文消息或者通过自定义菜单吸引用户点击进入商户网页。</li>
+<li>进入商户网页，用户选择购买，完成选购流程。</li>
+<li>调起微信支付控件，用户开始输入支付密码。</li>
+<li>密码验证通过，支付成功。商户后台得到支付成功的通知。</li>
+<li>返回商户页面，显示购买成功。该页面由商户自定义。</li>
+<li>公众号下发消息，提示发货成功。该步骤可选。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210429145011.png" alt=""></p>
+<h4 id="后端：初始化请求"><a href="#后端：初始化请求" class="headerlink" title="后端：初始化请求"></a>后端：初始化请求</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意一：ContentType 必须为 APPLICATION_JSON，否则会报签名错误。<br>注意二：mch_id 错误也提示签名错误，很是误导人。</p>
+</blockquote>
+<h4 id="前端：小程序调起支付"><a href="#前端：小程序调起支付" class="headerlink" title="前端：小程序调起支付"></a>前端：小程序调起支付</h4><h4 id="前端：公众号调起支付"><a href="#前端：公众号调起支付" class="headerlink" title="前端：公众号调起支付"></a>前端：公众号调起支付</h4><h4 id="前端：支付通知"><a href="#前端：支付通知" class="headerlink" title="前端：支付通知"></a>前端：支付通知</h4><h4 id="后端：支付通知"><a href="#后端：支付通知" class="headerlink" title="后端：支付通知"></a>后端：支付通知</h4><h4 id="后端：订单查询"><a href="#后端：订单查询" class="headerlink" title="后端：订单查询"></a>后端：订单查询</h4><h4 id="后端：申请退款"><a href="#后端：申请退款" class="headerlink" title="后端：申请退款"></a>后端：申请退款</h4><h4 id="后端：查询退款"><a href="#后端：查询退款" class="headerlink" title="后端：查询退款"></a>后端：查询退款</h4><h4 id="后端：关闭订单"><a href="#后端：关闭订单" class="headerlink" title="后端：关闭订单"></a>后端：关闭订单</h4><p>商户订单支付失败需要生成新单号重新发起支付，要对原订单号调用关单，避免重复支付；系统下单后，用户支付超时，系统退出不再受理，避免用户继续，请调用关单接口。</p>
+<h4 id="后端：通用方法"><a href="#后端：通用方法" class="headerlink" title="后端：通用方法"></a>后端：通用方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 计算签名</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">sign</span><span class="params">(TreeMap&lt;String, String&gt; params)</span> </span>&#123;</span><br><span class="line">   <span class="comment">// 1. 除 sign 字段外，所有參數按照字段名的 ascii 碼從小到大排序後使用 QueryString 的格式(即 key1=value1&amp;key2=value2...)拼接而成，空值不傳遞，不參與簽名組串。</span></span><br><span class="line">   String queryString = <span class="keyword">new</span> ArrayList&lt;&gt;(params.keySet())</span><br><span class="line">            .stream()</span><br><span class="line">            .filter(key -&gt; !StringUtils.isEmpty(params.get(key)))</span><br><span class="line">            .map(key -&gt; key + <span class="string">"="</span> + params.get(key))</span><br><span class="line">            .collect(Collectors.joining(<span class="string">"&amp;"</span>));</span><br><span class="line"></span><br><span class="line">   System.out.println(queryString);</span><br><span class="line">   <span class="comment">// 2. MD5 加签</span></span><br><span class="line">   <span class="keyword">if</span> (!StringUtils.isEmpty(params.get(<span class="string">"sign_type"</span>)) &amp;&amp; !params.get(<span class="string">"sign_type"</span>).equals(<span class="string">"MD5"</span>)) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> ServiceException(<span class="string">"目前只支持MD5加密"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   queryString += <span class="string">"&amp;key=0dc0b16bc452a9a562c1430ff2a7e720"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> md5(queryString);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* MD5加密，生成签名。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">md5</span><span class="params">(String queryString)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      MessageDigest m = MessageDigest.getInstance(<span class="string">"MD5"</span>);</span><br><span class="line">      m.update(queryString.getBytes(StandardCharsets.UTF_8));</span><br><span class="line">      <span class="keyword">byte</span>[] s = m.digest();</span><br><span class="line">      StringBuilder result = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">byte</span> b : s) &#123;</span><br><span class="line">            result.append(Integer.toHexString((<span class="number">0x000000ff</span> &amp; b) | <span class="number">0xffffff00</span>).substring(<span class="number">6</span>));</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> result.toString().toUpperCase();</span><br><span class="line">   &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> ServiceException(<span class="string">"MD5加密失败："</span> + e.getMessage());</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="补单机制"><a href="#补单机制" class="headerlink" title="补单机制"></a>补单机制</h2><p>参考：<a href="https://open.swiftpass.cn/openapi/doc?index_1=67&amp;index_2=1&amp;chapter_1=1200&amp;chapter_2=1201">https://open.swiftpass.cn/openapi/doc?index_1=67&amp;index_2=1&amp;chapter_1=1200&amp;chapter_2=1201</a></p>
+<p>对后台通知交互模式，如果平台收到商户的应答不是纯字符串 success 或超过 5 秒后返回时，平台认为通知失败，平台会通过一定的策略（通知频率为 0/15/15/30/180/1800/1800/1800/1800/3600，单位：秒）间接性重新发起通知，尽可能提高通知的成功率，但平台不保证通知最终能成功。</p>
+<p>由于存在重新发送后台通知的情况，因此同样的通知可能会多次发送给商户系统。商户系统必须能够正确处理重复的通知。平台推荐的做法是，当收到通知进行处理时，首先检查对应业务数据的状态，判断该通知是否已经处理过，如果没有处理过再进行处理，如果处理过直接返回纯字符串 success。在对业务数据进行状态检查和处理之前，要采用数据锁进行并发控制，以避免函数重复插入数据造成的数据混乱。</p>
+
   </div>
 </article>
 
@@ -174,7 +201,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#微信公众号-小程序接口"><span class="toc-number">1.</span> <span class="toc-text">微信公众号/小程序接口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#场景介绍"><span class="toc-number">1.0.1.</span> <span class="toc-text">场景介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：初始化请求"><span class="toc-number">1.0.2.</span> <span class="toc-text">后端：初始化请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#前端：小程序调起支付"><span class="toc-number">1.0.3.</span> <span class="toc-text">前端：小程序调起支付</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#前端：公众号调起支付"><span class="toc-number">1.0.4.</span> <span class="toc-text">前端：公众号调起支付</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#前端：支付通知"><span class="toc-number">1.0.5.</span> <span class="toc-text">前端：支付通知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：支付通知"><span class="toc-number">1.0.6.</span> <span class="toc-text">后端：支付通知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：订单查询"><span class="toc-number">1.0.7.</span> <span class="toc-text">后端：订单查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：申请退款"><span class="toc-number">1.0.8.</span> <span class="toc-text">后端：申请退款</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：查询退款"><span class="toc-number">1.0.9.</span> <span class="toc-text">后端：查询退款</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：关闭订单"><span class="toc-number">1.0.10.</span> <span class="toc-text">后端：关闭订单</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后端：通用方法"><span class="toc-number">1.0.11.</span> <span class="toc-text">后端：通用方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补单机制"><span class="toc-number">2.</span> <span class="toc-text">补单机制</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
