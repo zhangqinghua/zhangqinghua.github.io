@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="这篇文章主要是和大家聊一聊，在设计一个登录接口时，不仅仅是功能上的实现，在安全方面，我们还需要考虑哪些地方。 安全风险暴力破解只要网站是暴露在公网的，那么很大概率上会被人盯上，尝试爆破这种简单且有效的方式：通过各种方式获得了网站的用户名之后，通过编写程序来遍历所有可能的密码，直至找到正确的密码为止。 伪代码如下： 12345678910# 密码字典password_dict = []# 登录接口l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="登陆接口开发">
+<meta property="og:url" content="http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这篇文章主要是和大家聊一聊，在设计一个登录接口时，不仅仅是功能上的实现，在安全方面，我们还需要考虑哪些地方。 安全风险暴力破解只要网站是暴露在公网的，那么很大概率上会被人盯上，尝试爆破这种简单且有效的方式：通过各种方式获得了网站的用户名之后，通过编写程序来遍历所有可能的密码，直至找到正确的密码为止。 伪代码如下： 12345678910# 密码字典password_dict = []# 登录接口l">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-05-04T09:22:05.908Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="登陆接口开发">
+<meta name="twitter:description" content="这篇文章主要是和大家聊一聊，在设计一个登录接口时，不仅仅是功能上的实现，在安全方面，我们还需要考虑哪些地方。 安全风险暴力破解只要网站是暴露在公网的，那么很大概率上会被人盯上，尝试爆破这种简单且有效的方式：通过各种方式获得了网站的用户名之后，通过编写程序来遍历所有可能的密码，直至找到正确的密码为止。 伪代码如下： 12345678910# 密码字典password_dict = []# 登录接口l">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>登陆接口开发</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/05/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/27/架构设计/支付开发/支付类型/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&text=登陆接口开发"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&is_video=false&description=登陆接口开发"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=登陆接口开发&body=Check out this article: http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&name=登陆接口开发&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安全风险"><span class="toc-number">1.</span> <span class="toc-text">安全风险</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#暴力破解"><span class="toc-number">2.</span> <span class="toc-text">暴力破解</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#验证码"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">验证码</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#登录限制"><span class="toc-number">2.0.1.</span> <span class="toc-text">登录限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP-限制"><span class="toc-number">2.0.2.</span> <span class="toc-text">IP 限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#手机验证"><span class="toc-number">2.0.3.</span> <span class="toc-text">手机验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中间人攻击"><span class="toc-number">3.</span> <span class="toc-text">中间人攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTPS"><span class="toc-number">3.0.1.</span> <span class="toc-text">HTTPS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#加密传输"><span class="toc-number">3.0.2.</span> <span class="toc-text">加密传输</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其它手段"><span class="toc-number">3.0.3.</span> <span class="toc-text">其它手段</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        登陆接口开发
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-05-04T00:00:00.000Z" itemprop="datePublished">2021-05-04</time>
+        
+        (Updated: <time datetime="2021-05-04T09:22:05.908Z" itemprop="dateModified">2021-05-04</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/架构设计/">架构设计</a> › <a class="category-link" href="/categories/架构设计/接口规范/">接口规范</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>这篇文章主要是和大家聊一聊，在设计一个登录接口时，不仅仅是功能上的实现，在安全方面，我们还需要考虑哪些地方。</p>
+<h2 id="安全风险"><a href="#安全风险" class="headerlink" title="安全风险"></a>安全风险</h2><h2 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h2><p>只要网站是暴露在公网的，那么很大概率上会被人盯上，尝试爆破这种简单且有效的方式：通过各种方式获得了网站的用户名之后，通过编写程序来遍历所有可能的密码，直至找到正确的密码为止。</p>
+<p>伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 密码字典</span><br><span class="line">password_dict = []</span><br><span class="line"># 登录接口</span><br><span class="line">login_url = &apos;&apos;</span><br><span class="line">def attack(username):</span><br><span class="line"> for password in password_dict:</span><br><span class="line">     data = &#123;&apos;username&apos;: username, &apos;password&apos;: password&#125;</span><br><span class="line">       content = requests.post(login_url, data).content.decode(&apos;utf-8&apos;)</span><br><span class="line">       if &apos;login success&apos; in content:</span><br><span class="line">           print(&apos;got it! password is : %s&apos; % password)</span><br></pre></td></tr></table></figure>
+<p>那么这种情况，我们要怎么防范呢？</p>
+<h5 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h5><p>有聪明的同学就想到了，我可以在它密码错误达到一定次数时，增加验证码校验！比如我们设置，当用户密码错误达到3次之后，则需要用户输入图片验证码才可以继续登录操作：</p>
+<p>伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fail_count = get_from_redis(fail_username)</span><br><span class="line">if fail_count &gt;= 3:</span><br><span class="line"> if captcha is None:</span><br><span class="line">  return error(&apos;需要验证码&apos;)</span><br><span class="line">    check_captcha(captcha)</span><br><span class="line">success = do_login(username, password)</span><br><span class="line">if not success:</span><br><span class="line"> set_redis(fail_username, fail_count + 1)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>伪代码未考虑并发，实际开发可以考虑加锁。</p>
+</blockquote>
+<p>这样确实可以过滤掉一些非法的攻击，但是以目前的 OCR 技术来说的话，普通的图片验证码真的很难做到有效的防止机器人（我们就在这个上面吃过大亏）。当然，我们也可以花钱购买类似于三方公司提供的滑动验证等验证方案，但是也并不是 100% 的安全，一样可以被破解（惨痛教训）。</p>
+<h4 id="登录限制"><a href="#登录限制" class="headerlink" title="登录限制"></a>登录限制</h4><p>那这时候又有同学说了，那我可以直接限制非正常用户的登录操作，当它密码错误达到一定次数时，直接拒绝用户的登录，隔一段时间再恢复。比如我们设置某个账号在登录时错误次数达到 10 次时，则5分钟内拒绝该账号的所有登录操作。</p>
+<p>伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fail_count = get_from_redis(fail_username)</span><br><span class="line">locked = get_from_redis(lock_username)</span><br><span class="line"></span><br><span class="line">if locked:</span><br><span class="line"> return error(&apos;拒绝登录&apos;)</span><br><span class="line">if fail_count &gt;= 3:</span><br><span class="line"> if captcha is None:</span><br><span class="line">  return error(&apos;需要验证码&apos;)</span><br><span class="line">    check_captcha(captcha)</span><br><span class="line">success = do_login(username, password)</span><br><span class="line">if not success:</span><br><span class="line"> set_redis(fail_username, fail_count + 1)</span><br><span class="line">    if fail_count + 1 &gt;= 10:</span><br><span class="line">     # 失败超过10次，设置锁定标记</span><br><span class="line">     set_redis(lock_username, true, 300s)</span><br></pre></td></tr></table></figure>
+<p>umm，这样确实可以解决用户密码被爆破的问题。但是，这样会带来另一个风险：攻击者虽然不能获取到网站的用户信息，但是它可以让我们网站所有的用户都无法登录！攻击者只需要无限循环遍历所有的用户名（即使没有，随机也行）进行登录，那么这些用户会永远处于锁定状态，导致正常的用户无法登录网站！</p>
+<h4 id="IP-限制"><a href="#IP-限制" class="headerlink" title="IP 限制"></a>IP 限制</h4><p>那既然直接针对用户名不行的话，我们可以针对 IP 来处理，直接把攻击者的 IP 封了不就万事大吉了嘛。我们可以设定某个 IP 下调用登录接口错误次数达到一定时，则禁止该 IP 进行登录操作。</p>
+<p>伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ip = request[&apos;IP&apos;]</span><br><span class="line">fail_count = get_from_redis(fail_ip)</span><br><span class="line">if fail_count &gt; 10:</span><br><span class="line"> return error(&apos;拒绝登录&apos;)</span><br><span class="line"># 其它逻辑</span><br><span class="line"># do something()</span><br><span class="line">success = do_login(username, password)</span><br><span class="line">if not success:</span><br><span class="line"> set_redis(fail_ip, true, 300s)</span><br></pre></td></tr></table></figure>
+<p>这样也可以一定程度上解决问题，事实上有很多的限流操作都是针对IP进行的，比如 Nginx 的限流模块就可以限制一个 IP 在单位时间内的访问次数。但是这里还是存在问题：</p>
+<ol>
+<li>比如现在很多学校、公司都是使用同一个出口 IP，如果直接按IP限制，可能会误杀其它正常的用户；</li>
+<li>现在这么多 VPN，攻击者完全可以在IP被封后切换 VPN 来攻击；</li>
+</ol>
+<h4 id="手机验证"><a href="#手机验证" class="headerlink" title="手机验证"></a>手机验证</h4><p>那难道就没有一个比较好的方式来防范吗？　当然有。　我们可以看到近些年来，几乎所有的应用都会让用户绑定手机，一个是国家的实名制政策要求，第二个是手机基本上和身份证一样，基本上可以代表一个人的身份标识了。所以很多安全操作都是基于手机验证来进行的，登录也可以：</p>
+<ol>
+<li>当用户输入密码次数大于 3 次时，要求用户输入验证码（最好使用滑动验证）;</li>
+<li>当用户输入密码次数大于 10 次时，弹出手机验证，需要用户使用手机验证码和密码双重认证进行登录；</li>
+</ol>
+<p>伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">fail_count = get_from_redis(fail_username)</span><br><span class="line"></span><br><span class="line">if fail_count &gt; 3:</span><br><span class="line"> if captcha is None:</span><br><span class="line">  return error(&apos;需要验证码&apos;)</span><br><span class="line">    check_captcha(captcha)</span><br><span class="line"></span><br><span class="line">if fail_count &gt; 10:</span><br><span class="line"> # 大于10次，使用验证码和密码登录</span><br><span class="line"> if dynamic_code is None:</span><br><span class="line">     return error(&apos;请输入手机验证码&apos;)</span><br><span class="line">    if not validate_dynamic_code(username, dynamic_code):</span><br><span class="line">     delete_dynamic_code(username)</span><br><span class="line">     return error(&apos;手机验证码错误&apos;)</span><br><span class="line"></span><br><span class="line"> success = do_login(username, password, dynamic_code)</span><br><span class="line"></span><br><span class="line"> if not success:</span><br><span class="line">     set_redis(fail_username, fail_count + 1)</span><br></pre></td></tr></table></figure>
+<h2 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h2><p>中间人攻击简单一点来说就是，A 和 B 在通讯过程中，攻击者通过嗅探、拦截等方式获取或修改A和B的通讯内容。</p>
+<p>举个栗子：小白给小黄发快递，途中要经过快递点 A，小黑就躲在快递点 A，或者干脆自己开一个快递点B来冒充快递点 A。然后偷偷的拆了小白给小黄的快递，看看里面有啥东西。甚至可以把小白的快递给留下来，自己再打包一个一毛一样的箱子发给小黄。</p>
+<p>那在登录过程中，如果攻击者在嗅探到了从客户端发往服务端的登录请求，就可以很轻易的获取到用户的用户名和密码。</p>
+<h4 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h4><p>防范中间人攻击最简单也是最有效的一个操作，更换 HTTPS，把网站中所有的 HTTP 请求修改为强制使用 HTTPS。</p>
+<p>为什么HTTPS可以防范中间人攻击？ HTTPS 实际上就是在 HTTP 和 TCP 协议中间加入了 SSL/TLS 协议，用于保障数据的安全传输。相比于 HTTP，HTTPS 主要有以下几个特点：</p>
+<ol>
+<li>内容加密；</li>
+<li>数据完整性；</li>
+<li>身份验证；</li>
+</ol>
+<h4 id="加密传输"><a href="#加密传输" class="headerlink" title="加密传输"></a>加密传输</h4><p>在 HTTPS 之外，我们还可以手动对敏感数据进行加密传输：</p>
+<ol>
+<li>用户名可以在客户端使用非对称加密，在服务端解密；</li>
+<li>密码可以在客户端进行MD5之后传输，防止暴露密码明文；</li>
+</ol>
+<h4 id="其它手段"><a href="#其它手段" class="headerlink" title="其它手段"></a>其它手段</h4><p>除了上面我们聊的这些以外，其实还有很多其它的工作可以考虑，比如：</p>
+<ol>
+<li>操作日志 ，用户的每次登录和敏感操作都需要记录日志（包括IP、设备等）；</li>
+<li>异常操作或登录提醒 ，有了上面的操作日志，那我们就可以基于日志做风险提醒，比如用户在进行非常登录地登录、修改密码、登录异常时，可以短信提醒用户；</li>
+<li>拒绝弱密码 注册或修改密码时，不允许用户设置弱密码；</li>
+<li>防止用户名被遍历 有些网站在注册时，在输入完用户名之后，会提示用户名是否存在。这样会存在网站的所有用户名被泄露的风险（遍历该接口即可），需要在交互或逻辑上做限制；</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安全风险"><span class="toc-number">1.</span> <span class="toc-text">安全风险</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#暴力破解"><span class="toc-number">2.</span> <span class="toc-text">暴力破解</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#验证码"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">验证码</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#登录限制"><span class="toc-number">2.0.1.</span> <span class="toc-text">登录限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP-限制"><span class="toc-number">2.0.2.</span> <span class="toc-text">IP 限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#手机验证"><span class="toc-number">2.0.3.</span> <span class="toc-text">手机验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中间人攻击"><span class="toc-number">3.</span> <span class="toc-text">中间人攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTPS"><span class="toc-number">3.0.1.</span> <span class="toc-text">HTTPS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#加密传输"><span class="toc-number">3.0.2.</span> <span class="toc-text">加密传输</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其它手段"><span class="toc-number">3.0.3.</span> <span class="toc-text">其它手段</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&text=登陆接口开发"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&is_video=false&description=登陆接口开发"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=登陆接口开发&body=Check out this article: http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&title=登陆接口开发"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/05/04/架构设计/接口规范/登陆接口开发/&name=登陆接口开发&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
