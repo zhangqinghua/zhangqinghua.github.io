@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="附：Docker 安装 Nacos创建数据库在 MySQL 创建 Nocas 数据库 nacos_cofig。 然后执行 SQL 文件：https://github.com/alibaba/nacos/blob/master/config/src/main/resources/META-INF/nacos-db.sql  Nacos1 只支持 MySQL8 以下的版本。  拉取镜像123456zh">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-05-11T07:18:26.487Z">
+<meta property="og:updated_time" content="2021-05-13T10:01:48.596Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringCloud Nacos">
 <meta name="twitter:description" content="附：Docker 安装 Nacos创建数据库在 MySQL 创建 Nocas 数据库 nacos_cofig。 然后执行 SQL 文件：https://github.com/alibaba/nacos/blob/master/config/src/main/resources/META-INF/nacos-db.sql  Nacos1 只支持 MySQL8 以下的版本。  拉取镜像123456zh">
@@ -77,7 +77,7 @@
         <li><a class="icon" href="/2021/02/17/后端开发/SpringCloud/SpringCloud Gateway/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2021/02/17/后端开发/SpringCloud/SpringCloud 分布式事务协议/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2021/01/11/面试题/尚硅谷Java大厂面试题全集/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -130,7 +130,7 @@
       
         <time datetime="2021-02-17T00:00:01.000Z" itemprop="datePublished">2021-02-17</time>
         
-        (Updated: <time datetime="2021-05-11T07:18:26.487Z" itemprop="dateModified">2021-05-11</time>)
+        (Updated: <time datetime="2021-05-13T10:01:48.596Z" itemprop="dateModified">2021-05-13</time>)
         
       
     </div>
@@ -155,8 +155,8 @@
 <blockquote>
 <p>Nacos1 只支持 MySQL8 以下的版本。</p>
 </blockquote>
-<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ docker pull nacos/nacos-server</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">zhangqinghua$ docker images</span><br><span class="line">REPOSITORY                   TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">nacos/nacos-server           latest              9c0b55a5ab2c        4 weeks ago         935MB</span><br></pre></td></tr></table></figure>
-<h4 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ docker run -d -p 8848:8848  \</span><br><span class="line">                         -e MODE=standalone \</span><br><span class="line">                         -e PREFER_HOST_MODE=hostname \</span><br><span class="line">                         -e SPRING_DATASOURCE_PLATFORM=mysql \</span><br><span class="line">                         -e MYSQL_SERVICE_HOST=127.0.0.1 \</span><br><span class="line">                         -e MYSQL_SERVICE_PORT=3306 \</span><br><span class="line">                         -e MYSQL_SERVICE_DB_NAME=nacos_config \</span><br><span class="line">                         -e MYSQL_SERVICE_USER=root \</span><br><span class="line">                         -e MYSQL_SERVICE_PASSWORD=123456 \</span><br><span class="line">                         -e MYSQL_DATABASE_NUM=1 \</span><br><span class="line">                         --restart always --name mynacos nacos/nacos-server</span><br></pre></td></tr></table></figure>
+<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ docker pull nacos/nacos-server:1.4.2</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">zhangqinghua$ docker images</span><br><span class="line">REPOSITORY                   TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">nacos/nacos-server           latest              9c0b55a5ab2c        4 weeks ago         935MB</span><br></pre></td></tr></table></figure>
+<h4 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ docker run --name nacos-quick -e MODE=standalone -p 8849:8848 \</span><br><span class="line">                                            -e SPRING_DATASOURCE_PLATFORM=mysql \</span><br><span class="line">                                            -e MYSQL_SERVICE_HOST=47.119.139.41 \</span><br><span class="line">                                            -e MYSQL_SERVICE_PORT=3306 \</span><br><span class="line">                                            -e MYSQL_SERVICE_DB_NAME=nacos_config \</span><br><span class="line">                                            -e MYSQL_SERVICE_USER=easybyte \</span><br><span class="line">                                            -e MYSQL_SERVICE_PASSWORD=easybyte \</span><br><span class="line">                                            -d nacos/nacos-server:1.4.2</span><br></pre></td></tr></table></figure>
 <div class="table-container">
 <table>
 <thead>
@@ -302,6 +302,7 @@
 <h2 id="附：常见问题"><a href="#附：常见问题" class="headerlink" title="附：常见问题"></a>附：常见问题</h2><p><strong>Docker 部署 Nacos 报错：java.lang.IllegalStateException: No DataSource set</strong><br>原因：Nacos1 不支持 MySQL8。<br>解决：1.切换 5.7 版本 2.修改 Nacos1 源码 3.使用Nacos2（目前没有 Dcoker 版本）</p>
 <p><strong>启动报错：Caused by: java.net.UnknownHostException: jmenv.tbsite.net</strong><br>原因：启动模式没设置导致的。<br>解决：<code>sh startup.sh -m standalone</code>。</p>
 <p>启动报错：Referenced from: /private/var/folders/wz/7_0z_zvj7_j8dsrm7cg6yz2w0000gn/T/librocksdbjni6447145289520783579.jnilib (which was built for Mac OS X 10.15)<br>原因：MacOS 版本过低。<br>解决：升级 MacOS 或使用 Docker。</p>
+<p><strong>[NACOS HTTP-GET] The maximum number of tolerable server reconnection errors has been reached</strong><br>场景：SpringBoot 使用 Nacos 作为配置中心，启动报错。<br>原因：<code>spring.cloud.nacos.config</code> 必须配置在 <code>bootstrap.yml</code> 文件，而项目里放在了 <code>api-nacos.yml</code> 文件然后用 <code>spring.profiles.include</code> 引入。<br>解决：<code>spring.cloud.nacos.config</code> 配置在 <code>bootstrap.yml</code> 文件。</p>
 
   </div>
 </article>
