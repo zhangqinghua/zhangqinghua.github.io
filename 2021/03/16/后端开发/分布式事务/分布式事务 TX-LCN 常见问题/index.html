@@ -6,17 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="ClassNotFoundException: org.springframework.data.jdbc.repository.config.JdbcRepositoryConfigExtension场景：参考官网上的demo，直接启动 tm-demo 失败。原因：启动类放错地方，且也提示了报错  WARNING  : Your ApplicationContext is unlikely to">
+    <meta name="description" content="TxLCN TM 监听IP 坑。1. 指定监听 IPTM 的默认监听 IP 是 127.0.0.1。这意味着 TC 只能使用 127.0.0.1 去访问，无法远程调用。123456# TM 配置tx-lcn.manager.host: 127.0.0.1tx-lcn.manager.port: 8070# TC 配置tx-lcn.client.manager-address: 127.0.0.1:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式事务 TX-LCN 常见问题">
 <meta property="og:url" content="http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 TX-LCN 常见问题/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="ClassNotFoundException: org.springframework.data.jdbc.repository.config.JdbcRepositoryConfigExtension场景：参考官网上的demo，直接启动 tm-demo 失败。原因：启动类放错地方，且也提示了报错  WARNING  : Your ApplicationContext is unlikely to">
+<meta property="og:description" content="TxLCN TM 监听IP 坑。1. 指定监听 IPTM 的默认监听 IP 是 127.0.0.1。这意味着 TC 只能使用 127.0.0.1 去访问，无法远程调用。123456# TM 配置tx-lcn.manager.host: 127.0.0.1tx-lcn.manager.port: 8070# TC 配置tx-lcn.client.manager-address: 127.0.0.1:">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-05-17T14:13:16.496Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210517172712.png">
+<meta property="og:updated_time" content="2021-05-18T11:06:56.954Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式事务 TX-LCN 常见问题">
-<meta name="twitter:description" content="ClassNotFoundException: org.springframework.data.jdbc.repository.config.JdbcRepositoryConfigExtension场景：参考官网上的demo，直接启动 tm-demo 失败。原因：启动类放错地方，且也提示了报错  WARNING  : Your ApplicationContext is unlikely to">
+<meta name="twitter:description" content="TxLCN TM 监听IP 坑。1. 指定监听 IPTM 的默认监听 IP 是 127.0.0.1。这意味着 TC 只能使用 127.0.0.1 去访问，无法远程调用。123456# TM 配置tx-lcn.manager.host: 127.0.0.1tx-lcn.manager.port: 8070# TC 配置tx-lcn.client.manager-address: 127.0.0.1:">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210517172712.png">
     
     
         
@@ -104,7 +106,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TxLCN-TM-监听IP-坑。"><span class="toc-number">1.</span> <span class="toc-text">TxLCN TM 监听IP 坑。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#常见问题"><span class="toc-number">1.0.1.</span> <span class="toc-text">常见问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TxLCN"><span class="toc-number">2.</span> <span class="toc-text">TxLCN</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -130,7 +132,7 @@
       
         <time datetime="2021-03-16T00:00:32.000Z" itemprop="datePublished">2021-03-16</time>
         
-        (Updated: <time datetime="2021-05-17T14:13:16.496Z" itemprop="dateModified">2021-05-17</time>)
+        (Updated: <time datetime="2021-05-18T11:06:56.954Z" itemprop="dateModified">2021-05-18</time>)
         
       
     </div>
@@ -150,7 +152,15 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p><strong>ClassNotFoundException: org.springframework.data.jdbc.repository.config.JdbcRepositoryConfigExtension</strong><br>场景：参考官网上的demo，直接启动 tm-demo 失败。<br>原因：启动类放错地方，且也提示了报错 <strong> WARNING </strong> : Your ApplicationContext is unlikely to start due to a @ComponentScan of the default package.<br>解决：建个包，把启动类放进去，再启动就 OK 了。</p>
+    <h2 id="TxLCN-TM-监听IP-坑。"><a href="#TxLCN-TM-监听IP-坑。" class="headerlink" title="TxLCN TM 监听IP 坑。"></a>TxLCN TM 监听IP 坑。</h2><p><strong>1. 指定监听 IP</strong><br>TM 的默认监听 IP 是 127.0.0.1。这意味着 TC 只能使用 127.0.0.1 去访问，无法远程调用。<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># TM 配置</span></span><br><span class="line"><span class="string">tx-lcn.manager.host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="string">tx-lcn.manager.port:</span> <span class="number">8070</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TC 配置</span></span><br><span class="line"><span class="string">tx-lcn.client.manager-address:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:31080</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>2. 模糊监听 IP</strong><br>根据官方文档描述，如果将 IP 设置为 0.0.0.0，既可以远程访问。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># TM 配置</span></span><br><span class="line"><span class="string">tx-lcn.manager.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="string">tx-lcn.manager.port:</span> <span class="number">8070</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TC 配置</span></span><br><span class="line"><span class="string">tx-lcn.client.manager-address:</span> <span class="number">47.119</span><span class="number">.139</span><span class="number">.41</span><span class="string">:31080</span></span><br></pre></td></tr></table></figure>
+<p>但是这会出现一个 Bug，TC 先请求一遍 47.119.139.41:31080，再请求一遍 0.0.0.0:31080。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210517172712.png" alt=""></p>
+<p><strong>3. 去掉监听 IP</strong><br>最后的方案是去掉监听 IP，这样子既可以远程访问，又不会去请求 0.0.0.0:31080。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># TM 配置</span></span><br><span class="line"><span class="string">tx-lcn.manager.host:</span> </span><br><span class="line"><span class="string">tx-lcn.manager.port:</span> <span class="number">8070</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TC 配置</span></span><br><span class="line"><span class="string">tx-lcn.client.manager-address:</span> <span class="number">47.119</span><span class="number">.139</span><span class="number">.41</span><span class="string">:31080</span></span><br></pre></td></tr></table></figure>
+<h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><p><strong>ClassNotFoundException: org.springframework.data.jdbc.repository.config.JdbcRepositoryConfigExtension</strong><br>场景：参考官网上的demo，直接启动 tm-demo 失败。<br>原因：启动类放错地方，且也提示了报错 <strong> WARNING </strong> : Your ApplicationContext is unlikely to start due to a @ComponentScan of the default package.<br>解决：建个包，把启动类放进去，再启动就 OK 了。</p>
+<h2 id="TxLCN"><a href="#TxLCN" class="headerlink" title="TxLCN"></a>TxLCN</h2><p><strong>TxLCN Client 一直无法连上 TxLCN manager</strong></p>
 
   </div>
 </article>
@@ -178,7 +188,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TxLCN-TM-监听IP-坑。"><span class="toc-number">1.</span> <span class="toc-text">TxLCN TM 监听IP 坑。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#常见问题"><span class="toc-number">1.0.1.</span> <span class="toc-text">常见问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TxLCN"><span class="toc-number">2.</span> <span class="toc-text">TxLCN</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
