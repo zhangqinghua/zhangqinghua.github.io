@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="附：Docker 安装 Nacos创建数据库在 MySQL 创建 Nocas 数据库 nacos_cofig。 然后执行 SQL 文件：https://github.com/alibaba/nacos/blob/master/config/src/main/resources/META-INF/nacos-db.sql  Nacos1 只支持 MySQL8 以下的版本。  拉取镜像123456zh">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-05-20T10:08:12.902Z">
+<meta property="og:updated_time" content="2021-05-20T14:09:40.022Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringCloud Nacos">
 <meta name="twitter:description" content="附：Docker 安装 Nacos创建数据库在 MySQL 创建 Nocas 数据库 nacos_cofig。 然后执行 SQL 文件：https://github.com/alibaba/nacos/blob/master/config/src/main/resources/META-INF/nacos-db.sql  Nacos1 只支持 MySQL8 以下的版本。  拉取镜像123456zh">
@@ -130,7 +130,7 @@
       
         <time datetime="2021-02-17T00:00:01.000Z" itemprop="datePublished">2021-02-17</time>
         
-        (Updated: <time datetime="2021-05-20T10:08:12.902Z" itemprop="dateModified">2021-05-20</time>)
+        (Updated: <time datetime="2021-05-20T14:09:40.022Z" itemprop="dateModified">2021-05-20</time>)
         
       
     </div>
@@ -303,6 +303,7 @@
 <p><strong>启动报错：Caused by: java.net.UnknownHostException: jmenv.tbsite.net</strong><br>原因：启动模式没设置导致的。<br>解决：<code>sh startup.sh -m standalone</code>。</p>
 <p>启动报错：Referenced from: /private/var/folders/wz/7_0z_zvj7_j8dsrm7cg6yz2w0000gn/T/librocksdbjni6447145289520783579.jnilib (which was built for Mac OS X 10.15)<br>原因：MacOS 版本过低。<br>解决：升级 MacOS 或使用 Docker。</p>
 <p><strong>[NACOS HTTP-GET] The maximum number of tolerable server reconnection errors has been reached</strong><br>场景：SpringBoot 使用 Nacos 作为配置中心，启动报错。<br>原因：<code>spring.cloud.nacos.config</code> 必须配置在 <code>bootstrap.yml</code> 文件，而项目里放在了 <code>api-nacos.yml</code> 文件然后用 <code>spring.profiles.include</code> 引入。<br>解决：<code>spring.cloud.nacos.config</code> 配置在 <code>bootstrap.yml</code> 文件。</p>
+<p><strong>Nacos 域名访问</strong><br>参考：<a href="https://my.oschina.net/huawenyao/blog/3235903">https://my.oschina.net/huawenyao/blog/3235903</a></p>
 
   </div>
 </article>
