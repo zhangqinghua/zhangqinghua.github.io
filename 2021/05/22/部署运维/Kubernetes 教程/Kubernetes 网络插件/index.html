@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="网络模型 IP-per-Pod每个 Pod 都拥有一个独立 IP 地址，Pod 内所有容器共享一个网络命名空间。 扁平网络集群内所有 Pod 都在一个直接连通的扁平网络中，可通过 IP 直接访问。 2.1 所有容器之间无需 NAT 就可以直接互相访问 2.2 所有 Node 和所有容器之间无需 NAT 就可以直接互相访问 2.3 容器自己看到的 IP 跟其他容器看到的一样  Service clu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes 网络插件">
+<meta property="og:url" content="http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="网络模型 IP-per-Pod每个 Pod 都拥有一个独立 IP 地址，Pod 内所有容器共享一个网络命名空间。 扁平网络集群内所有 Pod 都在一个直接连通的扁平网络中，可通过 IP 直接访问。 2.1 所有容器之间无需 NAT 就可以直接互相访问 2.2 所有 Node 和所有容器之间无需 NAT 就可以直接互相访问 2.3 容器自己看到的 IP 跟其他容器看到的一样  Service clu">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feisky.gitbooks.io/kubernetes/content/network/assets/image-20190316183639488.png">
+<meta property="og:image" content="https://feisky.gitbooks.io/kubernetes/content/network/assets/image-20190316183650404.png">
+<meta property="og:updated_time" content="2021-05-22T15:04:52.300Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kubernetes 网络插件">
+<meta name="twitter:description" content="网络模型 IP-per-Pod每个 Pod 都拥有一个独立 IP 地址，Pod 内所有容器共享一个网络命名空间。 扁平网络集群内所有 Pod 都在一个直接连通的扁平网络中，可通过 IP 直接访问。 2.1 所有容器之间无需 NAT 就可以直接互相访问 2.2 所有 Node 和所有容器之间无需 NAT 就可以直接互相访问 2.3 容器自己看到的 IP 跟其他容器看到的一样  Service clu">
+<meta name="twitter:image" content="https://feisky.gitbooks.io/kubernetes/content/network/assets/image-20190316183639488.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Kubernetes 网络插件</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/05/22/其它/等宽字体测试/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/05/18/部署运维/Nginx 手册/Nginx 配置文件/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&text=Kubernetes 网络插件"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&is_video=false&description=Kubernetes 网络插件"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kubernetes 网络插件&body=Check out this article: http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&name=Kubernetes 网络插件&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络模型"><span class="toc-number">1.</span> <span class="toc-text">网络模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#官方插件"><span class="toc-number">2.</span> <span class="toc-text">官方插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kubenet"><span class="toc-number">3.</span> <span class="toc-text">kubenet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CNI"><span class="toc-number">4.</span> <span class="toc-text">CNI</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装-CNI"><span class="toc-number">4.0.1.</span> <span class="toc-text">安装 CNI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置-CNI-brige-插件"><span class="toc-number">4.0.2.</span> <span class="toc-text">配置 CNI brige 插件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Flannel"><span class="toc-number">4.0.3.</span> <span class="toc-text">Flannel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Weave-Net"><span class="toc-number">4.0.4.</span> <span class="toc-text">Weave Net</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Calico"><span class="toc-number">4.0.5.</span> <span class="toc-text">Calico</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OVN"><span class="toc-number">4.0.6.</span> <span class="toc-text">OVN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Contiv"><span class="toc-number">4.0.7.</span> <span class="toc-text">Contiv</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Romana"><span class="toc-number">4.0.8.</span> <span class="toc-text">Romana</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenContrail"><span class="toc-number">4.0.9.</span> <span class="toc-text">OpenContrail</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Midonet"><span class="toc-number">4.0.10.</span> <span class="toc-text">Midonet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Host-network"><span class="toc-number">4.0.11.</span> <span class="toc-text">Host network</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ipvs"><span class="toc-number">5.0.1.</span> <span class="toc-text">ipvs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Canal"><span class="toc-number">5.0.2.</span> <span class="toc-text">Canal</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kuryr-kubernetes"><span class="toc-number">5.0.3.</span> <span class="toc-text">kuryr-kubernetes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cilium"><span class="toc-number">5.0.4.</span> <span class="toc-text">Cilium</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kope"><span class="toc-number">5.0.5.</span> <span class="toc-text">kope</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kube-router"><span class="toc-number">5.0.6.</span> <span class="toc-text">Kube-router</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Kubernetes 网络插件
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-05-22T10:01:00.000Z" itemprop="datePublished">2021-05-22</time>
+        
+        (Updated: <time datetime="2021-05-22T15:04:52.300Z" itemprop="dateModified">2021-05-22</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/部署运维/">部署运维</a> › <a class="category-link" href="/categories/部署运维/Kubernetes-教程/">Kubernetes 教程</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="网络模型"><a href="#网络模型" class="headerlink" title="网络模型"></a>网络模型</h2><ol>
+<li>IP-per-Pod<br>每个 Pod 都拥有一个独立 IP 地址，Pod 内所有容器共享一个网络命名空间。</li>
+<li><p>扁平网络<br>集群内所有 Pod 都在一个直接连通的扁平网络中，可通过 IP 直接访问。</p>
+<p>2.1 所有容器之间无需 NAT 就可以直接互相访问</p>
+<p>2.2 所有 Node 和所有容器之间无需 NAT 就可以直接互相访问</p>
+<p>2.3 容器自己看到的 IP 跟其他容器看到的一样</p>
+</li>
+<li>Service cluster<br>IP 尽可在集群内部访问，外部请求需要通过 NodePort、LoadBalance 或者 Ingress 来访问。</li>
+</ol>
+<h2 id="官方插件"><a href="#官方插件" class="headerlink" title="官方插件"></a>官方插件</h2><p>目前，Kubernetes 支持以下两种插件：</p>
+<ol>
+<li>kubenet<br>这是一个基于 CNI bridge 的网络插件（在 bridge 插件的基础上扩展了 port mapping 和 traffic shaping ），是目前推荐的默认插件。</li>
+<li>CNI<br>CNI 网络插件，需要用户将网络配置放到 <code>/etc/cni/net.d</code> 目录中，并将 CNI 插件的二进制文件放入 <code>/opt/cni/bin</code>。</li>
+<li>exec<br>通过第三方的可执行文件来为容器配置网络，已在 v1.6 中移除，见 <a href="https://github.com/kubernetes/kubernetes/pull/39254">kubernetes#39254</a>。</li>
+</ol>
+<h2 id="kubenet"><a href="#kubenet" class="headerlink" title="kubenet"></a>kubenet</h2><p>kubenet 是一个基于 CNI bridge 的网络插件，它为每个容器建立一对 veth pair 并连接到 cbr0 网桥上。kubenet 在 bridge 插件的基础上拓展了很多功能，包括：</p>
+<ol>
+<li>使用 host-local IPAM 插件为容器分配 IP 地址， 并定期释放已分配但未使用的 IP 地址；</li>
+<li>设置 <code>sysctl net.bridge.bridge-nf-call-iptables = 1</code>；</li>
+<li>为 Pod IP 创建 SNAT 规则<br><code>-A POSTROUTING ! -d 10.0.0.0/8 -m comment --comment &quot;kubenet: SNAT for outbound traffic from cluster&quot; -m addrtype ! --dst-type LOCAL -j MASQUERADE</code></li>
+<li>开启网桥的 hairpin 和 promisc 模式，允许 Pod 访问它自己所在的 Service IP（即通过 NAT 后再访问 Pod 自己）；</li>
+<li>HostPort 管理以及设置端口映射</li>
+<li>Traffic shaping 支持通过 kubernetes.io/ingress-bandwidth 和 kubernetes.io/egress-bandwidth 等 Annotation 设置 Pod 网络带宽限制。</li>
+</ol>
+<p>下图是一个 Kubernetes on Azure 多节点的 Pod 之间相互通信的原理：</p>
+<p><img src="https://feisky.gitbooks.io/kubernetes/content/network/assets/image-20190316183639488.png" alt=""></p>
+<p>跨节点 Pod 之间相互通信时，会通过云平台或者交换机配置的路由转发到正确的节点中：</p>
+<p><img src="https://feisky.gitbooks.io/kubernetes/content/network/assets/image-20190316183650404.png" alt=""></p>
+<h2 id="CNI"><a href="#CNI" class="headerlink" title="CNI"></a>CNI</h2><h4 id="安装-CNI"><a href="#安装-CNI" class="headerlink" title="安装 CNI"></a>安装 CNI</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF&gt; /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=http://yum.kubernetes.io/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg</span><br><span class="line">       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">yum install -y kubernetes-cni</span><br></pre></td></tr></table></figure>
+<h4 id="配置-CNI-brige-插件"><a href="#配置-CNI-brige-插件" class="headerlink" title="配置 CNI brige 插件"></a>配置 CNI brige 插件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /etc/cni/net.d</span><br><span class="line"></span><br><span class="line">cat &gt;/etc/cni/net.d/10-mynet.conf &lt;&lt;-EOF</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"cniVersion"</span>: <span class="string">"0.3.0"</span>,</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">    <span class="string">"type"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">    <span class="string">"bridge"</span>: <span class="string">"cni0"</span>,</span><br><span class="line">    <span class="string">"isGateway"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"ipMasq"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"ipam"</span>: &#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"host-local"</span>,</span><br><span class="line">        <span class="string">"subnet"</span>: <span class="string">"10.244.0.0/16"</span>,</span><br><span class="line">        <span class="string">"routes"</span>: [</span><br><span class="line">            &#123;<span class="string">"dst"</span>: <span class="string">"0.0.0.0/0"</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt;/etc/cni/net.d/99-loopback.conf &lt;&lt;-EOF</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"cniVersion"</span>: <span class="string">"0.3.0"</span>,</span><br><span class="line">    <span class="string">"type"</span>: <span class="string">"loopback"</span></span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>更多 CNI 网络插件的说明请参考 <a href="https://feisky.gitbooks.io/kubernetes/content/network/cni/index.md">CNI 网络插件</a>。</p>
+<h4 id="Flannel"><a href="#Flannel" class="headerlink" title="Flannel"></a>Flannel</h4><p>Flannel 是一个为 Kubernetes 提供 overlay network 的网络插件，它基于 Linux TUN/TAP，使用 UDP 封装 IP 包来创建 overlay 网络，并借助 etcd 维护网络的分配情况。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel-rbac.yml</span><br><span class="line"></span><br><span class="line">kubectl create -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
+<h4 id="Weave-Net"><a href="#Weave-Net" class="headerlink" title="Weave Net"></a>Weave Net</h4><p>Weave Net 是一个多主机容器网络方案，支持去中心化的控制平面，各个 host 上的 wRouter 间通过建立 Full Mesh 的 TCP 链接，并通过 Gossip 来同步控制信息。这种方式省去了集中式的 K/V Store，能够在一定程度上减低部署的复杂性，Weave 将其称为 “data centric”，而非 RAFT 或者 Paxos 的 “algorithm centric”。</p>
+<p>数据平面上，Weave 通过 UDP 封装实现 L2 Overlay，封装支持两种模式，一种是运行在 user space 的 sleeve mode，另一种是运行在 kernal space 的 fastpath mode。Sleeve mode 通过 pcap 设备在 Linux bridge 上截获数据包并由 wRouter 完成 UDP 封装，支持对 L2 traffic 进行加密，还支持 Partial Connection，但是性能损失明显。Fastpath mode 即通过 OVS 的 odp 封装 VxLAN 并完成转发，wRouter 不直接参与转发，而是通过下发 odp 流表的方式控制转发，这种方式可以明显地提升吞吐量，但是不支持加密等高级功能。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://git.io/weave-kube</span><br></pre></td></tr></table></figure>
+<h4 id="Calico"><a href="#Calico" class="headerlink" title="Calico"></a>Calico</h4><p>alico 是一个基于 BGP 的纯三层的数据中心网络方案（不需要 Overlay），并且与 OpenStack、Kubernetes、AWS、GCE 等 IaaS 和容器平台都有良好的集成。</p>
+<p>Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的 vRouter 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息像整个 Calico 网络内传播——小规模部署可以直接互联，大规模下可通过指定的 BGP route reflector 来完成。 这样保证最终所有的 workload 之间的数据流量都是通过 IP 路由的方式完成互联的。Calico 节点组网可以直接利用数据中心的网络结构（无论是 L2 或者 L3），不需要额外的 NAT，隧道或者 Overlay Network。</p>
+<p>此外，Calico 基于 iptables 还提供了丰富而灵活的网络 Policy，保证通过各个节点上的 ACLs 来提供 Workload 的多租户隔离、安全组以及其他可达性限制等功能。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f http://docs.projectcalico.org/v2.1/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml</span><br></pre></td></tr></table></figure>
+<h4 id="OVN"><a href="#OVN" class="headerlink" title="OVN"></a>OVN</h4><p>OVN (Open Virtual Network) 是 OVS 提供的原生虚拟化网络方案，旨在解决传统 SDN 架构（比如 Neutron DVR）的性能问题。</p>
+<p>OVN 为 Kubernetes 提供了两种网络方案：</p>
+<ol>
+<li>Overaly: 通过 ovs overlay 连接容器</li>
+<li>Underlay: 将 VM 内的容器连到 VM 所在的相同网络（开发中）</li>
+</ol>
+<p>其中，容器网络的配置是通过 OVN 的 CNI 插件来实现。</p>
+<h4 id="Contiv"><a href="#Contiv" class="headerlink" title="Contiv"></a>Contiv</h4><p>Contiv 是思科开源的容器网络方案，主要提供基于 Policy 的网络管理，并与主流容器编排系统集成。Contiv 最主要的优势是直接提供了多租户网络，并支持 L2(VLAN), L3(BGP), Overlay (VXLAN) 以及思科自家的 ACI。</p>
+<h4 id="Romana"><a href="#Romana" class="headerlink" title="Romana"></a>Romana</h4><p>Romana 是 Panic Networks 在 2016 年提出的开源项目，旨在借鉴 route aggregation 的思路来解决 Overlay 方案给网络带来的开销。</p>
+<h4 id="OpenContrail"><a href="#OpenContrail" class="headerlink" title="OpenContrail"></a>OpenContrail</h4><p>OpenContrail 是 Juniper 推出的开源网络虚拟化平台，其商业版本为 Contrail。其主要由控制器和 vRouter 组成：</p>
+<ol>
+<li>控制器提供虚拟网络的配置、控制和分析功能</li>
+<li>vRouter 提供分布式路由，负责虚拟路由器、虚拟网络的建立以及数据转发</li>
+</ol>
+<p>其中，vRouter 支持三种模式：</p>
+<ol>
+<li>Kernel vRouter：类似于 ovs 内核模块</li>
+<li>DPDK vRouter：类似于 ovs-dpdk</li>
+<li>Netronome Agilio Solution (商业产品)：支持 DPDK, SR-IOV and Express Virtio (XVIO)</li>
+</ol>
+<p>Juniper/contrail-kubernetes 提供了 Kubernetes 的集成，包括两部分：</p>
+<ol>
+<li>kubelet network plugin 基于 kubernetes v1.6 已经删除的 exec network plugin</li>
+<li>kube-network-manager 监听 kubernetes API，并根据 label 信息来配置网络策略</li>
+</ol>
+<h4 id="Midonet"><a href="#Midonet" class="headerlink" title="Midonet"></a>Midonet</h4><p>Midonet 是 Midokura 公司开源的 OpenStack 网络虚拟化方案。</p>
+<p>从组件来看，Midonet 以 Zookeeper+Cassandra 构建分布式数据库存储 VPC 资源的状态——Network State DB Cluster，并将 controller 分布在转发设备（包括 vswitch 和 L3 Gateway）本地——Midolman（L3 Gateway 上还有 quagga bgpd），设备的转发则保留了 ovs kernel 作为 fast datapath。可以看到，Midonet 和 DragonFlow、OVN 一样，在架构的设计上都是沿着 OVS-Neutron-Agent 的思路，将 controller 分布到设备本地，并在 neutron plugin 和设备 agent 间嵌入自己的资源数据库作为 super controller。</p>
+<p>从接口来看，NSDB 与 Neutron 间是 REST API，Midolman 与 NSDB 间是 RPC，这俩没什么好说的。Controller 的南向方面，Midolman 并没有用 OpenFlow 和 OVSDB，它干掉了 user space 中的 vswitchd 和 ovsdb-server，直接通过 linux netlink 机制操作 kernel space 中的 ovs datapath。</p>
+<h4 id="Host-network"><a href="#Host-network" class="headerlink" title="Host network"></a>Host network</h4><p>最简单的网络模型就是让容器共享 Host 的 network namespace，使用宿主机的网络协议栈。这样，不需要额外的配置，容器就可以共享宿主的各种网络资源。</p>
+<p>优点：</p>
+<ol>
+<li>简单，不需要任何额外配置</li>
+<li>高效，没有 NAT 等额外的开销</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>没有任何的网络隔离</li>
+<li>容器和 Host 的端口号容易冲突</li>
+<li>容器内任何网络配置都会影响整个宿主机</li>
+</ol>
+<blockquote>
+<p>注意：HostNetwork 是在 Pod 配置文件中设置的，kubelet 在启动时还是需要配置使用 CNI 或者 kubenet 插件（默认 kubenet）。</p>
+</blockquote>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h4 id="ipvs"><a href="#ipvs" class="headerlink" title="ipvs"></a>ipvs</h4><p>Kubernetes v1.8 已经支持 ipvs 负载均衡模式（alpha 版）。</p>
+<h4 id="Canal"><a href="#Canal" class="headerlink" title="Canal"></a>Canal</h4><p>Canal 是 Flannel 和 Calico 联合发布的一个统一网络插件，提供 CNI 网络插件，并支持 network policy。</p>
+<h4 id="kuryr-kubernetes"><a href="#kuryr-kubernetes" class="headerlink" title="kuryr-kubernetes"></a>kuryr-kubernetes</h4><p>kuryr-kubernetes 是 OpenStack 推出的集成 Neutron 网络插件，主要包括 Controller 和 CNI 插件两部分，并且也提供基于 Neutron LBaaS 的 Service 集成。</p>
+<h4 id="Cilium"><a href="#Cilium" class="headerlink" title="Cilium"></a>Cilium</h4><p>Cilium 是一个基于 eBPF 和 XDP 的高性能容器网络方案，提供了 CNI 和 CNM 插件。</p>
+<p>项目主页为 <a href="https://github.com/cilium/cilium。">https://github.com/cilium/cilium。</a></p>
+<h4 id="kope"><a href="#kope" class="headerlink" title="kope"></a>kope</h4><p>kope 是一个旨在简化 Kubernetes 网络配置的项目，支持三种模式：</p>
+<ol>
+<li>Layer2：自动为每个 Node 配置路由</li>
+<li>Vxlan：为主机配置 vxlan 连接，并建立主机和 Pod 的连接（通过 vxlan interface 和 ARP entry）</li>
+<li>ipsec：加密链接</li>
+</ol>
+<p>项目主页为 <a href="https://github.com/kopeio/kope-routing。">https://github.com/kopeio/kope-routing。</a></p>
+<h4 id="Kube-router"><a href="#Kube-router" class="headerlink" title="Kube-router"></a>Kube-router</h4><p>Kube-router 是一个基于 BGP 的网络插件，并提供了可选的 ipvs 服务发现（替代 kube-proxy）以及网络策略功能。</p>
+<p>部署 Kube-router：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml</span><br></pre></td></tr></table></figure>
+<p>部署 Kube-router 并替换 kube-proxy（这个功能其实不需要了，kube-proxy 已经内置了 ipvs 模式的支持）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml</span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove kube-proxy</span></span><br><span class="line">kubectl -n kube-system delete ds kube-proxy</span><br><span class="line">docker run --privileged --net=host gcr.io/google_containers/kube-proxy-amd64:v1.7.3 kube-proxy --cleanup-iptables</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络模型"><span class="toc-number">1.</span> <span class="toc-text">网络模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#官方插件"><span class="toc-number">2.</span> <span class="toc-text">官方插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kubenet"><span class="toc-number">3.</span> <span class="toc-text">kubenet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CNI"><span class="toc-number">4.</span> <span class="toc-text">CNI</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装-CNI"><span class="toc-number">4.0.1.</span> <span class="toc-text">安装 CNI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置-CNI-brige-插件"><span class="toc-number">4.0.2.</span> <span class="toc-text">配置 CNI brige 插件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Flannel"><span class="toc-number">4.0.3.</span> <span class="toc-text">Flannel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Weave-Net"><span class="toc-number">4.0.4.</span> <span class="toc-text">Weave Net</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Calico"><span class="toc-number">4.0.5.</span> <span class="toc-text">Calico</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OVN"><span class="toc-number">4.0.6.</span> <span class="toc-text">OVN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Contiv"><span class="toc-number">4.0.7.</span> <span class="toc-text">Contiv</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Romana"><span class="toc-number">4.0.8.</span> <span class="toc-text">Romana</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenContrail"><span class="toc-number">4.0.9.</span> <span class="toc-text">OpenContrail</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Midonet"><span class="toc-number">4.0.10.</span> <span class="toc-text">Midonet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Host-network"><span class="toc-number">4.0.11.</span> <span class="toc-text">Host network</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ipvs"><span class="toc-number">5.0.1.</span> <span class="toc-text">ipvs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Canal"><span class="toc-number">5.0.2.</span> <span class="toc-text">Canal</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kuryr-kubernetes"><span class="toc-number">5.0.3.</span> <span class="toc-text">kuryr-kubernetes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cilium"><span class="toc-number">5.0.4.</span> <span class="toc-text">Cilium</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kope"><span class="toc-number">5.0.5.</span> <span class="toc-text">kope</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kube-router"><span class="toc-number">5.0.6.</span> <span class="toc-text">Kube-router</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&text=Kubernetes 网络插件"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&is_video=false&description=Kubernetes 网络插件"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kubernetes 网络插件&body=Check out this article: http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&title=Kubernetes 网络插件"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/05/22/部署运维/Kubernetes 教程/Kubernetes 网络插件/&name=Kubernetes 网络插件&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
