@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="SpringBoot 的 Web 应用一般都添加了 spring-boot-maven-plugin 插件，打出来的 jar 包内置了所有的依赖, 放在 BOOT-INF/lib目录, 所以体积很大。 12345678&amp;lt;build&amp;gt;      &amp;lt;plugins&amp;gt;          &amp;lt;plugin&amp;gt;              &amp;lt;groupId&amp;gt;org.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 优化-压缩打包体积">
+<meta property="og:url" content="http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="SpringBoot 的 Web 应用一般都添加了 spring-boot-maven-plugin 插件，打出来的 jar 包内置了所有的依赖, 放在 BOOT-INF/lib目录, 所以体积很大。 12345678&amp;lt;build&amp;gt;      &amp;lt;plugins&amp;gt;          &amp;lt;plugin&amp;gt;              &amp;lt;groupId&amp;gt;org.">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210523175956.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210523180223.png">
+<meta property="og:updated_time" content="2021-05-23T10:29:31.659Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot 优化-压缩打包体积">
+<meta name="twitter:description" content="SpringBoot 的 Web 应用一般都添加了 spring-boot-maven-plugin 插件，打出来的 jar 包内置了所有的依赖, 放在 BOOT-INF/lib目录, 所以体积很大。 12345678&amp;lt;build&amp;gt;      &amp;lt;plugins&amp;gt;          &amp;lt;plugin&amp;gt;              &amp;lt;groupId&amp;gt;org.">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210523175956.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>SpringBoot 优化-压缩打包体积</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/05/23/后端开发/Java 相关/Java 开发手册/Java 基础/Java 集合/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/05/23/部署运维/Docker 手册/Docker 优化体积/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&text=SpringBoot 优化-压缩打包体积"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&is_video=false&description=SpringBoot 优化-压缩打包体积"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SpringBoot 优化-压缩打包体积&body=Check out this article: http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&name=SpringBoot 优化-压缩打包体积&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#导出所有依赖到外面"><span class="toc-number">1.</span> <span class="toc-text">导出所有依赖到外面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将内置的依赖排除掉"><span class="toc-number">2.</span> <span class="toc-text">将内置的依赖排除掉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行时外部加载依赖"><span class="toc-number">3.</span> <span class="toc-text">运行时外部加载依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        SpringBoot 优化-压缩打包体积
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-05-23T00:00:00.000Z" itemprop="datePublished">2021-05-23</time>
+        
+        (Updated: <time datetime="2021-05-23T10:29:31.659Z" itemprop="dateModified">2021-05-23</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/后端开发/">后端开发</a> › <a class="category-link" href="/categories/后端开发/SpringBoot-手册/">SpringBoot 手册</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>SpringBoot 的 Web 应用一般都添加了 <code>spring-boot-maven-plugin</code> 插件，打出来的 jar 包内置了所有的依赖, 放在 <code>BOOT-INF/lib</code>目录, 所以体积很大。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这时候我们可以将第三方依赖包独立出来，在程序运行时候再使用它们。</p>
+<h2 id="导出所有依赖到外面"><a href="#导出所有依赖到外面" class="headerlink" title="导出所有依赖到外面"></a>导出所有依赖到外面</h2><p>使用 Maven 可以很方便的导出项目依赖的 jar 包，直接使用命令就可以进行导出：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /lib 是指要导出的目录</span></span><br><span class="line">zhangqinghua$ dependency:copy-dependencies -DoutputDirectory=/lib</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210523175956.png" alt=""></p>
+<p>导出结果：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210523180223.png" alt=""></p>
+<h2 id="将内置的依赖排除掉"><a href="#将内置的依赖排除掉" class="headerlink" title="将内置的依赖排除掉"></a>将内置的依赖排除掉</h2><p>修改 <code>spring-boot-maven-plugin</code> 的参数, 使其将内置的 jar 包排除掉，使用如下:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>easybyte-auth<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--直接打成可运行的jar包--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">               ...</span><br><span class="line">               <span class="tag">&lt;<span class="name">layout</span>&gt;</span>ZIP<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">               <span class="comment">&lt;!-- 保留指定的依赖，其它的会排除出去 --&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">include</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.easybyte<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>easybyte-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>includes</code> 是指包含哪些项目的 jar 包，因为我项目结构的问题，我必须将 easybyte-api 这个项目打包进去。假如你的项目中没有自己项目依赖可以写成如下格式，表示不包含任何 jar 包。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">include</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>nothing<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>            </span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>nothing<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>另外还可以使用 <code>excludes</code> 命令排除指定的依赖。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>easybyte-auth<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--直接打成可运行的jar包--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">               ...</span><br><span class="line">               <span class="tag">&lt;<span class="name">layout</span>&gt;</span>ZIP<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">               <span class="comment">&lt;!-- 排除指定的依赖，其它的会保留下来 --&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;<span class="name">exclude</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.easybyte<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>easybyte-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                  <span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>layout 是为了 SpringBoot 简化后能够加载第三方 jar 包目录，如果没加入这句话，在待会儿启动时，会报错。</p>
+</blockquote>
+<p>这时候执行打包命令，编译出来的应用包就很小了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ mvn clean package</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">zhangqinghua$ ls -l -h easybyte-auth/target</span><br><span class="line">total 2360</span><br><span class="line">drwxr-xr-x  4 zhangqinghua  staff   128B May 23 17:49 classes</span><br><span class="line">-rw-r--r--  1 zhangqinghua  staff   1.1M May 23 17:49 easybyte-auth.jar</span><br><span class="line">-rw-r--r--  1 zhangqinghua  staff    62K May 23 17:49 easybyte-auth.jar.original</span><br><span class="line">drwxr-xr-x  3 zhangqinghua  staff    96B May 23 17:49 generated-sources</span><br><span class="line">drwxr-xr-x  3 zhangqinghua  staff    96B May 23 17:49 maven-archiver</span><br></pre></td></tr></table></figure>
+<h2 id="运行时外部加载依赖"><a href="#运行时外部加载依赖" class="headerlink" title="运行时外部加载依赖"></a>运行时外部加载依赖</h2><p>此时的 jar 包并不能直接运行，因为没有这些第三方依赖。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ Java -jar easybyte-auth/target/easybyte-auth.jar</span><br><span class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.NoClassDefFoundError: org.springframework.security.crypto.password.PasswordEncoder</span><br><span class="line">        at java.lang.J9VMInternals.prepareClassImpl(Native Method)</span><br><span class="line">        at java.lang.J9VMInternals.prepare(J9VMInternals.java:303)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>现在需要改成如下格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /path/lib 是存放第三方依赖的目录</span></span><br><span class="line">zhangqinghua$ Java –Dloader.path=/path/lib -jar easybyte-auth/target/easybyte-auth.jar</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>经测试，经过上面的两个步骤，笔者的应用从 70MB 缩小为 1.3MB，极大地缩小了体积。</p>
+<p>既缩小了体积，便于传输，又很容易地控制依赖jar的版本，做到全公司统一，共享同一套依赖集合。</p>
+<p>特别地，如果要讲应用部署到 Docker 中，需要修改 dockerfile，将依赖目录挂载到 Docker 镜像中。修改应用的启动命令，添加 <code>loader.path</code> 参数，指向挂载进来的依赖目录。不建议将依赖 <code>ADD</code> 到 Docker 镜像，那样的话 Docker 镜像会很大。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#导出所有依赖到外面"><span class="toc-number">1.</span> <span class="toc-text">导出所有依赖到外面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将内置的依赖排除掉"><span class="toc-number">2.</span> <span class="toc-text">将内置的依赖排除掉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行时外部加载依赖"><span class="toc-number">3.</span> <span class="toc-text">运行时外部加载依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&text=SpringBoot 优化-压缩打包体积"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&is_video=false&description=SpringBoot 优化-压缩打包体积"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SpringBoot 优化-压缩打包体积&body=Check out this article: http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&title=SpringBoot 优化-压缩打包体积"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-压缩打包体积/&name=SpringBoot 优化-压缩打包体积&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
