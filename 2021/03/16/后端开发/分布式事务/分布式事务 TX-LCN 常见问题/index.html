@@ -14,7 +14,7 @@
 <meta property="og:description" content="TxLCN TM 监听IP 坑。1. 指定监听 IPTM 的默认监听 IP 是 127.0.0.1。这意味着 TC 只能使用 127.0.0.1 去访问，无法远程调用。123456# TM 配置tx-lcn.manager.host: 127.0.0.1tx-lcn.manager.port: 8070# TC 配置tx-lcn.client.manager-address: 127.0.0.1:">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210517172712.png">
-<meta property="og:updated_time" content="2021-05-23T15:51:33.583Z">
+<meta property="og:updated_time" content="2021-05-24T10:48:46.968Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式事务 TX-LCN 常见问题">
 <meta name="twitter:description" content="TxLCN TM 监听IP 坑。1. 指定监听 IPTM 的默认监听 IP 是 127.0.0.1。这意味着 TC 只能使用 127.0.0.1 去访问，无法远程调用。123456# TM 配置tx-lcn.manager.host: 127.0.0.1tx-lcn.manager.port: 8070# TC 配置tx-lcn.client.manager-address: 127.0.0.1:">
@@ -132,7 +132,7 @@
       
         <time datetime="2021-03-16T00:00:32.000Z" itemprop="datePublished">2021-03-16</time>
         
-        (Updated: <time datetime="2021-05-23T15:51:33.583Z" itemprop="dateModified">2021-05-23</time>)
+        (Updated: <time datetime="2021-05-24T10:48:46.968Z" itemprop="dateModified">2021-05-24</time>)
         
       
     </div>
@@ -160,6 +160,7 @@
 <p><strong>3. 去掉监听 IP</strong><br>最后的方案是去掉监听 IP，这样子既可以远程访问，又不会去请求 0.0.0.0:31080。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># TM 配置</span></span><br><span class="line"><span class="string">tx-lcn.manager.host:</span> </span><br><span class="line"><span class="string">tx-lcn.manager.port:</span> <span class="number">8070</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TC 配置</span></span><br><span class="line"><span class="string">tx-lcn.client.manager-address:</span> <span class="number">47.119</span><span class="number">.139</span><span class="number">.41</span><span class="string">:31080</span></span><br></pre></td></tr></table></figure>
 <h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><p><strong>ClassNotFoundException: org.springframework.data.jdbc.repository.config.JdbcRepositoryConfigExtension</strong><br>场景：参考官网上的demo，直接启动 tm-demo 失败。<br>原因：启动类放错地方，且也提示了报错 <strong> WARNING </strong> : Your ApplicationContext is unlikely to start due to a @ComponentScan of the default package.<br>解决：建个包，把启动类放进去，再启动就 OK 了。</p>
+<p><strong>集群的情况下部分子事务提交失败</strong><br>场景：一个服务起多个副本的情况下，有部分事务没有提交成功。<br>原因：Bug。<br>解决：弃用或只起一个服务副本。或者 github.com/yizhishang/tx-lcn  重新打包，此人解决了这个问题。</p>
 <h2 id="TxLCN"><a href="#TxLCN" class="headerlink" title="TxLCN"></a>TxLCN</h2><p><strong>TxLCN Client 一直无法连上 TxLCN manager</strong></p>
 
   </div>

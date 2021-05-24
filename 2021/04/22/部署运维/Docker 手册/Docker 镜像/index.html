@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210422154817.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210422155140.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/zhangqinghua/hexo_image/master/WX20210422-154252.png">
-<meta property="og:updated_time" content="2021-05-23T15:51:33.591Z">
+<meta property="og:updated_time" content="2021-05-24T10:48:46.976Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 镜像">
 <meta name="twitter:description" content="镜像安装 MySQL搜索镜像1zhangqinghua$ docker search mysql 拉取 MySQL 8.01234567891011121314151617zhangqinghua$ docker pull mysql:8.08.0: Pulling from library/mysql80369df48736: Pull complete e8f52315cb10: Pull c">
@@ -134,7 +134,7 @@
       
         <time datetime="2021-04-22T00:00:00.000Z" itemprop="datePublished">2021-04-22</time>
         
-        (Updated: <time datetime="2021-05-23T15:51:33.591Z" itemprop="dateModified">2021-05-23</time>)
+        (Updated: <time datetime="2021-05-24T10:48:46.976Z" itemprop="dateModified">2021-05-24</time>)
         
       
     </div>
@@ -187,6 +187,10 @@
 <p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210422155140.png" alt=""></p>
 <h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><p><strong>Access denied for user ‘root’@’localhost’ (using password: NO)</strong><br>容器启动成功后，<code>docker logs -f {container}</code> 查看日志，发现系统报错 <code>ERROR 1045 (28000): Access denied for user &#39;root&#39;@&#39;localhost&#39; (using password: NO)</code> PHP 程序启动时建立了无密码的默认配置连接所导致，由于之后又使用了用户设置的my.php的数据库配置，因此程序功能正常）。</p>
 <p><img src="https://raw.githubusercontent.com/zhangqinghua/hexo_image/master/WX20210422-154252.png" alt=""></p>
+<p><strong>docker login 提示 Sorry, try again.</strong><br>场景：调用 docker login 命令提示密码总是报错。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ sudo docker login --username=tron@1847314153397611 registry.cn-hongkong.aliyuncs.com</span><br><span class="line">Password:</span><br><span class="line">Sorry, try again.</span><br><span class="line">Password:</span><br><span class="line">Sorry, try again.</span><br></pre></td></tr></table></figure>
+<p>原因：这种问题的原因，往往是您使用了sudo命令来运行docker，所以首次输入的密码为root用户密码，二次输入的密码是镜像仓库密码。</p>
+<p>解决：先输入 root 密码，再输入 docker 密码。</p>
 
   </div>
 </article>
