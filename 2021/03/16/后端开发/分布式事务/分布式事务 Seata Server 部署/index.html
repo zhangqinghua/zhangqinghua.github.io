@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="直接部署下载https://github.com/seata/seata/releases 配置启动1zhangqinghua$ sh ./bin/seata-server.sh 容器部署Nacos 启动上传配置至 Nacos 配置中心1. 下载配置文件 分别下载 nacos-config.sh 和 config.txt。 config.txt 就是 Seata 各种详细的配置，执行 nacos-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式事务 Seata Server 部署">
+<meta property="og:url" content="http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="直接部署下载https://github.com/seata/seata/releases 配置启动1zhangqinghua$ sh ./bin/seata-server.sh 容器部署Nacos 启动上传配置至 Nacos 配置中心1. 下载配置文件 分别下载 nacos-config.sh 和 config.txt。 config.txt 就是 Seata 各种详细的配置，执行 nacos-">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210531170943.png">
+<meta property="og:updated_time" content="2021-06-01T01:48:01.260Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式事务 Seata Server 部署">
+<meta name="twitter:description" content="直接部署下载https://github.com/seata/seata/releases 配置启动1zhangqinghua$ sh ./bin/seata-server.sh 容器部署Nacos 启动上传配置至 Nacos 配置中心1. 下载配置文件 分别下载 nacos-config.sh 和 config.txt。 config.txt 就是 Seata 各种详细的配置，执行 nacos-">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210531170943.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>分布式事务 Seata Server 部署</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/03/16/后端开发/分布式事务/分布式事务 Seata 常见问题/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/03/16/后端开发/分布式事务/分布式事务 Seata 介绍/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&text=分布式事务 Seata Server 部署"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&is_video=false&description=分布式事务 Seata Server 部署"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=分布式事务 Seata Server 部署&body=Check out this article: http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&name=分布式事务 Seata Server 部署&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#直接部署"><span class="toc-number">1.</span> <span class="toc-text">直接部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#下载"><span class="toc-number">1.0.1.</span> <span class="toc-text">下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置"><span class="toc-number">1.0.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#启动"><span class="toc-number">1.0.3.</span> <span class="toc-text">启动</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#容器部署"><span class="toc-number">2.</span> <span class="toc-text">容器部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-启动"><span class="toc-number">3.</span> <span class="toc-text">Nacos 启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#上传配置至-Nacos-配置中心"><span class="toc-number">3.0.1.</span> <span class="toc-text">上传配置至 Nacos 配置中心</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据库配置"><span class="toc-number">3.0.2.</span> <span class="toc-text">数据库配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Seata-Client-配置"><span class="toc-number">3.0.3.</span> <span class="toc-text">Seata Client 配置</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        分布式事务 Seata Server 部署
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-03-16T00:00:11.000Z" itemprop="datePublished">2021-03-16</time>
+        
+        (Updated: <time datetime="2021-06-01T01:48:01.260Z" itemprop="dateModified">2021-06-01</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/后端开发/">后端开发</a> › <a class="category-link" href="/categories/后端开发/分布式事务/">分布式事务</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="直接部署"><a href="#直接部署" class="headerlink" title="直接部署"></a>直接部署</h2><h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><p><a href="https://github.com/seata/seata/releases">https://github.com/seata/seata/releases</a></p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><h4 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ sh ./bin/seata-server.sh</span><br></pre></td></tr></table></figure>
+<h2 id="容器部署"><a href="#容器部署" class="headerlink" title="容器部署"></a>容器部署</h2><h2 id="Nacos-启动"><a href="#Nacos-启动" class="headerlink" title="Nacos 启动"></a>Nacos 启动</h2><h4 id="上传配置至-Nacos-配置中心"><a href="#上传配置至-Nacos-配置中心" class="headerlink" title="上传配置至 Nacos 配置中心"></a>上传配置至 Nacos 配置中心</h4><p><strong>1. 下载配置文件</strong></p>
+<p>分别下载 <a href="https://github.com/seata/seata/blob/develop/script/config-center/nacos/nacos-config.sh">nacos-config.sh</a> 和 <a href="https://github.com/seata/seata/blob/develop/script/config-center/config.txt">config.txt</a>。</p>
+<p><code>config.txt</code> 就是 Seata 各种详细的配置，执行 <code>nacos-config.sh</code> 即可将这些配置导入到 Nacos，这样就不需要将 <code>file.conf</code> 和 <code>registry.conf</code> 放到我们的项目中了，需要什么配置就直接从 Nacos 中读取。</p>
+<p><strong>2. 同步参数到配置中心</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -h: Nacos host，默认值 localhost</span></span><br><span class="line"><span class="comment"># -p: Nacos port，默认值 8848</span></span><br><span class="line"><span class="comment"># -g: Nacos 配置分组，默认值为 'SEATA_GROUP'</span></span><br><span class="line"><span class="comment"># -t: Nacos 租户信息，对应 Nacos 的命名空间ID字段, 默认值为空 ''</span></span><br><span class="line">zhangqinghua$ sh nacos-config.sh -h 120.78.223.168 -p 31848 -g SEATA_GROUP -t 150dfa3b-2681-4190-9f03-d0a09e255539</span><br><span class="line"><span class="built_in">set</span> nacosAddr=120.78.223.168:31848</span><br><span class="line"><span class="built_in">set</span> group=SEATA_GROUP</span><br><span class="line">Set transport.type=TCP successfully </span><br><span class="line">...</span><br><span class="line">Set metrics.exporterList=prometheus successfully </span><br><span class="line">Set metrics.exporterPrometheusPort=9898 successfully </span><br><span class="line">=========================================================================</span><br><span class="line"> Complete initialization parameters,  total-count:93 ,  failure-count:4 </span><br><span class="line">=========================================================================</span><br><span class="line"> init nacos config fail.</span><br></pre></td></tr></table></figure>
+<p><strong>3. 效果查看</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210531170943.png" alt=""></p>
+<h4 id="数据库配置"><a href="#数据库配置" class="headerlink" title="数据库配置"></a>数据库配置</h4><p><strong>1. Seata Server 建表</strong><br>给 Seata Server 的数据库建表。</p>
+<p>表文件：<a href="https://github.com/seata/seata/blob/develop/script/server/db/mysql.sql">https://github.com/seata/seata/blob/develop/script/server/db/mysql.sql</a></p>
+<p><strong>2. Seata Client 建表</strong></p>
+<p>在每个 Seata Client 数据库上建表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `undo_log` (</span><br><span class="line">  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT &apos;increment id&apos;,</span><br><span class="line">  `branch_id` bigint(20) NOT NULL COMMENT &apos;branch transaction id&apos;,</span><br><span class="line">  `xid` varchar(100) NOT NULL COMMENT &apos;global transaction id&apos;,</span><br><span class="line">  `context` varchar(128) NOT NULL COMMENT &apos;undo_log context,such as serialization&apos;,</span><br><span class="line">  `rollback_info` longblob NOT NULL COMMENT &apos;rollback info&apos;,</span><br><span class="line">  `log_status` int(11) NOT NULL COMMENT &apos;0:normal status,1:defense status&apos;,</span><br><span class="line">  `log_created` datetime NOT NULL COMMENT &apos;create datetime&apos;,</span><br><span class="line">  `log_modified` datetime NOT NULL COMMENT &apos;modify datetime&apos;,</span><br><span class="line">  `ext` varchar(100) DEFAULT NULL COMMENT &apos;reserved field&apos;,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT=&apos;AT transaction mode undo table&apos;;</span><br></pre></td></tr></table></figure>
+<h4 id="Seata-Client-配置"><a href="#Seata-Client-配置" class="headerlink" title="Seata Client 配置"></a>Seata Client 配置</h4><p><strong>1. SpringCloud 服务引入 Seata Client 依赖</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-seata<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">         <span class="comment">&lt;!--跟 BeetSQL 集合，排除冲突的依赖--&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.ow2.asm<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>asm<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">         <span class="comment">&lt;!--Seata Client 版本需要和 Seata Server 一致--&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.seata<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>seata-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--Seata Client 版本需要和 Seata Server 一致--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.seata<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>seata-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.4.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>2. 配置 yml 信息</strong></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#直接部署"><span class="toc-number">1.</span> <span class="toc-text">直接部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#下载"><span class="toc-number">1.0.1.</span> <span class="toc-text">下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置"><span class="toc-number">1.0.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#启动"><span class="toc-number">1.0.3.</span> <span class="toc-text">启动</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#容器部署"><span class="toc-number">2.</span> <span class="toc-text">容器部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-启动"><span class="toc-number">3.</span> <span class="toc-text">Nacos 启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#上传配置至-Nacos-配置中心"><span class="toc-number">3.0.1.</span> <span class="toc-text">上传配置至 Nacos 配置中心</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据库配置"><span class="toc-number">3.0.2.</span> <span class="toc-text">数据库配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Seata-Client-配置"><span class="toc-number">3.0.3.</span> <span class="toc-text">Seata Client 配置</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&text=分布式事务 Seata Server 部署"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&is_video=false&description=分布式事务 Seata Server 部署"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=分布式事务 Seata Server 部署&body=Check out this article: http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&title=分布式事务 Seata Server 部署"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/03/16/后端开发/分布式事务/分布式事务 Seata Server 部署/&name=分布式事务 Seata Server 部署&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
