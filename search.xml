@@ -4,11 +4,11 @@
   
     
     <entry>
-      <title>217 存在重复元素</title>
-      <link href="/2021/06/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/217%20%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/"/>
-      <url>/2021/06/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/217%20%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/</url>
+      <title>234 回文链表</title>
+      <link href="/2021/06/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/234%20%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/"/>
+      <url>/2021/06/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/234%20%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/</url>
       
-        <content type="html"><![CDATA[<p>给定一个数组，判断是否存在重复元素。</p><p>如果任意一值在数组中出现至少两次，函数返回 true。如果数组中每个元素都不相同，则返回 false。</p><p>示例 1:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[1, 2, 3, 1]</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure><p>示例 2:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[1, 2, 3, 4]</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure><p>示例 3:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[1, 1, 1, 3, 3, 4, 3, 2, 4, 2]</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure><h2 id="排序法"><a href="#排序法" class="headerlink" title="排序法"></a>排序法</h2><p>排序法是先将数组进行排序，然后对比两个相邻的元素是否相等。如果相等则存在重复元素。</p><p>实现步骤：</p><ol><li><p>对数组进行排序；</p></li><li><p>对比相邻的两个数字是否一致；</p></li></ol><p>算法效率：</p><ol><li><p>时间复杂度 $O(logn)$<br> 最快的排序算法时间复杂度是 $O(logn)$</p></li><li><p>空间复杂度 $O(1)$；<br> 因为没有使用到额外的空间。</p></li></ol><h2 id="SET-法"><a href="#SET-法" class="headerlink" title="SET 法"></a>SET 法</h2><p>利用 Set 不存在重复元素的特性，将数组放入 Set 中，然后对比元素数量。如果少了表示 Set 去掉了重复元素。</p><p>实现步骤：</p><ol><li><p>将数组放入 Set 中；</p></li><li><p>对比数组长度和 Set 大小；</p></li></ol><p>算法效率：</p><ol><li><p>时间复杂度 $O(n)$<br> 主要是将元素放入 Set 中。</p></li><li><p>空间复杂度 $O(n)$<br> 需要额外空间来存储 Set 集合。</p></li></ol><p>字典法<br>字典法相当于把元素作为 Map 的 Key，出现次数作为 Map 的 value。</p><p>例如数组：[1, 2, 3, 1] 转成 Map 后 {1:2, 2:1, 3:1, 4:1}。</p><p>算法效率：</p><ol><li><p>时间复杂度 O(n)<br> 主要是将元素放入 Map 中。</p></li><li><p>空间复杂度 O(n)<br> 需要额外空间来存储 Map 集合。</p></li></ol><p>字典法对比上面的其它方法，唯一的优势是能统计数字出现的次数。</p>]]></content>
+        <content type="html"><![CDATA[<p>请判断一个单链表是否回文链表。</p><p>示例 1：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：1 -&gt; 2</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure><p>示例 2：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：1 -&gt; 2 -&gt; 2 -&gt; 1</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure><p>示例 3：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：1 -&gt; 2 -&gt; 3 -&gt; 2 -&gt; 1</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure><p>进阶：你能否用 $O(n)$ 时间复杂度和 $O(1)$ 空间复杂度解决此题？</p><h2 id="双指针法"><a href="#双指针法" class="headerlink" title="双指针法"></a>双指针法</h2><p>两个指针分别从头部和尾部开始遍历数组，一一对比。</p><p><img src="001.png" alt=""></p><p>实现步骤：</p><ol><li><p>将链表转为数组；</p></li><li><p>将两个指针分别遍历数组的开头和结尾，往中间走；</p></li><li><p>如果指针指向的数据不相等，则返回 false；</p></li><li><p>返回true；</p></li></ol><p>算法效率：</p><ol><li>需要用到数组，空间复杂度是 $O(n)$；</li></ol><p>Java 代码：</p><h2 id="递归法"><a href="#递归法" class="headerlink" title="递归法"></a>递归法</h2><h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><p>快慢指针的思想是，有一 快一慢两指针，慢指针没走一步，快指针走两步，这样子的当慢指针到达链表中间位置时候，快指针就到了尾部。这时候把快指针指向链表头部，慢指针和后面的链表反转。然后进行对比。</p>]]></content>
       
       
       <categories>
@@ -25,11 +25,11 @@
     
     
     <entry>
-      <title>234 回文链表</title>
-      <link href="/2021/06/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/234%20%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/"/>
-      <url>/2021/06/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/234%20%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/</url>
+      <title>217 存在重复元素</title>
+      <link href="/2021/06/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/217%20%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/"/>
+      <url>/2021/06/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98/217%20%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/</url>
       
-        <content type="html"><![CDATA[<p>请判断一个单链表是否回文链表。</p><p>示例 1：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：1 -&gt; 2</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure><p>示例 2：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：1 -&gt; 2 -&gt; 2 -&gt; 1</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure><p>示例 3：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：1 -&gt; 2 -&gt; 3 -&gt; 2 -&gt; 1</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure><p>进阶：你能否用 $O(n)$ 时间复杂度和 $O(1)$ 空间复杂度解决此题？</p><h2 id="双指针法"><a href="#双指针法" class="headerlink" title="双指针法"></a>双指针法</h2><p>两个指针分别从头部和尾部开始遍历数组，一一对比。</p><p><img src="001.png" alt=""></p><p>实现步骤：</p><ol><li><p>将链表转为数组；</p></li><li><p>将两个指针分别遍历数组的开头和结尾，往中间走；</p></li><li><p>如果指针指向的数据不相等，则返回 false；</p></li><li><p>返回true；</p></li></ol><p>算法效率：</p><ol><li>需要用到数组，空间复杂度是 $O(n)$；</li></ol><p>Java 代码：</p><h2 id="递归法"><a href="#递归法" class="headerlink" title="递归法"></a>递归法</h2><h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><p>快慢指针的思想是，有一 快一慢两指针，慢指针没走一步，快指针走两步，这样子的当慢指针到达链表中间位置时候，快指针就到了尾部。这时候把快指针指向链表头部，慢指针和后面的链表反转。然后进行对比。</p>]]></content>
+        <content type="html"><![CDATA[<p>给定一个数组，判断是否存在重复元素。</p><p>如果任意一值在数组中出现至少两次，函数返回 true。如果数组中每个元素都不相同，则返回 false。</p><p>示例 1:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[1, 2, 3, 1]</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure><p>示例 2:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[1, 2, 3, 4]</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure><p>示例 3:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[1, 1, 1, 3, 3, 4, 3, 2, 4, 2]</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure><h2 id="排序法"><a href="#排序法" class="headerlink" title="排序法"></a>排序法</h2><p>排序法是先将数组进行排序，然后对比两个相邻的元素是否相等。如果相等则存在重复元素。</p><p>实现步骤：</p><ol><li><p>对数组进行排序；</p></li><li><p>对比相邻的两个数字是否一致；</p></li></ol><p>算法效率：</p><ol><li><p>时间复杂度 $O(logn)$<br> 最快的排序算法时间复杂度是 $O(logn)$</p></li><li><p>空间复杂度 $O(1)$；<br> 因为没有使用到额外的空间。</p></li></ol><h2 id="SET-法"><a href="#SET-法" class="headerlink" title="SET 法"></a>SET 法</h2><p>利用 Set 不存在重复元素的特性，将数组放入 Set 中，然后对比元素数量。如果少了表示 Set 去掉了重复元素。</p><p>实现步骤：</p><ol><li><p>将数组放入 Set 中；</p></li><li><p>对比数组长度和 Set 大小；</p></li></ol><p>算法效率：</p><ol><li><p>时间复杂度 $O(n)$<br> 主要是将元素放入 Set 中。</p></li><li><p>空间复杂度 $O(n)$<br> 需要额外空间来存储 Set 集合。</p></li></ol><p>字典法<br>字典法相当于把元素作为 Map 的 Key，出现次数作为 Map 的 value。</p><p>例如数组：[1, 2, 3, 1] 转成 Map 后 {1:2, 2:1, 3:1, 4:1}。</p><p>算法效率：</p><ol><li><p>时间复杂度 O(n)<br> 主要是将元素放入 Map 中。</p></li><li><p>空间复杂度 O(n)<br> 需要额外空间来存储 Map 集合。</p></li></ol><p>字典法对比上面的其它方法，唯一的优势是能统计数字出现的次数。</p>]]></content>
       
       
       <categories>
@@ -79,25 +79,6 @@
           <category> 后端开发 </category>
           
           <category> SpringBoot </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>等宽字体测试</title>
-      <link href="/2021/06/04/%E5%85%B6%E5%AE%83/%E7%AD%89%E5%AE%BD%E5%AD%97%E4%BD%93%E6%B5%8B%E8%AF%95/"/>
-      <url>/2021/06/04/%E5%85%B6%E5%AE%83/%E7%AD%89%E5%AE%BD%E5%AD%97%E4%BD%93%E6%B5%8B%E8%AF%95/</url>
-      
-        <content type="html"><![CDATA[<p>12345678901<br>aaaaaaaaaa1<br>，，，，，1<br>我你阿汤哥1</p><p><img src="test.svg" alt=""></p><p><img src="test2.svg" alt=""></p><div class="table-container"><table><thead><tr><th style="text-align:left">Font</th><th>Idea</th><th>VS Code</th><th>Chrome</th><th>iPhone</th></tr></thead><tbody><tr><td style="text-align:left">Iosevka</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td style="text-align:left">Source Han Sans HW</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td style="text-align:left">Input Mono Compressed</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr></tbody></table></div><script type="math/tex; mode=display">\begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix}</script><script type="math/tex; mode=display">\begin{pmatrix} \color{red}{A_{x}} \\ \color{green}{A_{y}} \\ \color{blue}{A_{z}} \end{pmatrix} \times \begin{pmatrix} \color{red}{B_{x}} \\ \color{green}{B_{y}} \\ \color{blue}{B_{z}}  \end{pmatrix} = \begin{pmatrix} \color{green}{A_{y}} \cdot \color{blue}{B_{z}} - \color{blue}{A_{z}} \cdot \color{green}{B_{y}} \\ \color{blue}{A_{z}} \cdot \color{red}{B_{x}} - \color{red}{A_{x}} \cdot \color{blue}{B_{z}} \\ \color{red}{A_{x}} \cdot \color{green}{B_{y}} - \color{green}{A_{y}} \cdot \color{red}{B_{x}} \end{pmatrix}</script>]]></content>
-      
-      
-      <categories>
-          
-          <category> 其它 </category>
           
       </categories>
       
@@ -161,6 +142,25 @@
           <category> 后端开发 </category>
           
           <category> Java 基础 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>等宽字体测试</title>
+      <link href="/2021/06/04/%E5%85%B6%E5%AE%83/%E7%AD%89%E5%AE%BD%E5%AD%97%E4%BD%93%E6%B5%8B%E8%AF%95/"/>
+      <url>/2021/06/04/%E5%85%B6%E5%AE%83/%E7%AD%89%E5%AE%BD%E5%AD%97%E4%BD%93%E6%B5%8B%E8%AF%95/</url>
+      
+        <content type="html"><![CDATA[<p>12345678901<br>aaaaaaaaaa1<br>，，，，，1<br>我你阿汤哥1</p><p><img src="test.svg" alt=""></p><p><img src="test2.svg" alt=""></p><div class="table-container"><table><thead><tr><th style="text-align:left">Font</th><th>Idea</th><th>VS Code</th><th>Chrome</th><th>iPhone</th></tr></thead><tbody><tr><td style="text-align:left">Iosevka</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td style="text-align:left">Source Han Sans HW</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td style="text-align:left">Input Mono Compressed</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr></tbody></table></div><script type="math/tex; mode=display">\begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix}</script><script type="math/tex; mode=display">\begin{pmatrix} \color{red}{A_{x}} \\ \color{green}{A_{y}} \\ \color{blue}{A_{z}} \end{pmatrix} \times \begin{pmatrix} \color{red}{B_{x}} \\ \color{green}{B_{y}} \\ \color{blue}{B_{z}}  \end{pmatrix} = \begin{pmatrix} \color{green}{A_{y}} \cdot \color{blue}{B_{z}} - \color{blue}{A_{z}} \cdot \color{green}{B_{y}} \\ \color{blue}{A_{z}} \cdot \color{red}{B_{x}} - \color{red}{A_{x}} \cdot \color{blue}{B_{z}} \\ \color{red}{A_{x}} \cdot \color{green}{B_{y}} - \color{green}{A_{y}} \cdot \color{red}{B_{x}} \end{pmatrix}</script>]]></content>
+      
+      
+      <categories>
+          
+          <category> 其它 </category>
           
       </categories>
       
@@ -245,6 +245,48 @@
           <category> 部署运维 </category>
           
           <category> Nginx 手册 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Helm 操作</title>
+      <link href="/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Helm%20%E5%AE%89%E8%A3%85/"/>
+      <url>/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Helm%20%E5%AE%89%E8%A3%85/</url>
+      
+        <content type="html"><![CDATA[<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2.16.3</span></span><br><span class="line">zhangqinghus$ helm delete ks-jenkins</span><br><span class="line">release <span class="string">"ks-jenkins"</span> deleted</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 部署运维 </category>
+          
+          <category> Kubernetes 手册 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Helm 安装</title>
+      <link href="/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Helm%20%E6%93%8D%E4%BD%9C/"/>
+      <url>/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Helm%20%E6%93%8D%E4%BD%9C/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 部署运维 </category>
+          
+          <category> Kubernetes 手册 </category>
           
       </categories>
       
@@ -385,48 +427,6 @@
       <url>/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Kubernetes%20%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</url>
       
         <content type="html"><![CDATA[<h2 id="Kubernetes-集群部署一个-Tomcat-服务"><a href="#Kubernetes-集群部署一个-Tomcat-服务" class="headerlink" title="Kubernetes 集群部署一个 Tomcat 服务"></a>Kubernetes 集群部署一个 Tomcat 服务</h2><h4 id="创建-prod"><a href="#创建-prod" class="headerlink" title="创建 prod"></a>创建 prod</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl create deployment tomcat6 --image=tomcat:6.0.53-jre8</span><br><span class="line">deployment.apps/tomcat6 created</span><br></pre></td></tr></table></figure><h4 id="查询-prod"><a href="#查询-prod" class="headerlink" title="查询 prod"></a>查询 prod</h4><p>查询所有的资源：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl get all</span><br><span class="line">NAME                           READY   STATUS    RESTARTS   AGE</span><br><span class="line">pod/tomcat6-5f7ccf4cb9-f8269   0/1     Pending   0          17s</span><br><span class="line"></span><br><span class="line">NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE</span><br><span class="line">service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   26m</span><br><span class="line"></span><br><span class="line">NAME                      READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">deployment.apps/tomcat6   0/1     1            0           17s</span><br><span class="line"></span><br><span class="line">NAME                                 DESIRED   CURRENT   READY   AGE</span><br><span class="line">replicaset.apps/tomcat6-5f7ccf4cb9   1         1         0       17s</span><br></pre></td></tr></table></figure><p>使用 <code>-o wide</code> 查询更丰富的信息：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl get pods -o wide</span><br><span class="line">NAME                       READY   STATUS    RESTARTS   AGE    IP       NODE     NOMINATED NODE   READINESS GATES</span><br><span class="line">tomcat6-5f7ccf4cb9-f8269   0/1     Pending   0          106s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure><blockquote><p>READY 0/1 表示此 prod 在集群内有 1 个容器，其中 0 个准备好了。NODE 表示部署在哪个节点上。</p></blockquote><h2 id="查看-pod-日志"><a href="#查看-pod-日志" class="headerlink" title="查看 pod 日志"></a>查看 pod 日志</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl logs tiller-deploy-bc4f597d8-j7rgh --namespace kube-system</span><br><span class="line">Error from server (BadRequest): container <span class="string">"tiller"</span> <span class="keyword">in</span> pod <span class="string">"tiller-deploy-bc4f597d8-j7rgh"</span> is waiting to start: trying and failing to pull image</span><br></pre></td></tr></table></figure><h2 id="查看-pod-信息"><a href="#查看-pod-信息" class="headerlink" title="查看 pod 信息"></a>查看 pod 信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl describe pod tiller-deploy-bc4f597d8-j7rgh --namespace kube-system</span><br><span class="line">Name:         tiller-deploy-bc4f597d8-j7rgh</span><br><span class="line">Namespace:    kube-system</span><br><span class="line">Priority:     0</span><br><span class="line">Node:         izwz9go2hn3kv068o5wpdpz/172.27.243.201</span><br><span class="line">Start Time:   Sat, 15 May 2021 19:37:43 +0800</span><br><span class="line">Labels:       app=helm</span><br><span class="line">              name=tiller</span><br><span class="line">              pod-template-hash=bc4f597d8</span><br><span class="line">Annotations:  &lt;none&gt;</span><br><span class="line">Status:       Pending</span><br><span class="line">IP:           10.244.0.227</span><br><span class="line">IPs:</span><br><span class="line">  IP:           10.244.0.227</span><br><span class="line">Controlled By:  ReplicaSet/tiller-deploy-bc4f597d8</span><br><span class="line">Containers:</span><br><span class="line">  tiller:</span><br><span class="line">    Container ID:   </span><br><span class="line">    Image:          gcr.io/kubernetes-helm/tiller:v2.16.3</span><br><span class="line">    Image ID:       </span><br><span class="line">    Ports:          44134/TCP, 44135/TCP</span><br><span class="line">    Host Ports:     0/TCP, 0/TCP</span><br><span class="line">    State:          Waiting</span><br><span class="line">      Reason:       ImagePullBackOff</span><br><span class="line">    Ready:          False</span><br><span class="line">    Restart Count:  0</span><br><span class="line">    Liveness:       http-get http://:44135/liveness delay=1s timeout=1s period=10s <span class="comment">#success=1 #failure=3</span></span><br><span class="line">    Readiness:      http-get http://:44135/readiness delay=1s timeout=1s period=10s <span class="comment">#success=1 #failure=3</span></span><br><span class="line">    Environment:</span><br><span class="line">      TILLER_NAMESPACE:    kube-system</span><br><span class="line">      TILLER_HISTORY_MAX:  300</span><br><span class="line">    Mounts:</span><br><span class="line">      /var/run/secrets/kubernetes.io/serviceaccount from tiller-token-4fc68 (ro)</span><br><span class="line">Conditions:</span><br><span class="line">  Type              Status</span><br><span class="line">  Initialized       True </span><br><span class="line">  Ready             False </span><br><span class="line">  ContainersReady   False </span><br><span class="line">  PodScheduled      True </span><br><span class="line">Volumes:</span><br><span class="line">  tiller-token-4fc68:</span><br><span class="line">    Type:        Secret (a volume populated by a Secret)</span><br><span class="line">    SecretName:  tiller-token-4fc68</span><br><span class="line">    Optional:    <span class="literal">false</span></span><br><span class="line">QoS Class:       BestEffort</span><br><span class="line">Node-Selectors:  &lt;none&gt;</span><br><span class="line">Tolerations:     node.kubernetes.io/not-ready:NoExecute <span class="keyword">for</span> 300s</span><br><span class="line">                 node.kubernetes.io/unreachable:NoExecute <span class="keyword">for</span> 300s</span><br><span class="line">Events:</span><br><span class="line">  Type     Reason     Age                    From                              Message</span><br><span class="line">  ----     ------     ----                   ----                              -------</span><br><span class="line">  Normal   Scheduled  6m27s                  default-scheduler                 Successfully assigned kube-system/tiller-deploy-bc4f597d8-j7rgh to izwz9go2hn3kv068o5wpdpz</span><br><span class="line">  Normal   Pulling    4m15s (x4 over 6m26s)  kubelet, izwz9go2hn3kv068o5wpdpz  Pulling image <span class="string">"gcr.io/kubernetes-helm/tiller:v2.16.3"</span></span><br><span class="line">  Warning  Failed     4m (x4 over 6m11s)     kubelet, izwz9go2hn3kv068o5wpdpz  Failed to pull image <span class="string">"gcr.io/kubernetes-helm/tiller:v2.16.3"</span>: rpc error: code = Unknown desc = Error response from daemon: Get https://gcr.io/v2/: net/http: request canceled <span class="keyword">while</span> waiting <span class="keyword">for</span> connection (Client.Timeout exceeded <span class="keyword">while</span> awaiting headers)</span><br><span class="line">  Warning  Failed     4m (x4 over 6m11s)     kubelet, izwz9go2hn3kv068o5wpdpz  Error: ErrImagePull</span><br><span class="line">  Normal   BackOff    3m23s (x7 over 6m11s)  kubelet, izwz9go2hn3kv068o5wpdpz  Back-off pulling image <span class="string">"gcr.io/kubernetes-helm/tiller:v2.16.3"</span></span><br><span class="line">  Warning  Failed     75s (x15 over 6m11s)   kubelet, izwz9go2hn3kv068o5wpdpz  Error: ImagePullBackOff</span><br></pre></td></tr></table></figure><h2 id="删除-pod"><a href="#删除-pod" class="headerlink" title="删除 pod"></a>删除 pod</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl delete pod tiller-deploy-bc4f597d8-j7rgh --namespace kube-system </span><br><span class="line">pod <span class="string">"tiller-deploy-bc4f597d8-j7rgh"</span> deleted</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> 部署运维 </category>
-          
-          <category> Kubernetes 手册 </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Helm 操作</title>
-      <link href="/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Helm%20%E5%AE%89%E8%A3%85/"/>
-      <url>/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Helm%20%E5%AE%89%E8%A3%85/</url>
-      
-        <content type="html"><![CDATA[<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2.16.3</span></span><br><span class="line">zhangqinghus$ helm delete ks-jenkins</span><br><span class="line">release <span class="string">"ks-jenkins"</span> deleted</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> 部署运维 </category>
-          
-          <category> Kubernetes 手册 </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Helm 安装</title>
-      <link href="/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Helm%20%E6%93%8D%E4%BD%9C/"/>
-      <url>/2021/05/13/%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4/Kubernetes%20%E6%89%8B%E5%86%8C/Helm%20%E6%93%8D%E4%BD%9C/</url>
-      
-        <content type="html"><![CDATA[]]></content>
       
       
       <categories>
@@ -697,7 +697,7 @@
       <link href="/2021/04/27/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E6%94%AF%E4%BB%98%E5%BC%80%E5%8F%91/%E7%AC%AC%E4%B8%89%E6%96%B9%E6%94%AF%E4%BB%98%20%E5%BE%AE%E4%BF%A1/"/>
       <url>/2021/04/27/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E6%94%AF%E4%BB%98%E5%BC%80%E5%8F%91/%E7%AC%AC%E4%B8%89%E6%96%B9%E6%94%AF%E4%BB%98%20%E5%BE%AE%E4%BF%A1/</url>
       
-        <content type="html"><![CDATA[<h2 id="创建问题"><a href="#创建问题" class="headerlink" title="创建问题"></a>创建问题</h2><h4 id="w"><a href="#w" class="headerlink" title="w"></a>w</h4>]]></content>
+        <content type="html"><![CDATA[<h2 id="创建问题"><a href="#创建问题" class="headerlink" title="创建问题"></a>创建问题</h2><h4 id="预支付，小程序没有调起来"><a href="#预支付，小程序没有调起来" class="headerlink" title="预支付，小程序没有调起来"></a>预支付，小程序没有调起来</h4><p>场景：小程序调用支付接口，获得支付数据后调用支付，没有窗口弹起。<br>原因：小程序支付参数大小写错误。<br>解决：。。。</p>]]></content>
       
       
       <categories>
