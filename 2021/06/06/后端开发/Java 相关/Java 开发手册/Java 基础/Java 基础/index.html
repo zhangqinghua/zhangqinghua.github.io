@@ -9,11 +9,11 @@
     <meta name="description" content="关键字transient 一旦变量被 transient 修饰，变量将不再是对象持久化的一部分，该变量内容在序列化后无法获得访问。 transient 关键字只能修饰变量，而不能修饰方法和类。注意，本地变量是不能被 transient 关键字修饰的。变量如果是用户自定义类变量，则该类需要实现 Serializable 接口。 被 transient 关键字修饰的变量不再能被序列化，一个静态变量不管">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 基础">
-<meta property="og:url" content="http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/index.html">
+<meta property="og:url" content="http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="关键字transient 一旦变量被 transient 修饰，变量将不再是对象持久化的一部分，该变量内容在序列化后无法获得访问。 transient 关键字只能修饰变量，而不能修饰方法和类。注意，本地变量是不能被 transient 关键字修饰的。变量如果是用户自定义类变量，则该类需要实现 Serializable 接口。 被 transient 关键字修饰的变量不再能被序列化，一个静态变量不管">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-06-04T11:40:44.662Z">
+<meta property="og:updated_time" content="2021-06-06T16:10:45.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基础">
 <meta name="twitter:description" content="关键字transient 一旦变量被 transient 修饰，变量将不再是对象持久化的一部分，该变量内容在序列化后无法获得访问。 transient 关键字只能修饰变量，而不能修饰方法和类。注意，本地变量是不能被 transient 关键字修饰的。变量如果是用户自定义类变量，则该类需要实现 Serializable 接口。 被 transient 关键字修饰的变量不再能被序列化，一个静态变量不管">
@@ -74,10 +74,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2021/06/04/后端开发/SpringBoot/常见问题/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2021/06/06/后端开发/SpringBoot/常见问题/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 网络/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 网络/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -90,16 +90,16 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&text=Java 基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&is_video=false&description=Java 基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Java 基础&body=Check out this article: http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&name=Java 基础&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&text=Java 基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&is_video=false&description=Java 基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java 基础&body=Check out this article: http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&name=Java 基础&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -128,9 +128,9 @@
       
     <div class="postdate">
       
-        <time datetime="2021-06-04T11:40:44.662Z" itemprop="datePublished">2021-06-04</time>
+        <time datetime="2021-06-06T16:10:45.795Z" itemprop="datePublished">2021-06-06</time>
         
-        (Updated: <time datetime="2021-06-04T11:40:44.662Z" itemprop="dateModified">2021-06-04</time>)
+        (Updated: <time datetime="2021-06-06T16:10:45.795Z" itemprop="dateModified">2021-06-06</time>)
         
       
     </div>
@@ -237,16 +237,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&text=Java 基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&is_video=false&description=Java 基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Java 基础&body=Check out this article: http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/06/04/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&name=Java 基础&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&text=Java 基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&is_video=false&description=Java 基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java 基础&body=Check out this article: http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&title=Java 基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/06/06/后端开发/Java 相关/Java 开发手册/Java 基础/Java 基础/&name=Java 基础&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
