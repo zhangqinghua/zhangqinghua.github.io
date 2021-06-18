@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210514121835.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210514121921.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210514121951.png">
-<meta property="og:updated_time" content="2021-06-17T09:26:05.997Z">
+<meta property="og:updated_time" content="2021-06-18T10:03:18.695Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="KubeSphere 常用操作">
 <meta name="twitter:description" content="KubeSphere 3.1 开启应用路由本文档介绍了如何在 KubeSphere 上创建、使用和编辑应用路由。 准备工作 您需要创建一个企业空间、一个项目以及两个帐户（例如，project-admin 和 project-regular）。在此项目中，project-admin 必须具有 admin 角色，project-regular 必须具有 operator 角色。有关更多信息，请参见创建">
@@ -116,7 +116,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#KubeSphere-3-1-开启应用路由"><span class="toc-number">1.</span> <span class="toc-text">KubeSphere 3.1 开启应用路由</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#准备工作"><span class="toc-number">1.0.1.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置访问方式"><span class="toc-number">1.0.2.</span> <span class="toc-text">配置访问方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建应用路由"><span class="toc-number">1.0.3.</span> <span class="toc-text">创建应用路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置域名解析"><span class="toc-number">1.0.4.</span> <span class="toc-text">配置域名解析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#污点管理"><span class="toc-number">2.</span> <span class="toc-text">污点管理</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#KubeSphere-3-1-开启应用路由"><span class="toc-number">1.</span> <span class="toc-text">KubeSphere 3.1 开启应用路由</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#准备工作"><span class="toc-number">1.0.1.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置访问方式"><span class="toc-number">1.0.2.</span> <span class="toc-text">配置访问方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建应用路由"><span class="toc-number">1.0.3.</span> <span class="toc-text">创建应用路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置域名解析"><span class="toc-number">1.0.4.</span> <span class="toc-text">配置域名解析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#污点管理"><span class="toc-number">2.</span> <span class="toc-text">污点管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#日志收集支持多行日志"><span class="toc-number">2.0.1.</span> <span class="toc-text">日志收集支持多行日志</span></a></li></ol></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -142,7 +142,7 @@
       
         <time datetime="2021-05-13T07:00:09.000Z" itemprop="datePublished">2021-05-13</time>
         
-        (Updated: <time datetime="2021-06-17T09:26:05.997Z" itemprop="dateModified">2021-06-17</time>)
+        (Updated: <time datetime="2021-06-18T10:03:18.695Z" itemprop="dateModified">2021-06-18</time>)
         
       
     </div>
@@ -213,6 +213,7 @@
 <p><strong>3. 删除污点</strong><br><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210514121951.png" alt=""></p>
 <p>删除污点后，可以看到 pod 部署到 master 节点上来了。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl get pods -o wide</span><br><span class="line">NAME                       READY   STATUS    RESTARTS   AGE     IP             NODE                      NOMINATED NODE   READINESS GATES</span><br><span class="line">tomcat6-5f7ccf4cb9-25p6t   1/1     Running   0          5m23s   10.244.0.8     izwz9go2hn3kv068o5wpdpz   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">tomcat6-5f7ccf4cb9-5gcdl   1/1     Running   0          5m23s   10.244.0.7     izwz9go2hn3kv068o5wpdpz   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">tomcat6-5f7ccf4cb9-78b5h   1/1     Running   0          5m23s   10.244.0.9     izwz9go2hn3kv068o5wpdpz   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">tomcat6-5f7ccf4cb9-7xgj7   1/1     Running   0          51m     10.244.1.181   easybyte-dev-server       &lt;none&gt;           &lt;none&gt;</span><br><span class="line">tomcat6-5f7ccf4cb9-n5qhc   1/1     Running   0          5m23s   10.244.0.6     izwz9go2hn3kv068o5wpdpz   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">tomcat6-5f7ccf4cb9-wn7ml   1/1     Running   0          5m23s   10.244.1.204   easybyte-dev-server       &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="日志收集支持多行日志"><a href="#日志收集支持多行日志" class="headerlink" title="日志收集支持多行日志"></a>日志收集支持多行日志</h4>
   </div>
 </article>
 
@@ -239,7 +240,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#KubeSphere-3-1-开启应用路由"><span class="toc-number">1.</span> <span class="toc-text">KubeSphere 3.1 开启应用路由</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#准备工作"><span class="toc-number">1.0.1.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置访问方式"><span class="toc-number">1.0.2.</span> <span class="toc-text">配置访问方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建应用路由"><span class="toc-number">1.0.3.</span> <span class="toc-text">创建应用路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置域名解析"><span class="toc-number">1.0.4.</span> <span class="toc-text">配置域名解析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#污点管理"><span class="toc-number">2.</span> <span class="toc-text">污点管理</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#KubeSphere-3-1-开启应用路由"><span class="toc-number">1.</span> <span class="toc-text">KubeSphere 3.1 开启应用路由</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#准备工作"><span class="toc-number">1.0.1.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置访问方式"><span class="toc-number">1.0.2.</span> <span class="toc-text">配置访问方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建应用路由"><span class="toc-number">1.0.3.</span> <span class="toc-text">创建应用路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置域名解析"><span class="toc-number">1.0.4.</span> <span class="toc-text">配置域名解析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#污点管理"><span class="toc-number">2.</span> <span class="toc-text">污点管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#日志收集支持多行日志"><span class="toc-number">2.0.1.</span> <span class="toc-text">日志收集支持多行日志</span></a></li></ol></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
