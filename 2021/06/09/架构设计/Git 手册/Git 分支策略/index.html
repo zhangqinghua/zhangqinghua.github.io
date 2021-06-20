@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Git 的特色之一就是可以灵活的建立分支，因为有分支的存在，才构成了多工作流的特色。事实的确如此，因为项目开发中，多人协作，分支很多，虽然各自在分支上互不干扰，但是我们总归需要把分支合并到一起，而且真实项目中涉及到很多问题，例如版本迭代，版本发布，Bug 修复等，为了更好的管理代码，需要制定一个工作流程，这就是通常意义上的Workflow，也就是我们常说的分支管理策略。 常见的分支策略目前使用度最">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 分支策略">
+<meta property="og:url" content="http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Git 的特色之一就是可以灵活的建立分支，因为有分支的存在，才构成了多工作流的特色。事实的确如此，因为项目开发中，多人协作，分支很多，虽然各自在分支上互不干扰，但是我们总归需要把分支合并到一起，而且真实项目中涉及到很多问题，例如版本迭代，版本发布，Bug 修复等，为了更好的管理代码，需要制定一个工作流程，这就是通常意义上的Workflow，也就是我们常说的分支管理策略。 常见的分支策略目前使用度最">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-d9cac24cd7dced55b83d543a9cc173ca_720w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-4830f2888ab8eed040cbb6556cc32557_720w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-1f07b2eed7292e788127ff4fd460b0d6_720w.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-76cb458e70552f68261bb41c7120a788_720w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-86a2c7151462cf37bb68f0e31c0b74c3_720w.jpg">
+<meta property="og:updated_time" content="2021-06-20T16:25:53.130Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git 分支策略">
+<meta name="twitter:description" content="Git 的特色之一就是可以灵活的建立分支，因为有分支的存在，才构成了多工作流的特色。事实的确如此，因为项目开发中，多人协作，分支很多，虽然各自在分支上互不干扰，但是我们总归需要把分支合并到一起，而且真实项目中涉及到很多问题，例如版本迭代，版本发布，Bug 修复等，为了更好的管理代码，需要制定一个工作流程，这就是通常意义上的Workflow，也就是我们常说的分支管理策略。 常见的分支策略目前使用度最">
+<meta name="twitter:image" content="https://pic3.zhimg.com/80/v2-d9cac24cd7dced55b83d543a9cc173ca_720w.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Git 分支策略</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/06/09/后端开发/SpringBoot 源码/SpringBoot 事务源码/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/06/09/架构设计/Git 手册/Git 提交规范/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&text=Git 分支策略"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&is_video=false&description=Git 分支策略"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Git 分支策略&body=Check out this article: http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&name=Git 分支策略&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的分支策略"><span class="toc-number">1.</span> <span class="toc-text">常见的分支策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Git-Flow"><span class="toc-number">1.0.1.</span> <span class="toc-text">Git Flow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Github-Flow"><span class="toc-number">1.0.2.</span> <span class="toc-text">Github Flow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GitLab-Flow"><span class="toc-number">1.0.3.</span> <span class="toc-text">GitLab Flow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#主干开发"><span class="toc-number">1.0.4.</span> <span class="toc-text">主干开发</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-Flow-流程"><span class="toc-number">2.</span> <span class="toc-text">Git Flow 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#01-创建项目"><span class="toc-number">2.0.1.</span> <span class="toc-text">01. 创建项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#02-创建开发分支"><span class="toc-number">2.0.2.</span> <span class="toc-text">02. 创建开发分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#03-feature-1：商品管理"><span class="toc-number">2.0.3.</span> <span class="toc-text">03. feature 1：商品管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#04-feature-2：性能优化"><span class="toc-number">2.0.4.</span> <span class="toc-text">04. feature 2：性能优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#05-合并-feature-1-到-develop-分支"><span class="toc-number">2.0.5.</span> <span class="toc-text">05. 合并 feature 1 到 develop 分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#06-合并-feature-2-到-develop-分支"><span class="toc-number">2.0.6.</span> <span class="toc-text">06. 合并 feature 2 到 develop 分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#07-发布测试版本"><span class="toc-number">2.0.7.</span> <span class="toc-text">07. 发布测试版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#08-修复测试版本-Bug"><span class="toc-number">2.0.8.</span> <span class="toc-text">08. 修复测试版本 Bug</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#09-发布线上版本"><span class="toc-number">2.0.9.</span> <span class="toc-text">09. 发布线上版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-feature-3：评论管理"><span class="toc-number">2.0.10.</span> <span class="toc-text">10. feature 3：评论管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-修复线上版本-Bug"><span class="toc-number">2.0.11.</span> <span class="toc-text">11. 修复线上版本 Bug</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-补充说明"><span class="toc-number">2.0.12.</span> <span class="toc-text">12. 补充说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Github-Flow-流程"><span class="toc-number">3.</span> <span class="toc-text">Github Flow 流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gitlab-Flow-流程"><span class="toc-number">4.</span> <span class="toc-text">Gitlab Flow 流程</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Git 分支策略
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-06-09T00:00:00.000Z" itemprop="datePublished">2021-06-09</time>
+        
+        (Updated: <time datetime="2021-06-20T16:25:53.130Z" itemprop="dateModified">2021-06-20</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/架构设计/">架构设计</a> › <a class="category-link" href="/categories/架构设计/Git-手册/">Git 手册</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Git 的特色之一就是可以灵活的建立分支，因为有分支的存在，才构成了多工作流的特色。事实的确如此，因为项目开发中，多人协作，分支很多，虽然各自在分支上互不干扰，但是我们总归需要把分支合并到一起，而且真实项目中涉及到很多问题，例如版本迭代，版本发布，Bug 修复等，为了更好的管理代码，需要制定一个工作流程，这就是通常意义上的Workflow，也就是我们常说的分支管理策略。</p>
+<h2 id="常见的分支策略"><a href="#常见的分支策略" class="headerlink" title="常见的分支策略"></a>常见的分支策略</h2><p>目前使用度最高的工作流前三名分别是以下三种（排名不分先后）：</p>
+<ol>
+<li>Git Flow</li>
+<li>GitHub Flow</li>
+<li>GitLab Flow</li>
+</ol>
+<p>其中 Git Flow 出现的最早，GitHub Flow 在 Git Flow 的基础上，做了一些优化，适用于持续版本的发布，而 GitLab Flow 出现的时间比较晚，所以综合前面两种工作流的优点，制定而成的一个工作流。</p>
+<h4 id="Git-Flow"><a href="#Git-Flow" class="headerlink" title="Git Flow"></a>Git Flow</h4><p>Git Flow 是 Vincent Driessen 2010 年发布出来的他自己的分支管理模型，属于强流程性，使用度非常高，比较适合开发技术能力中等的团队作战。</p>
+<p>Git Flow 的分支结构很特别，按功能来说，可以分支为5种分支，从 5 种分支的生命时间上，又可以分别归类为长期分支和暂时分支，或者更贴切描述为，主要分支和协助分支。</p>
+<p><strong>主要分支</strong></p>
+<p>在采用 Git Flow 工作流的项目中，代码的中央仓库会一直存在以下两个长期分支：</p>
+<ol>
+<li>Master Branch</li>
+<li>Develop Branch</li>
+</ol>
+<p>其中 origin/master 分支上的最新代码永远是版本发布状态。origin/develop 分支则是最新的开发进度。</p>
+<p>当 develop 上的代码达到一个稳定的状态，可以发布版本的时候，develop 上这些修改会以某种特别方式被合并到 master 分支上，然后标记上对应的版本标签。</p>
+<p><strong>协助分支</strong></p>
+<p>除了主要分支，Git Flow 的开发模式还需要一系列的协助分支，来帮助更好的功能的并行开发，简化功能开发和问题修复。协助分支分为以下几类：</p>
+<ol>
+<li>Hotfix Branch</li>
+<li>Release Branch</li>
+<li>Feature Branch</li>
+</ol>
+<p>Feature 分支用来做分模块功能开发，建议命名为feature-xxx。模块完成之后，会合并到 develop 分支，然后删除。</p>
+<p>Release 分支用来做版本发布的预发布分支，建议命名为 release-xxx。例如在软件 1.0.0 版本的功能全部开发完成，提交测试之后，从 develop 检出 release-1.0.0，测试中出现的小问题，在 release 分支进行修改提交，测试完毕准备发布的时候，代码会合并到 master 和 develop，master 分支合并后会打上对应版本标签 v1.0.0, 合并后删除自己。这样做的好处是，在测试的时候，不影响下一个版本功能并行开发。</p>
+<p>Hotfix 分支是用来做线上的紧急 bug 修复的分支,建议命名为 hotfix-xxx。当线上某个版本出现了问题，将检出对应版本的代码，创建 Hotfix 分支，问题修复后，合并回 master 和 develop ，然后删除自己。这里注意，合并到 master 的时候，也要打上修复后的版本标签。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-d9cac24cd7dced55b83d543a9cc173ca_720w.jpg" alt=""></p>
+<p>图中画了 Git Flow 的五种分支，master，develop，feature ,release , hoxfixes，其中 master 和 develop 字体被加粗代表主要分支。master 分支每合并一个分支，无论是 hotfix 还是 release ,都会打一个版本标签。通过箭头可以清楚的看到分支的开始和结束走向，例如 feature 分支从 develop 开始，最终合并回 develop ，hoxfixes 从 master 检出创建，最后合并回 develop 和 master，master 也打上了标签。</p>
+<h4 id="Github-Flow"><a href="#Github-Flow" class="headerlink" title="Github Flow"></a>Github Flow</h4><p>GitHub Flow 是大型程序员交友社区 GitHub 制定并使用的工作流模型，由 scott chacon 在 2011 年 8 月 31 号正式发布。因为 Git Flow 对于大部分开发人员和团队来说，稍微有些复杂，而且没有 GUI 图形页面，只能命令行操作。所以为了更好的解决这些问题，GitHub Flow 应运而生了。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-4830f2888ab8eed040cbb6556cc32557_720w.jpg" alt=""></p>
+<p>对比上面那张 Git flow 分支模型图，GitHub flow 真的可以称得上简单明了，因为 GitHub Flow 推荐做法是只有一个主分支 master，团队成员们的分支代码通过 pull Request 来合并到 master 上。这种分支策略适合团队开发技术比较高的团队使用，否则就是 no zuo no die。</p>
+<p>GitHub Flow 模型简单说明：</p>
+<ol>
+<li>只有一个长期分支 master，而且 master 分支上的代码，永远是可发布状态，一般 master 会设置 protected 分支保护，只有有权限的人才能推送代码到 master 分支。</li>
+<li>如果有新功能开发，可以从 master 分支上检出新分支。</li>
+<li>在本地分支提交代码，并且保证按时向远程仓库推送。</li>
+<li>当你需要反馈或者帮助，或者你想合并分支时，可以发起一个 pull request。</li>
+<li>当 review 或者讨论通过后，代码会合并到目标分支。</li>
+<li>一旦合并到 master 分支，应该立即发布。</li>
+</ol>
+<p>其中最有特色的就是 pull request，后来 GitLab Flow也 受此启发有了 Merge Request。</p>
+<h4 id="GitLab-Flow"><a href="#GitLab-Flow" class="headerlink" title="GitLab Flow"></a>GitLab Flow</h4><p>GitLab Flow 是 GitLab 的 CEO Sytse Sijbrandij 在 2014 年 9 月 29 正式发布出来的。因为出现的比前面两种工作流稍微晚一些，所以它有个非常大的优势，集百家之长，补百家之短。</p>
+<p>GitLab 既支持 Git Flow 的分支策略，也有 GitHub Flow 的 Pull Request（Merge Request） 和 issue tracking。</p>
+<p>针对 GitHub 里面只有一个 Master 分支的情况，从需要发布的环境的角度出发，添加了 pre-production 和 prodution 分支都对应不同的环境，这个分支策略比较适用服务端，测试环境，预发环境，正式环境，一个环境建一个分支。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-1f07b2eed7292e788127ff4fd460b0d6_720w.jpg" alt=""></p>
+<p>这里要注意，代码合并的顺序，要按环境依次推送，确保代码被充分测试过,才会从上游分支合并到下游分支。除非是很紧急的情况，才允许跳过上游分支，直接合并到下游分支。这种规则称之为 “upstream first”，也就是 “上游优先”。</p>
+<p>在 Git Flow ,版本记录是通过 master 上的 tag 来记录。发现问题，创建 hotfix 分支，完成之后合并到 master 和 develop。在 GitLab Flow ，建议的做法是每一个稳定版本，都要从master分支拉出一个分支，比如2-3-stable、2-4-stable等等。发现问题，就从对应版本分支创建修复分支，完成之后，先合并到 master，才能再合并到 release 分支，遵循 “上游优先” 原则。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-76cb458e70552f68261bb41c7120a788_720w.jpg" alt=""></p>
+<p>GitLab 中的 Merge Request（MR，合并请求）是作为编码协作及版本控制平台的 GitLab 的基础功能。就和它的命名一样：是一个将一个分支合并到另一个分支上的请求。</p>
+<p>通过 GitLab 的 Merge requests，我们可以：</p>
+<ol>
+<li>对比两个分支的差异</li>
+<li>逐行地去 Review 和讨论改动内容</li>
+<li>将 MR 指派给任何已注册用户，并且可以任意多地改变受理人</li>
+<li>通过 UI 界面去解决冲突</li>
+</ol>
+<h4 id="主干开发"><a href="#主干开发" class="headerlink" title="主干开发"></a>主干开发</h4><p>以上三种是常见模式，补充一个目前比较高大上，但很少团队可以达到的模式，主干开发。</p>
+<p>主线开发模型：如下图所示，主线开发模型是同一个产品的所有的开发人员共享一个 trunk，开发人员可以有自己的私有分支，但所有修改最后都会回到主干，只有在 Release 时才会创建 Release Branch，由 Release Engineer 进行维护，发布分支是主干某个时点的快照，必要时通过 cherry-pick 从主干挑拣代码到发布分支。基于主干的开发的优点是保证了所有用户看到的都是同一份代码的最新版本，避免了合并分支时的麻烦，缺点是不适于瀑布开发模型，同时对开发人员和发布分支的维护人员的技术要求比较高。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-86a2c7151462cf37bb68f0e31c0b74c3_720w.jpg" alt=""></p>
+<h2 id="Git-Flow-流程"><a href="#Git-Flow-流程" class="headerlink" title="Git Flow 流程"></a>Git Flow 流程</h2><h4 id="01-创建项目"><a href="#01-创建项目" class="headerlink" title="01. 创建项目"></a>01. 创建项目</h4><h4 id="02-创建开发分支"><a href="#02-创建开发分支" class="headerlink" title="02. 创建开发分支"></a>02. 创建开发分支</h4><h4 id="03-feature-1：商品管理"><a href="#03-feature-1：商品管理" class="headerlink" title="03. feature 1：商品管理"></a>03. feature 1：商品管理</h4><h4 id="04-feature-2：性能优化"><a href="#04-feature-2：性能优化" class="headerlink" title="04. feature 2：性能优化"></a>04. feature 2：性能优化</h4><h4 id="05-合并-feature-1-到-develop-分支"><a href="#05-合并-feature-1-到-develop-分支" class="headerlink" title="05. 合并 feature 1 到 develop 分支"></a>05. 合并 feature 1 到 develop 分支</h4><h4 id="06-合并-feature-2-到-develop-分支"><a href="#06-合并-feature-2-到-develop-分支" class="headerlink" title="06. 合并 feature 2 到 develop 分支"></a>06. 合并 feature 2 到 develop 分支</h4><h4 id="07-发布测试版本"><a href="#07-发布测试版本" class="headerlink" title="07. 发布测试版本"></a>07. 发布测试版本</h4><h4 id="08-修复测试版本-Bug"><a href="#08-修复测试版本-Bug" class="headerlink" title="08. 修复测试版本 Bug"></a>08. 修复测试版本 Bug</h4><h4 id="09-发布线上版本"><a href="#09-发布线上版本" class="headerlink" title="09. 发布线上版本"></a>09. 发布线上版本</h4><h4 id="10-feature-3：评论管理"><a href="#10-feature-3：评论管理" class="headerlink" title="10. feature 3：评论管理"></a>10. feature 3：评论管理</h4><h4 id="11-修复线上版本-Bug"><a href="#11-修复线上版本-Bug" class="headerlink" title="11. 修复线上版本 Bug"></a>11. 修复线上版本 Bug</h4><h4 id="12-补充说明"><a href="#12-补充说明" class="headerlink" title="12. 补充说明"></a>12. 补充说明</h4><ol>
+<li>远程仓库只保留 master 和 develop 分支。</li>
+<li>featute 和 hotfix 分支用完即删</li>
+</ol>
+<h2 id="Github-Flow-流程"><a href="#Github-Flow-流程" class="headerlink" title="Github Flow 流程"></a>Github Flow 流程</h2><p>todo…</p>
+<h2 id="Gitlab-Flow-流程"><a href="#Gitlab-Flow-流程" class="headerlink" title="Gitlab Flow 流程"></a>Gitlab Flow 流程</h2><p>todo…</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的分支策略"><span class="toc-number">1.</span> <span class="toc-text">常见的分支策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Git-Flow"><span class="toc-number">1.0.1.</span> <span class="toc-text">Git Flow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Github-Flow"><span class="toc-number">1.0.2.</span> <span class="toc-text">Github Flow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GitLab-Flow"><span class="toc-number">1.0.3.</span> <span class="toc-text">GitLab Flow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#主干开发"><span class="toc-number">1.0.4.</span> <span class="toc-text">主干开发</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-Flow-流程"><span class="toc-number">2.</span> <span class="toc-text">Git Flow 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#01-创建项目"><span class="toc-number">2.0.1.</span> <span class="toc-text">01. 创建项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#02-创建开发分支"><span class="toc-number">2.0.2.</span> <span class="toc-text">02. 创建开发分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#03-feature-1：商品管理"><span class="toc-number">2.0.3.</span> <span class="toc-text">03. feature 1：商品管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#04-feature-2：性能优化"><span class="toc-number">2.0.4.</span> <span class="toc-text">04. feature 2：性能优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#05-合并-feature-1-到-develop-分支"><span class="toc-number">2.0.5.</span> <span class="toc-text">05. 合并 feature 1 到 develop 分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#06-合并-feature-2-到-develop-分支"><span class="toc-number">2.0.6.</span> <span class="toc-text">06. 合并 feature 2 到 develop 分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#07-发布测试版本"><span class="toc-number">2.0.7.</span> <span class="toc-text">07. 发布测试版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#08-修复测试版本-Bug"><span class="toc-number">2.0.8.</span> <span class="toc-text">08. 修复测试版本 Bug</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#09-发布线上版本"><span class="toc-number">2.0.9.</span> <span class="toc-text">09. 发布线上版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-feature-3：评论管理"><span class="toc-number">2.0.10.</span> <span class="toc-text">10. feature 3：评论管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-修复线上版本-Bug"><span class="toc-number">2.0.11.</span> <span class="toc-text">11. 修复线上版本 Bug</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-补充说明"><span class="toc-number">2.0.12.</span> <span class="toc-text">12. 补充说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Github-Flow-流程"><span class="toc-number">3.</span> <span class="toc-text">Github Flow 流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gitlab-Flow-流程"><span class="toc-number">4.</span> <span class="toc-text">Gitlab Flow 流程</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&text=Git 分支策略"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&is_video=false&description=Git 分支策略"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Git 分支策略&body=Check out this article: http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&title=Git 分支策略"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/06/09/架构设计/Git 手册/Git 分支策略/&name=Git 分支策略&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
