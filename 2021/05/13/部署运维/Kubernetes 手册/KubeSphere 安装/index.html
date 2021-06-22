@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210515222342.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210515222656.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210516220443.png">
-<meta property="og:updated_time" content="2021-06-21T15:28:08.403Z">
+<meta property="og:updated_time" content="2021-06-22T01:55:01.517Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="KubeSphere 安装">
 <meta name="twitter:description" content="预先工作安装 Helm123456789zhangqinghua$ wget https://get.helm.sh/helm-v2.16.3-linux-amd64.tar.gzzhangqinghua$ tar -zxvf helm-v2.16.3-linux-amd64.tar.gzzhangqinghua$ mv linux-amd64/helm /usr/local/bin/helmzh">
@@ -136,7 +136,7 @@
       
         <time datetime="2021-05-13T07:00:10.000Z" itemprop="datePublished">2021-05-13</time>
         
-        (Updated: <time datetime="2021-06-21T15:28:08.403Z" itemprop="dateModified">2021-06-21</time>)
+        (Updated: <time datetime="2021-06-22T01:55:01.517Z" itemprop="dateModified">2021-06-22</time>)
         
       
     </div>
@@ -223,6 +223,8 @@
 <p>解决：修复参数问题。</p>
 <h4 id="您需要联系平台管理员或者集群管理员为企业空间授权集群的访问权限"><a href="#您需要联系平台管理员或者集群管理员为企业空间授权集群的访问权限" class="headerlink" title="您需要联系平台管理员或者集群管理员为企业空间授权集群的访问权限"></a>您需要联系平台管理员或者集群管理员为企业空间授权集群的访问权限</h4><p>场景：在开启多集群功能后，企业空间无法查看项目。<br>原因：集群可见性。<br>解决：开发集群可见行。<br>参考：<a href="https://kubesphere.com.cn/docs/cluster-administration/cluster-settings/cluster-visibility-and-authorization/">https://kubesphere.com.cn/docs/cluster-administration/cluster-settings/cluster-visibility-and-authorization/</a></p>
 <h4 id="彻底禁用-ES"><a href="#彻底禁用-ES" class="headerlink" title="彻底禁用 ES"></a>彻底禁用 ES</h4><p>场景：在开启日志系统后，ES 也随着安装，但是禁用日志系统后，ES 没有停掉。<br>原因：日志系统、事件系统、审计日志均使用到 ES。即使将它们禁用，ES 还是不会自动关闭，需要手工删除。<br>解决：将使用到 ES 的组件禁用后，手工执行 <code>kubectl delete ns xxx</code>。</p>
+<p>参考：<a href="https://kubesphere.com.cn/forum/d/4860-logging">https://kubesphere.com.cn/forum/d/4860-logging</a></p>
+<p>参考：<a href="https://kubesphere.com.cn/docs/faq/observability/logging/">https://kubesphere.com.cn/docs/faq/observability/logging/</a></p>
 <h4 id="部署多集群环境，ks-apiserver-xxx-报错"><a href="#部署多集群环境，ks-apiserver-xxx-报错" class="headerlink" title="部署多集群环境，ks-apiserver-xxx 报错"></a>部署多集群环境，ks-apiserver-xxx 报错</h4><p>场景：配置 Host 集群，ks-apiserver-xxx 一直处于 CrashLoopBackOff 状态， 查看日志提示：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl logs -f  ks-apiserver-65cdffb5d9-p2bzm -n kubesphere-system</span><br><span class="line">Error: JWT secret MUST not be empty</span><br><span class="line">2021/06/15 10:19:03 JWT secret MUST not be empty</span><br></pre></td></tr></table></figure>
 <p>原因：ks-installer 配置的 <code>spec.authentication.jwtSecret: null</code>。但是这本身是host集群，估计是 bug。<br>解决：配置 <code>spec.authentication.jwtSecret: gfIwilcc0WjNGKJ5DLeksf2JKfcLgTZU</code> 随便设置值，再删除 ks-installer 让它重新安装即可。</p>
@@ -236,6 +238,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ kubectl logs -f jaeger-query-b478c5655-sjqnb jaeger-query -n istio-system</span><br><span class="line">2021/06/17 01:30:51 maxprocs: Leaving GOMAXPROCS=2: CPU quota undefined</span><br><span class="line">&#123;<span class="string">"level"</span>:<span class="string">"info"</span>,<span class="string">"ts"</span>:1623893451.6409516,<span class="string">"caller"</span>:<span class="string">"flags/service.go:115"</span>,<span class="string">"msg"</span>:<span class="string">"Mounting metrics handler on admin server"</span>,<span class="string">"route"</span>:<span class="string">"/metrics"</span>&#125;</span><br><span class="line">&#123;<span class="string">"level"</span>:<span class="string">"info"</span>,<span class="string">"ts"</span>:1623893451.6411955,<span class="string">"caller"</span>:<span class="string">"flags/admin.go:115"</span>,<span class="string">"msg"</span>:<span class="string">"Mounting health check on admin server"</span>,<span class="string">"route"</span>:<span class="string">"/"</span>&#125;</span><br><span class="line">&#123;<span class="string">"level"</span>:<span class="string">"info"</span>,<span class="string">"ts"</span>:1623893451.6412811,<span class="string">"caller"</span>:<span class="string">"flags/admin.go:121"</span>,<span class="string">"msg"</span>:<span class="string">"Starting admin HTTP server"</span>,<span class="string">"http-port"</span>:16687&#125;</span><br><span class="line">&#123;<span class="string">"level"</span>:<span class="string">"info"</span>,<span class="string">"ts"</span>:1623893451.641299,<span class="string">"caller"</span>:<span class="string">"flags/admin.go:107"</span>,<span class="string">"msg"</span>:<span class="string">"Admin server started"</span>,<span class="string">"http-port"</span>:16687,<span class="string">"health-status"</span>:<span class="string">"unavailable"</span>&#125;</span><br><span class="line">&#123;<span class="string">"level"</span>:<span class="string">"fatal"</span>,<span class="string">"ts"</span>:1623893456.67678,<span class="string">"caller"</span>:<span class="string">"query/main.go:93"</span>,<span class="string">"msg"</span>:<span class="string">"Failed to init storage factory"</span>,<span class="string">"error"</span>:<span class="string">"failed to create primary Elasticsearch client: health check timeout: Head http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200: dial tcp: lookup elasticsearch-logging-data.kubesphere-logging-system.svc on 10.96.0.10:53: no such host: no Elasticsearch node available"</span>,<span class="string">"stacktrace"</span>:<span class="string">"main.main.func1\n\tgithub.com/jaegertracing/jaeger@/cmd/query/main.go:93\ngithub.com/spf13/cobra.(*Command).execute\n\tgithub.com/spf13/cobra@v0.0.3/command.go:762\ngithub.com/spf13/cobra.(*Command).ExecuteC\n\tgithub.com/spf13/cobra@v0.0.3/command.go:852\ngithub.com/spf13/cobra.(*Command).Execute\n\tgithub.com/spf13/cobra@v0.0.3/command.go:800\nmain.main\n\tgithub.com/jaegertracing/jaeger@/cmd/query/main.go:135\nruntime.main\n\truntime/proc.go:203"</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>解决：ES 没有安装。</p>
 <p>参考：<a href="https://kubesphere.com.cn/forum/d/4823-istio-system/8">https://kubesphere.com.cn/forum/d/4823-istio-system/8</a></p>
+<p>参考：<a href="https://kubesphere.com.cn/docs/faq/observability/logging/">https://kubesphere.com.cn/docs/faq/observability/logging/</a></p>
 
   </div>
 </article>
