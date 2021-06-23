@@ -13,16 +13,16 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Git 的特色之一就是可以灵活的建立分支，因为有分支的存在，才构成了多工作流的特色。事实的确如此，因为项目开发中，多人协作，分支很多，虽然各自在分支上互不干扰，但是我们总归需要把分支合并到一起，而且真实项目中涉及到很多问题，例如版本迭代，版本发布，Bug 修复等，为了更好的管理代码，需要制定一个工作流程，这就是通常意义上的Workflow，也就是我们常说的分支管理策略。 常见的分支策略目前使用度最">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://pic3.zhimg.com/80/v2-d9cac24cd7dced55b83d543a9cc173ca_720w.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210623094231.png">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-4830f2888ab8eed040cbb6556cc32557_720w.jpg">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-1f07b2eed7292e788127ff4fd460b0d6_720w.jpg">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-76cb458e70552f68261bb41c7120a788_720w.jpg">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-86a2c7151462cf37bb68f0e31c0b74c3_720w.jpg">
-<meta property="og:updated_time" content="2021-06-22T09:54:05.955Z">
+<meta property="og:updated_time" content="2021-06-23T10:19:21.095Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 分支策略">
 <meta name="twitter:description" content="Git 的特色之一就是可以灵活的建立分支，因为有分支的存在，才构成了多工作流的特色。事实的确如此，因为项目开发中，多人协作，分支很多，虽然各自在分支上互不干扰，但是我们总归需要把分支合并到一起，而且真实项目中涉及到很多问题，例如版本迭代，版本发布，Bug 修复等，为了更好的管理代码，需要制定一个工作流程，这就是通常意义上的Workflow，也就是我们常说的分支管理策略。 常见的分支策略目前使用度最">
-<meta name="twitter:image" content="https://pic3.zhimg.com/80/v2-d9cac24cd7dced55b83d543a9cc173ca_720w.jpg">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210623094231.png">
     
     
         
@@ -136,7 +136,7 @@
       
         <time datetime="2021-06-09T00:00:00.000Z" itemprop="datePublished">2021-06-09</time>
         
-        (Updated: <time datetime="2021-06-22T09:54:05.955Z" itemprop="dateModified">2021-06-22</time>)
+        (Updated: <time datetime="2021-06-23T10:19:21.095Z" itemprop="dateModified">2021-06-23</time>)
         
       
     </div>
@@ -184,7 +184,7 @@
 <p>Feature 分支用来做分模块功能开发，建议命名为feature-xxx。模块完成之后，会合并到 develop 分支，然后删除。</p>
 <p>Release 分支用来做版本发布的预发布分支，建议命名为 release-xxx。例如在软件 1.0.0 版本的功能全部开发完成，提交测试之后，从 develop 检出 release-1.0.0，测试中出现的小问题，在 release 分支进行修改提交，测试完毕准备发布的时候，代码会合并到 master 和 develop，master 分支合并后会打上对应版本标签 v1.0.0, 合并后删除自己。这样做的好处是，在测试的时候，不影响下一个版本功能并行开发。</p>
 <p>Hotfix 分支是用来做线上的紧急 bug 修复的分支,建议命名为 hotfix-xxx。当线上某个版本出现了问题，将检出对应版本的代码，创建 Hotfix 分支，问题修复后，合并回 master 和 develop ，然后删除自己。这里注意，合并到 master 的时候，也要打上修复后的版本标签。</p>
-<p><img src="https://pic3.zhimg.com/80/v2-d9cac24cd7dced55b83d543a9cc173ca_720w.jpg" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210623094231.png" alt=""></p>
 <p>图中画了 Git Flow 的五种分支，master，develop，feature ,release , hoxfixes，其中 master 和 develop 字体被加粗代表主要分支。master 分支每合并一个分支，无论是 hotfix 还是 release ,都会打一个版本标签。通过箭头可以清楚的看到分支的开始和结束走向，例如 feature 分支从 develop 开始，最终合并回 develop ，hoxfixes 从 master 检出创建，最后合并回 develop 和 master，master 也打上了标签。</p>
 <h4 id="Github-Flow"><a href="#Github-Flow" class="headerlink" title="Github Flow"></a>Github Flow</h4><p>GitHub Flow 是大型程序员交友社区 GitHub 制定并使用的工作流模型，由 scott chacon 在 2011 年 8 月 31 号正式发布。因为 Git Flow 对于大部分开发人员和团队来说，稍微有些复杂，而且没有 GUI 图形页面，只能命令行操作。所以为了更好的解决这些问题，GitHub Flow 应运而生了。</p>
 <p><img src="https://pic4.zhimg.com/80/v2-4830f2888ab8eed040cbb6556cc32557_720w.jpg" alt=""></p>
