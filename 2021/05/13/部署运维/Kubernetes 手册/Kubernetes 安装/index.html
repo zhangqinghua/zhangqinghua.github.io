@@ -14,7 +14,7 @@
 <meta property="og:description" content="部署内网集群 环境配置需要在 Master 节点和 Node 节点执行以下操作： 12345678# 关闭防火墙zhangqinghua$ sudo systemctl stop firewalld &amp;amp;&amp;amp; sudo systemctl disable firewalld   # 关闭selinuxzhangqinghua$ sudo setenforce 0 &amp;amp;&amp;amp;">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210513161436.png">
-<meta property="og:updated_time" content="2021-06-23T10:19:21.099Z">
+<meta property="og:updated_time" content="2021-06-23T10:21:50.659Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kubernetes 安装">
 <meta name="twitter:description" content="部署内网集群 环境配置需要在 Master 节点和 Node 节点执行以下操作： 12345678# 关闭防火墙zhangqinghua$ sudo systemctl stop firewalld &amp;amp;&amp;amp; sudo systemctl disable firewalld   # 关闭selinuxzhangqinghua$ sudo setenforce 0 &amp;amp;&amp;amp;">
@@ -132,7 +132,7 @@
       
         <time datetime="2021-05-13T09:00:10.000Z" itemprop="datePublished">2021-05-13</time>
         
-        (Updated: <time datetime="2021-06-23T10:19:21.099Z" itemprop="dateModified">2021-06-23</time>)
+        (Updated: <time datetime="2021-06-23T10:21:50.659Z" itemprop="dateModified">2021-06-23</time>)
         
       
     </div>
@@ -222,7 +222,8 @@
 <p><strong>从节点加入失败： error execution phase preflight: couldn’t validate the identity of the API Server: abort connecting to API servers after timeout</strong><br>场景：从节点加入一直没有进度。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@kube-node01 ~]<span class="comment"># kubeadm join 172.25.25.244:6443 --token d3qa8m.9live0v3z817t6km     --discovery-token-ca-cert-hash sha256:fff8c69e23cce925eefa5e00f564c3ff71d68a2ec87086b8853dedc782e26522</span></span><br><span class="line">W0531 10:50:58.497804    2566 join.go:346] [preflight] WARNING: JoinControlPane.controlPlane settings will be ignored when control-plane flag is not <span class="built_in">set</span>.</span><br><span class="line">[preflight] Running pre-flight checks</span><br><span class="line">        [WARNING IsDockerSystemdCheck]: detected <span class="string">"cgroupfs"</span> as the Docker cgroup driver. The recommended driver is <span class="string">"systemd"</span>. Please follow the guide at https://kubernetes.io/docs/setup/cri/</span><br><span class="line">        [WARNING FileExisting-tc]: tc not found <span class="keyword">in</span> system path</span><br><span class="line">        [WARNING SystemVerification]: this Docker version is not on the list of validated versions: 20.10.6. Latest validated version: 19.03</span><br><span class="line">        [WARNING Hostname]: hostname <span class="string">"kube-node01"</span> could not be reached</span><br><span class="line">        [WARNING Hostname]: hostname <span class="string">"kube-node01"</span>: lookup kube-node01 on 100.100.2.136:53: no such host</span><br><span class="line">        [WARNING Service-Kubelet]: kubelet service is not enabled, please run <span class="string">'systemctl enable kubelet.service'</span></span><br><span class="line">error execution phase preflight: couldn<span class="string">'t validate the identity of the API Server: abort connecting to API servers after timeout of 5m0s</span></span><br><span class="line"><span class="string">To see the stack trace of this error execute with --v=5 or higher</span></span><br></pre></td></tr></table></figure>
 <p>原因：Master 节点的防火墙开了，导致从节点连不上。<br>解决：关掉 Master 的防火墙。</p>
-<p><strong>yum 安装 Docker 失败：Error: Unable to find a match: docker-ce</strong><br>场景：</p>
+<p><strong>yum 安装 Docker 失败：Error: Unable to find a match: docker-ce</strong><br>场景：Centos8 使用 yum 安装 Docker 18.7 失败，提示找不到镜像。<br>原因：版本太老，换新的。<br>解决：换新一点的版本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ yum list docker-ce --showduplicates | sort -r</span><br><span class="line">Failed to <span class="built_in">set</span> locale, defaulting to C</span><br><span class="line">docker-ce.x86_64            3:19.03.4-3.el7                     docker-ce-stable</span><br><span class="line">docker-ce.x86_64            3:19.03.3-3.el7                     docker-ce-stable</span><br><span class="line">docker-ce.x86_64            3:19.03.2-3.el7                     docker-ce-stable</span><br><span class="line">docker-ce.x86_64            3:19.03.1-3.el7                     docker-ce-stable</span><br><span class="line">docker-ce.x86_64            3:19.03.0-3.el7                     docker-ce-stable</span><br><span class="line"></span><br><span class="line">zhangqinghua$ sudo yum install -y docker-ce-19.03.4 ...............</span><br></pre></td></tr></table></figure>
 
   </div>
 </article>
