@@ -14,7 +14,7 @@
 <meta property="og:description" content="部署内网集群 环境配置需要在 Master 节点和 Node 节点执行以下操作： 12345678# 关闭防火墙zhangqinghua$ sudo systemctl stop firewalld &amp;amp;&amp;amp; sudo systemctl disable firewalld   # 关闭selinuxzhangqinghua$ sudo setenforce 0 &amp;amp;&amp;amp;">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210513161436.png">
-<meta property="og:updated_time" content="2021-06-23T10:21:50.659Z">
+<meta property="og:updated_time" content="2021-06-25T10:01:15.037Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kubernetes 安装">
 <meta name="twitter:description" content="部署内网集群 环境配置需要在 Master 节点和 Node 节点执行以下操作： 12345678# 关闭防火墙zhangqinghua$ sudo systemctl stop firewalld &amp;amp;&amp;amp; sudo systemctl disable firewalld   # 关闭selinuxzhangqinghua$ sudo setenforce 0 &amp;amp;&amp;amp;">
@@ -132,7 +132,7 @@
       
         <time datetime="2021-05-13T09:00:10.000Z" itemprop="datePublished">2021-05-13</time>
         
-        (Updated: <time datetime="2021-06-23T10:21:50.659Z" itemprop="dateModified">2021-06-23</time>)
+        (Updated: <time datetime="2021-06-25T10:01:15.037Z" itemprop="dateModified">2021-06-25</time>)
         
       
     </div>
@@ -185,7 +185,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x509: certificate is valid <span class="keyword">for</span> 10.96.0.1, 172.18.255.243, not 内网IP</span><br></pre></td></tr></table></figure>
 <p>解决：加上 <code>--apiserver-cert-extra-sans=内网IP</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 172.25.25.244 为内网IP</span></span><br><span class="line">zhangqinghua$ sudo kubeadm init  --apiserver-advertise-address=47.242.9.184 --apiserver-cert-extra-sans=172.25.25.244</span><br></pre></td></tr></table></figure>
-<p>参考：<a href="https://www.cnblogs.com/huhyoung/p/9738126.html">https://www.cnblogs.com/huhyoung/p/9738126.html</a></p>
+<p>最新：这个能解决。。。。。。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ <span class="built_in">echo</span> <span class="built_in">export</span> KUBECONFIG=/etc/kubernetes/kubelet.conf &gt;&gt; ~/.bashrc</span><br><span class="line">zhangqinghua$ <span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure></p>
+<p>参考：<a href="https://www.cnblogs.com/lfl17718347843/p/14122407.html">k8s提示Unable to connect to the server: x509</a></p>
 <h4 id="证书修复"><a href="#证书修复" class="headerlink" title="证书修复"></a>证书修复</h4><p>修复验证后，执行 kubectl 命令会报错。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Unable to connect to the server: x509: certificate signed by unknown authority (possibly because of “crypto/rsa: verification error” while trying to verify candidate authority certificate “kubernetes”)</span><br></pre></td></tr></table></figure>
 <p>执行以下命令即可：</p>
