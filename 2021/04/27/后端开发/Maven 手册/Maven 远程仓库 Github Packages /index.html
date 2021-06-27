@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="配置 Token在 Guthub -&amp;gt; Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens 创建一个用于上传依赖的 Token。需要勾选 repo 和 user 选项。  配置 server找到 Maven 的配置文件 .m2/settings.xml，添加以下内容： 1234567891011&amp;lt;settings">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven 远程仓库 GitHub&#39;s repo">
+<meta property="og:url" content="http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="配置 Token在 Guthub -&amp;gt; Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens 创建一个用于上传依赖的 Token。需要勾选 repo 和 user 选项。  配置 server找到 Maven 的配置文件 .m2/settings.xml，添加以下内容： 1234567891011&amp;lt;settings">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627154807.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627155324.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627160110.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627160221.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627150603.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627151426.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627151531.png">
+<meta property="og:updated_time" content="2021-06-27T16:00:18.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Maven 远程仓库 GitHub&#39;s repo">
+<meta name="twitter:description" content="配置 Token在 Guthub -&amp;gt; Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens 创建一个用于上传依赖的 Token。需要勾选 repo 和 user 选项。  配置 server找到 Maven 的配置文件 .m2/settings.xml，添加以下内容： 1234567891011&amp;lt;settings">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627154807.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Maven 远程仓库 GitHub&#39;s repo</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/27/后端开发/Maven 手册/Maven 构建/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/27/后端开发/Maven 手册/Maven 远程仓库/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&text=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&is_video=false&description=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Maven 远程仓库 GitHub&#39;s repo&body=Check out this article: http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&name=Maven 远程仓库 GitHub&#39;s repo&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-Token"><span class="toc-number">1.</span> <span class="toc-text">配置 Token</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-server"><span class="toc-number">2.</span> <span class="toc-text">配置 server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-distributionManagement"><span class="toc-number">3.</span> <span class="toc-text">配置 distributionManagement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-maven-deploy-plugin"><span class="toc-number">4.</span> <span class="toc-text">配置 maven-deploy-plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-site-maven-plugin"><span class="toc-number">5.</span> <span class="toc-text">配置 site-maven-plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行-mvn-clean-deploy"><span class="toc-number">6.</span> <span class="toc-text">运行 mvn clean deploy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-number">7.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见问题"><span class="toc-number">8.</span> <span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Error-creating-blob-Not-Found-404"><span class="toc-number">8.0.1.</span> <span class="toc-text">Error creating blob: Not Found (404)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Error-retrieving-user-info-Not-Found-404"><span class="toc-number">8.0.2.</span> <span class="toc-text">Error retrieving user info: Not Found (404)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Git-Repository-is-empty-409"><span class="toc-number">8.0.3.</span> <span class="toc-text">Git Repository is empty. (409)</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Maven 远程仓库 GitHub&#39;s repo
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-04-27T00:00:00.000Z" itemprop="datePublished">2021-04-27</time>
+        
+        (Updated: <time datetime="2021-06-27T16:00:18.231Z" itemprop="dateModified">2021-06-27</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/后端开发/">后端开发</a> › <a class="category-link" href="/categories/后端开发/Maven-手册/">Maven 手册</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="配置-Token"><a href="#配置-Token" class="headerlink" title="配置 Token"></a>配置 Token</h2><p>在 Guthub -&gt; Settings -&gt; Developer settings -&gt; Personal access tokens 创建一个用于上传依赖的 Token。需要勾选 repo 和 user 选项。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627154807.png" alt=""></p>
+<h2 id="配置-server"><a href="#配置-server" class="headerlink" title="配置 server"></a>配置 server</h2><p>找到 Maven 的配置文件 <code>.m2/settings.xml</code>，添加以下内容：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">settings</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">servers</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">server</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">id</span>&gt;</span>github<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">         <span class="comment">&lt;!-- GitHub登录名 --&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">username</span>&gt;</span>the.patron.saint.of.science@gmail.com<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">         <span class="comment">&lt;!-- GitHub Token --&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">password</span>&gt;</span>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<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">server</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">servers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置-distributionManagement"><a href="#配置-distributionManagement" class="headerlink" title="配置 distributionManagement"></a>配置 distributionManagement</h2><p>在项目的 pom.xml 上添加以下配置。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">distributionManagement</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">id</span>&gt;</span>maven.repo<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">name</span>&gt;</span>Local Staging Repository<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">url</span>&gt;</span>file://$&#123;project.build.directory&#125;/mvn-repo<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">distributionManagement</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>它的作用是将依赖安装在本地，以便后面我们用来上传到 GitHub。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627155324.png" alt=""></p>
+<p>如果希望把源码也一块提交，可以加上 maven-source-plugin 插件。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-source-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">attach</span>&gt;</span>true<span class="tag">&lt;/<span class="name">attach</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">goal</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">phase</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置-maven-deploy-plugin"><a href="#配置-maven-deploy-plugin" class="headerlink" title="配置 maven-deploy-plugin"></a>配置 maven-deploy-plugin</h2><p>接下来我们需要添加 maven-deploy-plugin 插件用于必定上面依赖（maven.repo）存放的地址。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-deploy-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">altDeploymentRepository</span>&gt;</span>maven.repo::default::file://$&#123;project.build.directory&#125;/mvn-repo<span class="tag">&lt;/<span class="name">altDeploymentRepository</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置-site-maven-plugin"><a href="#配置-site-maven-plugin" class="headerlink" title="配置 site-maven-plugin"></a>配置 site-maven-plugin</h2><p>然后再添加 site-maven-plugin 插件，这是核心。需要配置 <code>server</code> 就是 Maven settings.xml 里面配置的 <code>server.id</code>。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.github<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>site-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- git commit message --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">message</span>&gt;</span>Maven artifacts for $&#123;project.version&#125;<span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- disable webpage processing --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">noJekyll</span>&gt;</span>false<span class="tag">&lt;/<span class="name">noJekyll</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- matches distribution management repository url above --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">outputDirectory</span>&gt;</span>$&#123;project.build.directory&#125;/mvn-repo<span class="tag">&lt;/<span class="name">outputDirectory</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- remote branch name --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">branch</span>&gt;</span>refs/heads/master<span class="tag">&lt;/<span class="name">branch</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">merge</span>&gt;</span>true<span class="tag">&lt;/<span class="name">merge</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!--Maven setttings 文件中定义的 server.id--&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">server</span>&gt;</span>github<span class="tag">&lt;/<span class="name">server</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- 对应github上创建的仓库名 --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">repositoryName</span>&gt;</span>maven-repo<span class="tag">&lt;/<span class="name">repositoryName</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- github仓库所有者setting中的name或者组织名 --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">repositoryOwner</span>&gt;</span>zhangqinghua<span class="tag">&lt;/<span class="name">repositoryOwner</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">phase</span>&gt;</span>deploy<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">goal</span>&gt;</span>site<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的是 <code>repositoryOwner</code> 是 GitHub.Settings.name。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627160110.png" alt=""></p>
+<p>如果我们需要发布到 Organizations 上，则 <code>repositoryOwner</code>  改成组织名。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627160221.png" alt=""></p>
+<h2 id="运行-mvn-clean-deploy"><a href="#运行-mvn-clean-deploy" class="headerlink" title="运行 mvn clean deploy"></a>运行 mvn clean deploy</h2><p>上面配置好之前，就可以运行发布了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ mvn clean deploy</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>在 GitHub 的项目页面上可以看到已经多了一个 mvn-repo 的分支了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627150603.png" alt=""></p>
+<p>里面可以看多上传了不同的项目。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627151426.png" alt=""></p>
+<p>不同的版本：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210627151531.png" alt=""></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>要使用 GitHub 上的依赖，只需要在项目 pom.xml 上添加仓库地址即可。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">id</span>&gt;</span>maven-repo<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">         <span class="comment">&lt;!-- 格式是 https://raw.githubusercontent.com/[github 用户名]/[github 仓库名]/[分支名]/repository --&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://raw.githubusercontent.com/rxliuli/maven-repository-example/mvn-repo/repository<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>就像其他 Maven 仓库一样，我们知道 groupId, artifactId 与 version，自然可以直接使用。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.rxliuli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-repository-example<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span>&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这种使用 GitHub 部署的 Maven 仓库，在 Maven 中央仓库中并不能搜索到的哦</p>
+</blockquote>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h4 id="Error-creating-blob-Not-Found-404"><a href="#Error-creating-blob-Not-Found-404" class="headerlink" title="Error creating blob: Not Found (404)"></a>Error creating blob: Not Found (404)</h4><p>场景：<code>mvn deploy</code> 发布时报错，卡住了几个小时</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Failed to execute goal com.github.github:site-maven-plugin:0.12:site (default) on project demo2: Error creating blob: Not Found (404)</span><br></pre></td></tr></table></figure>
+<p>原因：Maven settings.xml 里面的 <code>servers.server.password</code> 要使用 token，不要使用 GitHub 登陆密码。</p>
+<p>原因：<code>repositoryOwner</code> 名称错误，<code>repositoryOwner</code> 是指 Githuh.Settings.Name 的，不是 GitHub 的登录名。</p>
+<p>解决：参考上面。</p>
+<h4 id="Error-retrieving-user-info-Not-Found-404"><a href="#Error-retrieving-user-info-Not-Found-404" class="headerlink" title="Error retrieving user info: Not Found (404)"></a>Error retrieving user info: Not Found (404)</h4><p>场景：<code>mvn deploy</code> 发布时报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Failed to execute goal com.github.github:site-maven-plugin:0.12:site (default) on project demo: Error retrieving user info: Not Found (404)</span><br></pre></td></tr></table></figure>
+<p>原因：GitHub Token 要需要授权用户信息，没有勾选就抱这个错误。</p>
+<p>解决：参考上面。</p>
+<h4 id="Git-Repository-is-empty-409"><a href="#Git-Repository-is-empty-409" class="headerlink" title="Git Repository is empty. (409)"></a>Git Repository is empty. (409)</h4><p>场景：<code>mvn deploy</code> 发布时报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Failed to execute goal com.github.github:site-maven-plugin:0.12:site (default) on project demo: Error creating blob: Git Repository is empty. (409)</span><br></pre></td></tr></table></figure>
+<p>原因：仓库为空。</p>
+<p>解决：加个 README.md 即可。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-Token"><span class="toc-number">1.</span> <span class="toc-text">配置 Token</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-server"><span class="toc-number">2.</span> <span class="toc-text">配置 server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-distributionManagement"><span class="toc-number">3.</span> <span class="toc-text">配置 distributionManagement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-maven-deploy-plugin"><span class="toc-number">4.</span> <span class="toc-text">配置 maven-deploy-plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-site-maven-plugin"><span class="toc-number">5.</span> <span class="toc-text">配置 site-maven-plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行-mvn-clean-deploy"><span class="toc-number">6.</span> <span class="toc-text">运行 mvn clean deploy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-number">7.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见问题"><span class="toc-number">8.</span> <span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Error-creating-blob-Not-Found-404"><span class="toc-number">8.0.1.</span> <span class="toc-text">Error creating blob: Not Found (404)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Error-retrieving-user-info-Not-Found-404"><span class="toc-number">8.0.2.</span> <span class="toc-text">Error retrieving user info: Not Found (404)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Git-Repository-is-empty-409"><span class="toc-number">8.0.3.</span> <span class="toc-text">Git Repository is empty. (409)</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&text=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&is_video=false&description=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Maven 远程仓库 GitHub&#39;s repo&body=Check out this article: http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&title=Maven 远程仓库 GitHub&#39;s repo"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/27/后端开发/Maven 手册/Maven 远程仓库 Github Packages /&name=Maven 远程仓库 GitHub&#39;s repo&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
