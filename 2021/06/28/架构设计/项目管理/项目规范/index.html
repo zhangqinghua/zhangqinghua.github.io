@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="开发环境统一开发语言、统一开发框架、统一开发方法、统一开发环境 这四个统一，目的是杜绝那些随着性子的开发行为，这种行为对团队的可持续发展及积累是毁灭性打击。 编码规范除了形式上的统一，最重要的是命名规范，提高代码的可读性，降低多人协作开发的难度。 备份机制备份很重要，不少删库跑路的故障，其实做好备份机制就不会出大问题。 代码审查定期团队code review。发现大家代码的疏忽、在算法、逻辑、安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目规范">
+<meta property="og:url" content="http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="开发环境统一开发语言、统一开发框架、统一开发方法、统一开发环境 这四个统一，目的是杜绝那些随着性子的开发行为，这种行为对团队的可持续发展及积累是毁灭性打击。 编码规范除了形式上的统一，最重要的是命名规范，提高代码的可读性，降低多人协作开发的难度。 备份机制备份很重要，不少删库跑路的故障，其实做好备份机制就不会出大问题。 代码审查定期团队code review。发现大家代码的疏忽、在算法、逻辑、安全">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-06-27T16:45:50.957Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="项目规范">
+<meta name="twitter:description" content="开发环境统一开发语言、统一开发框架、统一开发方法、统一开发环境 这四个统一，目的是杜绝那些随着性子的开发行为，这种行为对团队的可持续发展及积累是毁灭性打击。 编码规范除了形式上的统一，最重要的是命名规范，提高代码的可读性，降低多人协作开发的难度。 备份机制备份很重要，不少删库跑路的故障，其实做好备份机制就不会出大问题。 代码审查定期团队code review。发现大家代码的疏忽、在算法、逻辑、安全">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>项目规范</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2021/06/27/数据结构和算法/力扣刷题/217 存在重复元素/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&text=项目规范"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&is_video=false&description=项目规范"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=项目规范&body=Check out this article: http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&name=项目规范&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#开发环境"><span class="toc-number">1.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编码规范"><span class="toc-number">2.</span> <span class="toc-text">编码规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#备份机制"><span class="toc-number">3.</span> <span class="toc-text">备份机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码审查"><span class="toc-number">4.</span> <span class="toc-text">代码审查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发流程"><span class="toc-number">5.</span> <span class="toc-text">开发流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释规范"><span class="toc-number">6.</span> <span class="toc-text">注释规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安全规范"><span class="toc-number">7.</span> <span class="toc-text">安全规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口规范"><span class="toc-number">8.</span> <span class="toc-text">接口规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日志打点"><span class="toc-number">9.</span> <span class="toc-text">日志打点</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        项目规范
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-06-28T00:00:00.000Z" itemprop="datePublished">2021-06-28</time>
+        
+        (Updated: <time datetime="2021-06-27T16:45:50.957Z" itemprop="dateModified">2021-06-27</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/架构设计/">架构设计</a> › <a class="category-link" href="/categories/架构设计/项目管理/">项目管理</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><p>统一开发语言、统一开发框架、统一开发方法、统一开发环境</p>
+<p>这四个统一，目的是杜绝那些随着性子的开发行为，这种行为对团队的可持续发展及积累是毁灭性打击。</p>
+<h2 id="编码规范"><a href="#编码规范" class="headerlink" title="编码规范"></a>编码规范</h2><p>除了形式上的统一，最重要的是命名规范，提高代码的可读性，降低多人协作开发的难度。</p>
+<h2 id="备份机制"><a href="#备份机制" class="headerlink" title="备份机制"></a>备份机制</h2><p>备份很重要，不少删库跑路的故障，其实做好备份机制就不会出大问题。</p>
+<h2 id="代码审查"><a href="#代码审查" class="headerlink" title="代码审查"></a>代码审查</h2><p>定期团队code review。发现大家代码的疏忽、在算法、逻辑、安全等方面的问题，引导大家用正确的方法编码、学习成长。</p>
+<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><p>用git就约定一下branch的规范，一般用gitlab flow就行。</p>
+<p>如果用CI，也要制定规范：一般用jenkins + workflow或者gitlab ci这样的方式就行。</p>
+<h2 id="注释规范"><a href="#注释规范" class="headerlink" title="注释规范"></a>注释规范</h2><p>每个功能函数、方法、接口、类都要有对应注释，各个关键业务代码段，也需注释。</p>
+<p>以上九点，做好了，团队就能稳定前进，另外规范是死的，人是活的，在制定开发规范并执行的过程中，如果发现规范反而影响了生产力，一定需要复盘讨论，不合适就推翻重建。</p>
+<h2 id="安全规范"><a href="#安全规范" class="headerlink" title="安全规范"></a>安全规范</h2><p>接口处做入参检查，防止SQL注入。</p>
+<p>一些关键业务接口如短信发送，须做机器防刷机制。</p>
+<p>源码保证可编译的情况下，每天定时提交。</p>
+<p>数据库连接信息不可外泄，由专人管理。</p>
+<p>数据库用户密码等关键数据需做加密处理，不可明文保存。</p>
+<h2 id="接口规范"><a href="#接口规范" class="headerlink" title="接口规范"></a>接口规范</h2><p>一般基于http + json或者http + PB的规范，尤其是对客户端的信息传递和response错误的处理。</p>
+<p>有人Restful，但Restful从业务角度非常不完备，即便用Restful也要补充很多信息。</p>
+<h2 id="日志打点"><a href="#日志打点" class="headerlink" title="日志打点"></a>日志打点</h2><p>业务日志打点：如前端的界面访问打点，后端下单打点等，便于做ABtest和商业决策分析。</p>
+<p>后端系统打点，比如api吞吐、延迟、返回成功/错误的计数，CPU/Mem/带宽占用/磁盘占用量等。设置好报警，千万别等主库满了之后才去处理。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#开发环境"><span class="toc-number">1.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编码规范"><span class="toc-number">2.</span> <span class="toc-text">编码规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#备份机制"><span class="toc-number">3.</span> <span class="toc-text">备份机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码审查"><span class="toc-number">4.</span> <span class="toc-text">代码审查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发流程"><span class="toc-number">5.</span> <span class="toc-text">开发流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释规范"><span class="toc-number">6.</span> <span class="toc-text">注释规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安全规范"><span class="toc-number">7.</span> <span class="toc-text">安全规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口规范"><span class="toc-number">8.</span> <span class="toc-text">接口规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日志打点"><span class="toc-number">9.</span> <span class="toc-text">日志打点</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&text=项目规范"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&is_video=false&description=项目规范"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=项目规范&body=Check out this article: http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&title=项目规范"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/06/28/架构设计/项目管理/项目规范/&name=项目规范&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/archives/">Articles</a></li>
+        
+        <li><a href="/categories/">Categories</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
