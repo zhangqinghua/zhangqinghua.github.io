@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="修改容器启动配置参数有时候，我们创建容器时忘了添加参数 --restart=always，当 Docker 重启时，容器未能自动启动。现在要添加该参数怎么办呢，方法有二： 1. Docker 命令修改 1zhangqinghua$ docker container update --restart=always 容器名字 2. 配置文件修改  首先停止容器，不然无法修改配置文件 配置文件路径为：/">
+    <meta name="description" content="批量删除镜像参考：docker批量删除镜像 1zhangqinghua$ docker rmi -f $(docker images | grep &quot;none&quot; | awk &apos;&amp;#123;print $3&amp;#125;&apos;) 修改容器启动配置参数有时候，我们创建容器时忘了添加参数 --restart=always，当 Docker 重启时，容器未能自动启动。现在要添加该参数怎么办呢，方法有二： 1.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker 常用操作">
 <meta property="og:url" content="http://yoursite.com/2021/04/22/部署运维/Docker 手册/Docker 常用操作/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="修改容器启动配置参数有时候，我们创建容器时忘了添加参数 --restart=always，当 Docker 重启时，容器未能自动启动。现在要添加该参数怎么办呢，方法有二： 1. Docker 命令修改 1zhangqinghua$ docker container update --restart=always 容器名字 2. 配置文件修改  首先停止容器，不然无法修改配置文件 配置文件路径为：/">
+<meta property="og:description" content="批量删除镜像参考：docker批量删除镜像 1zhangqinghua$ docker rmi -f $(docker images | grep &quot;none&quot; | awk &apos;&amp;#123;print $3&amp;#125;&apos;) 修改容器启动配置参数有时候，我们创建容器时忘了添加参数 --restart=always，当 Docker 重启时，容器未能自动启动。现在要添加该参数怎么办呢，方法有二： 1.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-06-29T16:05:16.548Z">
+<meta property="og:updated_time" content="2021-07-02T15:32:38.034Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 常用操作">
-<meta name="twitter:description" content="修改容器启动配置参数有时候，我们创建容器时忘了添加参数 --restart=always，当 Docker 重启时，容器未能自动启动。现在要添加该参数怎么办呢，方法有二： 1. Docker 命令修改 1zhangqinghua$ docker container update --restart=always 容器名字 2. 配置文件修改  首先停止容器，不然无法修改配置文件 配置文件路径为：/">
+<meta name="twitter:description" content="批量删除镜像参考：docker批量删除镜像 1zhangqinghua$ docker rmi -f $(docker images | grep &quot;none&quot; | awk &apos;&amp;#123;print $3&amp;#125;&apos;) 修改容器启动配置参数有时候，我们创建容器时忘了添加参数 --restart=always，当 Docker 重启时，容器未能自动启动。现在要添加该参数怎么办呢，方法有二： 1.">
     
     
         
@@ -74,10 +74,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2021/04/22/部署运维/Docker 手册/Docker 镜像/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2021/04/22/部署运维/Docker 手册/Docker Dockerfile/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2021/04/22/部署运维/Docker 手册/Docker Dockerfile/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2021/04/18/后端开发/Elasticsearch 教程/Elasticsearch 安装/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -104,7 +104,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#修改容器启动配置参数"><span class="toc-number">1.</span> <span class="toc-text">修改容器启动配置参数</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#批量删除镜像"><span class="toc-number">1.</span> <span class="toc-text">批量删除镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改容器启动配置参数"><span class="toc-number">2.</span> <span class="toc-text">修改容器启动配置参数</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -130,7 +130,7 @@
       
         <time datetime="2021-04-22T00:00:00.000Z" itemprop="datePublished">2021-04-22</time>
         
-        (Updated: <time datetime="2021-06-29T16:05:16.548Z" itemprop="dateModified">2021-06-29</time>)
+        (Updated: <time datetime="2021-07-02T15:32:38.034Z" itemprop="dateModified">2021-07-02</time>)
         
       
     </div>
@@ -150,7 +150,9 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h4 id="修改容器启动配置参数"><a href="#修改容器启动配置参数" class="headerlink" title="修改容器启动配置参数"></a>修改容器启动配置参数</h4><p>有时候，我们创建容器时忘了添加参数 <code>--restart=always</code>，当 Docker 重启时，容器未能自动启动。现在要添加该参数怎么办呢，方法有二：</p>
+    <h4 id="批量删除镜像"><a href="#批量删除镜像" class="headerlink" title="批量删除镜像"></a>批量删除镜像</h4><p>参考：<a href="https://blog.csdn.net/benben_2015/article/details/90081468">docker批量删除镜像</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ docker rmi -f $(docker images | grep <span class="string">"none"</span> | awk <span class="string">'&#123;print $3&#125;'</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="修改容器启动配置参数"><a href="#修改容器启动配置参数" class="headerlink" title="修改容器启动配置参数"></a>修改容器启动配置参数</h4><p>有时候，我们创建容器时忘了添加参数 <code>--restart=always</code>，当 Docker 重启时，容器未能自动启动。现在要添加该参数怎么办呢，方法有二：</p>
 <p><strong>1. Docker 命令修改</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zhangqinghua$ docker container update --restart=always 容器名字</span><br></pre></td></tr></table></figure>
 <p><strong>2. 配置文件修改</strong></p>
@@ -190,7 +192,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#修改容器启动配置参数"><span class="toc-number">1.</span> <span class="toc-text">修改容器启动配置参数</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#批量删除镜像"><span class="toc-number">1.</span> <span class="toc-text">批量删除镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改容器启动配置参数"><span class="toc-number">2.</span> <span class="toc-text">修改容器启动配置参数</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
