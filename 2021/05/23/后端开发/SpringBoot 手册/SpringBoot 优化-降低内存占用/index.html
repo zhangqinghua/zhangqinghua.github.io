@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="参考：微服务中使用 OpenJ9 JVM 内存占用降60%(相对HotSpot) 参考：没想到Spring Boot居然这么耗内存，有点惊讶 参考：Java微服务内存占用分析 我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。">
+    <meta name="description" content="参考：微服务中使用 OpenJ9 JVM 内存占用降60%(相对HotSpot) 参考：没想到Spring Boot居然这么耗内存，有点惊讶 参考：Java微服务内存占用分析 我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。  经过测试，这个 jre 在某些场景下会报错：Caused by: java.lang.NoClassDefFoundError: jdk">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot 优化-降低内存占用">
 <meta property="og:url" content="http://yoursite.com/2021/05/23/后端开发/SpringBoot 手册/SpringBoot 优化-降低内存占用/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="参考：微服务中使用 OpenJ9 JVM 内存占用降60%(相对HotSpot) 参考：没想到Spring Boot居然这么耗内存，有点惊讶 参考：Java微服务内存占用分析 我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。">
+<meta property="og:description" content="参考：微服务中使用 OpenJ9 JVM 内存占用降60%(相对HotSpot) 参考：没想到Spring Boot居然这么耗内存，有点惊讶 参考：Java微服务内存占用分析 我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。  经过测试，这个 jre 在某些场景下会报错：Caused by: java.lang.NoClassDefFoundError: jdk">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-07-02T15:32:38.026Z">
+<meta property="og:updated_time" content="2021-07-05T03:21:51.213Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot 优化-降低内存占用">
-<meta name="twitter:description" content="参考：微服务中使用 OpenJ9 JVM 内存占用降60%(相对HotSpot) 参考：没想到Spring Boot居然这么耗内存，有点惊讶 参考：Java微服务内存占用分析 我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。">
+<meta name="twitter:description" content="参考：微服务中使用 OpenJ9 JVM 内存占用降60%(相对HotSpot) 参考：没想到Spring Boot居然这么耗内存，有点惊讶 参考：Java微服务内存占用分析 我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。  经过测试，这个 jre 在某些场景下会报错：Caused by: java.lang.NoClassDefFoundError: jdk">
     
     
         
@@ -130,7 +130,7 @@
       
         <time datetime="2021-05-23T00:00:00.000Z" itemprop="datePublished">2021-05-23</time>
         
-        (Updated: <time datetime="2021-07-02T15:32:38.026Z" itemprop="dateModified">2021-07-02</time>)
+        (Updated: <time datetime="2021-07-05T03:21:51.213Z" itemprop="dateModified">2021-07-05</time>)
         
       
     </div>
@@ -154,6 +154,9 @@
 <p>参考：<a href="https://www.cnblogs.com/hulianwangjiagoushi/p/11672839.html">没想到Spring Boot居然这么耗内存，有点惊讶</a></p>
 <p>参考：<a href="https://blog.csdn.net/lgxzzz/article/details/103220202">Java微服务内存占用分析</a></p>
 <p>我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。</p>
+<blockquote>
+<p>经过测试，这个 jre 在某些场景下会报错：Caused by: java.lang.NoClassDefFoundError: jdk/nashorn/internal/runtime/Debug</p>
+</blockquote>
 
   </div>
 </article>
