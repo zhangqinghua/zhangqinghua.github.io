@@ -437,6 +437,9 @@ body td {
   font-family: "iosevka Local";
   src: local("iosevka Local"), url("../lib/iosevka/iosevka-regular-18.ttf") format("truetype");
 }
+.max-width {
+  max-width: 60.25rem !important;
+}
 table {
   table-layout: fixed;
 }
@@ -452,7 +455,6 @@ ol > li > p {
   margin-block-start: 0em;
 }
 .highlight {
-  margin: 0 -0.5rem !important;
   padding: 0px 0 !important;
 }
 .gutter,
@@ -473,19 +475,26 @@ body table {
 }
 article .content img,
 article .content video {
-  width: 102% !important;
-  margin: -9px !important;
-  padding-top: 9px !important;
+  width: 100% !important;
   max-width: none !important;
 }
 figure::-webkit-scrollbar {
-  background-color: rgba(100,1,1,0);
+/*background-color: rgba(100, 1, 1, 0);*/
+  height: 0px;
 }
 article .content blockquote {
   margin-block-start: 0;
   margin-inline-start: 0px;
   margin: 0 0 1rem !important;
   padding: 0.5em 0 !important;
+}
+.highlight {
+/*底部留下1rem距离*/
+  margin: 0 0 1rem 0 !important;
+  width: 100% !important;
+}
+.highlight td.gutter {
+  display: none !important;
 }
 .highlight .code pre {
   font-size: 14px !important;
