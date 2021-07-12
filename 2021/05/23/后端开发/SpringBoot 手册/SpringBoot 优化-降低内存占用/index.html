@@ -13,10 +13,12 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="参考：微服务中使用 OpenJ9 JVM 内存占用降60%(相对HotSpot) 参考：没想到Spring Boot居然这么耗内存，有点惊讶 参考：Java微服务内存占用分析 我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。  经过测试，这个 jre 在某些场景下会报错：Caused by: java.lang.NoClassDefFoundError: jdk">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-07-07T14:45:11.410Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210706112445.png">
+<meta property="og:updated_time" content="2021-07-12T01:47:27.527Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot 优化-降低内存占用">
 <meta name="twitter:description" content="参考：微服务中使用 OpenJ9 JVM 内存占用降60%(相对HotSpot) 参考：没想到Spring Boot居然这么耗内存，有点惊讶 参考：Java微服务内存占用分析 我这边测试是降低20%左右，一个 314MB 的微服务，可以降到 250MB 左右。  经过测试，这个 jre 在某些场景下会报错：Caused by: java.lang.NoClassDefFoundError: jdk">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210706112445.png">
     
     
         
@@ -104,7 +106,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot-应用内存分析"><span class="toc-number">1.</span> <span class="toc-text">SpringBoot 应用内存分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#企业级应用内存占用"><span class="toc-number">1.0.1.</span> <span class="toc-text">企业级应用内存占用</span></a></li></ol></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -130,7 +132,7 @@
       
         <time datetime="2021-05-23T00:00:00.000Z" itemprop="datePublished">2021-05-23</time>
         
-        (Updated: <time datetime="2021-07-07T14:45:11.410Z" itemprop="dateModified">2021-07-07</time>)
+        (Updated: <time datetime="2021-07-12T01:47:27.527Z" itemprop="dateModified">2021-07-12</time>)
         
       
     </div>
@@ -157,6 +159,7 @@
 <blockquote>
 <p>经过测试，这个 jre 在某些场景下会报错：Caused by: java.lang.NoClassDefFoundError: jdk/nashorn/internal/runtime/Debug</p>
 </blockquote>
+<h2 id="SpringBoot-应用内存分析"><a href="#SpringBoot-应用内存分析" class="headerlink" title="SpringBoot 应用内存分析"></a>SpringBoot 应用内存分析</h2><h4 id="企业级应用内存占用"><a href="#企业级应用内存占用" class="headerlink" title="企业级应用内存占用"></a>企业级应用内存占用</h4><p><img src="https://cdn.jsdelivr.net/gh/zhangqinghua/hexo_image/20210706112445.png" alt=""></p>
 
   </div>
 </article>
@@ -184,7 +187,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot-应用内存分析"><span class="toc-number">1.</span> <span class="toc-text">SpringBoot 应用内存分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#企业级应用内存占用"><span class="toc-number">1.0.1.</span> <span class="toc-text">企业级应用内存占用</span></a></li></ol></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
