@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="判断当前线程是否带有事务1TransactionSynchronizationManager.isActualTransactionActive() 获取事务IdSpringBoot无法直接获取事务Id，要判断是否同一个事务，可以通过数据库连接 Id 来确认。这个方法的缺点是无法获取非事务的连接Id。 12345678910@Transactionalpublic void printConnec">
+    <meta name="description" content="判断当前线程是否带有事务1TransactionSynchronizationManager.isActualTransactionActive() 获取事务Id/连接IdSpringBoot无法直接获取事务Id，要判断是否同一个事务，可以通过数据库连接 Id 来确认。这个方法的缺点是无法获取非事务的连接Id。  非事务的连接Id无法获取，因为它一旦用完了就关闭了。  12345678910@Tr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot 事务">
 <meta property="og:url" content="http://yoursite.com/2021/06/14/后端开发/SpringBoot 手册/SpringBoot 事务/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="判断当前线程是否带有事务1TransactionSynchronizationManager.isActualTransactionActive() 获取事务IdSpringBoot无法直接获取事务Id，要判断是否同一个事务，可以通过数据库连接 Id 来确认。这个方法的缺点是无法获取非事务的连接Id。 12345678910@Transactionalpublic void printConnec">
+<meta property="og:description" content="判断当前线程是否带有事务1TransactionSynchronizationManager.isActualTransactionActive() 获取事务Id/连接IdSpringBoot无法直接获取事务Id，要判断是否同一个事务，可以通过数据库连接 Id 来确认。这个方法的缺点是无法获取非事务的连接Id。  非事务的连接Id无法获取，因为它一旦用完了就关闭了。  12345678910@Tr">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-07-15T09:55:07.284Z">
+<meta property="og:updated_time" content="2021-07-15T10:49:16.891Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot 事务">
-<meta name="twitter:description" content="判断当前线程是否带有事务1TransactionSynchronizationManager.isActualTransactionActive() 获取事务IdSpringBoot无法直接获取事务Id，要判断是否同一个事务，可以通过数据库连接 Id 来确认。这个方法的缺点是无法获取非事务的连接Id。 12345678910@Transactionalpublic void printConnec">
+<meta name="twitter:description" content="判断当前线程是否带有事务1TransactionSynchronizationManager.isActualTransactionActive() 获取事务Id/连接IdSpringBoot无法直接获取事务Id，要判断是否同一个事务，可以通过数据库连接 Id 来确认。这个方法的缺点是无法获取非事务的连接Id。  非事务的连接Id无法获取，因为它一旦用完了就关闭了。  12345678910@Tr">
     
     
         
@@ -104,7 +104,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#判断当前线程是否带有事务"><span class="toc-number">1.</span> <span class="toc-text">判断当前线程是否带有事务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取事务Id"><span class="toc-number">2.</span> <span class="toc-text">获取事务Id</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取连接Id"><span class="toc-number">3.</span> <span class="toc-text">获取连接Id</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#判断当前线程是否带有事务"><span class="toc-number">1.</span> <span class="toc-text">判断当前线程是否带有事务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取事务Id-连接Id"><span class="toc-number">2.</span> <span class="toc-text">获取事务Id/连接Id</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -130,7 +130,7 @@
       
         <time datetime="2021-06-14T00:00:00.000Z" itemprop="datePublished">2021-06-14</time>
         
-        (Updated: <time datetime="2021-07-15T09:55:07.284Z" itemprop="dateModified">2021-07-15</time>)
+        (Updated: <time datetime="2021-07-15T10:49:16.891Z" itemprop="dateModified">2021-07-15</time>)
         
       
     </div>
@@ -151,12 +151,15 @@
 
   <div class="content" itemprop="articleBody">
     <h4 id="判断当前线程是否带有事务"><a href="#判断当前线程是否带有事务" class="headerlink" title="判断当前线程是否带有事务"></a>判断当前线程是否带有事务</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TransactionSynchronizationManager.isActualTransactionActive()</span><br></pre></td></tr></table></figure>
-<h4 id="获取事务Id"><a href="#获取事务Id" class="headerlink" title="获取事务Id"></a>获取事务Id</h4><p>SpringBoot无法直接获取事务Id，要判断是否同一个事务，可以通过数据库连接 Id 来确认。这个方法的缺点是无法获取非事务的连接Id。</p>
+<h4 id="获取事务Id-连接Id"><a href="#获取事务Id-连接Id" class="headerlink" title="获取事务Id/连接Id"></a>获取事务Id/连接Id</h4><p>SpringBoot无法直接获取事务Id，要判断是否同一个事务，可以通过数据库连接 Id 来确认。这个方法的缺点是无法获取非事务的连接Id。</p>
+<blockquote>
+<p>非事务的连接Id无法获取，因为它一旦用完了就关闭了。</p>
+</blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printConnect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.err.println(<span class="string">"MerchantGroupController.test123 -------------------&gt; Transactional"</span>);</span><br><span class="line">    Map&lt;Object, Object&gt; map = TransactionSynchronizationManager.getResourceMap();</span><br><span class="line">    <span class="keyword">for</span> (Object key: map.keySet()) &#123;</span><br><span class="line">        System.err.println(<span class="string">"key: "</span> + key);</span><br><span class="line">        System.err.println(<span class="string">"value: "</span> +  map.get(key));</span><br><span class="line">    &#125;</span><br><span class="line">    System.err.println(<span class="string">"MerchantGroupController.test123 -------------------&gt; Transactional"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>下面以一个 demo 来测试一下。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="keyword">public</span> ClassA.method() &#123;</span><br><span class="line">   printConnect();</span><br><span class="line">   ClassB.method();</span><br><span class="line">   ClassC.method();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> ClassB.method() &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> ClassC.method() &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">=====================</span><br><span class="line">key: &#123;</span><br><span class="line">	CreateTime:<span class="string">"2021-06-14 14:53:04"</span>,</span><br><span class="line">	ActiveCount:<span class="number">1</span>,</span><br><span class="line">	PoolingCount:<span class="number">0</span>,</span><br><span class="line">	CreateCount:<span class="number">1</span>,</span><br><span class="line">	DestroyCount:<span class="number">0</span>,</span><br><span class="line">	CloseCount:<span class="number">1</span>,</span><br><span class="line">	ConnectCount:<span class="number">2</span>,</span><br><span class="line">	Connections:[</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br><span class="line">value: org.springframework.jdbc.datasource.ConnectionHolder<span class="meta">@d</span>5d122d3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">key: &#123;</span><br><span class="line">	CreateTime:<span class="string">"2021-06-14 14:53:04"</span>,</span><br><span class="line">	ActiveCount:<span class="number">1</span>,</span><br><span class="line">	PoolingCount:<span class="number">0</span>,</span><br><span class="line">	CreateCount:<span class="number">1</span>,</span><br><span class="line">	DestroyCount:<span class="number">0</span>,</span><br><span class="line">	CloseCount:<span class="number">1</span>,</span><br><span class="line">	ConnectCount:<span class="number">2</span>,</span><br><span class="line">	Connections:[</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br><span class="line">value: org.springframework.jdbc.datasource.ConnectionHolder<span class="meta">@d</span>5d122d3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">key: &#123;</span><br><span class="line">	CreateTime:<span class="string">"2021-06-14 14:53:04"</span>,</span><br><span class="line">	ActiveCount:<span class="number">2</span>,</span><br><span class="line">	PoolingCount:<span class="number">0</span>,</span><br><span class="line">	CreateCount:<span class="number">2</span>,</span><br><span class="line">	DestroyCount:<span class="number">0</span>,</span><br><span class="line">	CloseCount:<span class="number">1</span>,</span><br><span class="line">	ConnectCount:<span class="number">3</span>,</span><br><span class="line">	Connections:[</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br><span class="line">value: org.springframework.jdbc.datasource.ConnectionHolder@<span class="number">7</span>bf06f97</span><br></pre></td></tr></table></figure>
 <p>可以看到 <code>ClassB.method</code> 和 <code>ClassA.method</code> 的数据库连接是同一个，所以他们属于同一个事务，能查询到未提交的数据。<code>ClassC.method</code> 开启了一个新的事务，他们的数据库连接不是同一个。</p>
-<h4 id="获取连接Id"><a href="#获取连接Id" class="headerlink" title="获取连接Id"></a>获取连接Id</h4>
+
   </div>
 </article>
 
@@ -183,7 +186,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#判断当前线程是否带有事务"><span class="toc-number">1.</span> <span class="toc-text">判断当前线程是否带有事务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取事务Id"><span class="toc-number">2.</span> <span class="toc-text">获取事务Id</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取连接Id"><span class="toc-number">3.</span> <span class="toc-text">获取连接Id</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#判断当前线程是否带有事务"><span class="toc-number">1.</span> <span class="toc-text">判断当前线程是否带有事务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取事务Id-连接Id"><span class="toc-number">2.</span> <span class="toc-text">获取事务Id/连接Id</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
